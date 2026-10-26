@@ -86,7 +86,7 @@ Routes are **planned** (nothing exists yet besides the template's `src/app/index
 | Button / primary · secondary · ghost × default · pressed · disabled | `src/components/Button.tsx` | height 48; pressed primary uses `color.amber-pressed` |
 | Icon button / default · pressed · disabled | `src/components/IconButton.tsx` | 44 × 44 |
 | Text field / default · focused · error | `src/components/TextField.tsx` | label, placeholder, helper/error line |
-| Password field / hidden · shown | `src/components/PasswordField.tsx` | Show/Hide, optional "Forgot password?" and live rules |
+| Password field / hidden · shown | `src/components/PasswordField.tsx` | the kit shows an eye icon, but the Sign in / Sign up screens override it with a "Show" text button (`labelStrong14`, `text-2`), so the code follows the screens; "Forgot password?" goes in the label row, live rules in the footer |
 | Card | `src/components/Card.tsx` | max one soft shadow |
 | List row | `src/components/ListRow.tsx` | no shadow |
 | Section header | `src/components/SectionHeader.tsx` | title + optional right text |
@@ -244,7 +244,7 @@ Export these from pen.dev at **@2x** into `docs/design/screens/`, file name = fr
 ### Icons
 
 The design uses 234 `icon` nodes, all from the **Lucide** library (ISC licence). 46 distinct names: arrow-left, audio-lines, audio-waveform, award, book-open, chart-no-axes-column-increasing, check, chevron-down/right/up, circle, circle-alert, circle-check, circle-dot, drum, eye, eye-off, flame, grid-3x3, guitar, hand, library, lock, mic, minus, music, pause, play, plus, rotate-ccw-square, rotate-cw, signal(-high/-low/-medium), sliders-horizontal, sparkles, speaker, square, target, triangle-alert, type, user, wifi, wifi-off, x (signal/wifi/battery are only the fake status bar).
-Candidate: `lucide-react-native` (JS on top of `react-native-svg`, which is in Expo Go), so names match the design 1:1.
+Used via `lucide-react-native` (on top of `react-native-svg`, which is in Expo Go), so names match the design 1:1. `src/components/Icon.tsx` lists the 44 non-status-bar icons; "music" is called "eighth-notes" in Lucide 1.x.
 
 ### Sounds (not in the design)
 

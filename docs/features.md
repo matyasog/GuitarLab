@@ -14,6 +14,7 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 | Fonts: Archivo, DM Mono, Barlow Semi Condensed | 1 | done | `useFonts` at runtime (Expo Go) |
 | Size classes compact / regular / wide + `useLayoutClass()` | 1 | done | rules in `src/theme/layout.ts` |
 | Base text and screen wrapper (`AppText`, `Screen`) | 1 | done | safe areas, margins, max width on tablets |
+| Icons, buttons, icon button, text and password fields | 1 | done | Lucide icons; states from the kit |
 | Base components (button, text field, card, list row, tab bar, …) | 1 | planned | 25 components from the kit |
 | Dev-only component gallery route | 1 | planned | hidden in production |
 | Folder structure, `.env.example`, check scripts | 0 | done | `npm run typecheck`, `npm run lint`, `npm test` |

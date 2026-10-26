@@ -57,6 +57,7 @@ export const textStyles = {
   // Body text
   body16: style(f.ui400, t[16], { lineHeight: lineHeight(t[16], 1.45) }),
   body14: style(f.ui400, t[14], { lineHeight: lineHeight(t[14], 1.45) }),
+  helper14: style(f.ui400, t[14], { lineHeight: lineHeight(t[14], 1.35) }),
   caption12: style(f.ui400, t[12], { lineHeight: lineHeight(t[12], 1.35) }),
 
   // Labels (row titles, control labels, tabs, tags)

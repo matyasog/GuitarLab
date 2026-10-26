@@ -4,6 +4,7 @@
 //   node scripts/design/inspect-pen.js summary          top-level keys, variables, fonts, images
 //   node scripts/design/inspect-pen.js frames           top-level frames (name, id, x, y, size)
 //   node scripts/design/inspect-pen.js tree <id> [depth] layer tree below one node
+//   node scripts/design/inspect-pen.js props <id>        layer tree with style properties
 //   node scripts/design/inspect-pen.js texts <id>        all text content below one node
 //   node scripts/design/inspect-pen.js refs                which components each screen uses
 //   node scripts/design/inspect-pen.js find <text>      nodes whose name contains <text>
@@ -78,6 +79,22 @@ if (cmd === 'tree') {
     if (n.rotation) extra.push(`rot=${n.rotation}`);
     if (n.x !== undefined) extra.push(`@${n.x},${n.y}`);
     console.log(`${'  '.repeat(d)}${n.type} ${n.id} "${n.name ?? ''}" ${size(n)} ${extra.join(' ')}`);
+  });
+}
+
+if (cmd === 'props') {
+  // Layer tree below one node with its style properties (for building components).
+  const skip = new Set(['children', 'id', 'name', 'type', 'x', 'y', 'descendants']);
+  let target = null;
+  for (const top of doc.children) walk(top, (n) => { if (n.id === arg) target = n; });
+  if (!target) throw new Error(`id ${arg} not found`);
+  walk(target, (n, d) => {
+    const props = Object.entries(n)
+      .filter(([k]) => !skip.has(k))
+      .map(([k, v]) => `${k}=${JSON.stringify(v)}`)
+      .join(' ');
+    console.log(`${'  '.repeat(d)}${n.type} "${n.name ?? ''}" ${props}`);
+    if (n.descendants) console.log(`${'  '.repeat(d + 1)}overrides ${JSON.stringify(n.descendants)}`);
   });
 }
 

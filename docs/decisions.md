@@ -232,3 +232,27 @@ Goal: smooth and professional, with optimisation considered at all times.
 **Reason:** The compact frames in the design (360 × 640) exist for short screens, where the instrument and readouts must still fit; that is about height more than width. Common tall Android phones (360 × 800) have room for the regular layout. Using the short and long side means a phone keeps its class in landscape (Practice). The 480 pt column is not in the design (there are no tablet frames); it is slightly wider than the largest phone so phone layouts don't stretch.
 **Note:** My test iPhone is 375 × 667 pt (iPhone SE/8 class), so it shows the compact layouts. The regular layouts are checked on the Android emulator or a bigger phone.
 **Alternatives:** width-only breakpoints (would show cramped regular layouts on short phones like the iPhone SE); separate landscape rules (more cases, no design for them).
+
+---
+
+## 2026-10-26 · Icons: lucide-react-native, one import per icon
+
+**Decision:** Icons come from `lucide-react-native` (ISC licence, works in Expo Go on top of `react-native-svg`). `src/components/Icon.tsx` imports each icon the design uses from its own file (`lucide-react-native/icons/play`) and exposes them under the design's names.
+**Reason:** The design is drawn with Lucide icons, so the app shows exactly the same shapes and names. Importing one file per icon keeps the other ~1,900 Lucide icons out of the app (React Native's bundler doesn't remove unused exports). Together with `react-native-svg` this added about 0.3 MB to the JS bundle.
+**Alternatives:** `@expo/vector-icons` (in Expo Go, but its Lucide-like sets don't match the design's icons exactly); `expo-symbols` (SF Symbols, iOS look only, removed in Phase 0); exporting icons as images (no colour changes, blurry at other sizes).
+
+---
+
+## 2026-10-26 · Password field follows the screens, not the kit
+
+**Decision:** `PasswordField` uses a "Show" / "Hide" text button inside the field, and `TextField` has slots for a label-row accessory ("Forgot password?") and a footer (password rules).
+**Reason:** The component kit shows an eye icon, but every screen that uses the field (Sign in, Sign up) overrides it with the "Show" text button, and the v2 spec describes "Show"/"Hide". The screens are what users see, so they win.
+**Alternatives:** the eye icon from the kit (would differ from every screen design).
+
+---
+
+## 2026-10-26 · Keeping text fields above the keyboard
+
+**Decision:** `Screen` turns on the scroll view's `automaticallyAdjustKeyboardInsets`: when the keyboard opens on iOS, the screen gets extra scroll room and the focused field scrolls into view.
+**Reason:** On the iPhone SE (375 × 667 pt) the keyboard with its suggestion bar covers about half the screen, so the email field on the check screen was hidden while typing. The Sign in and Sign up screens would hit the same problem (hero image, several fields, password rules). The fix is one built-in property in one place, so every screen gets it.
+**Alternatives:** `react-native-keyboard-controller` (Expo's recommendation for forms, but not included in Expo Go; possible with the Android dev build); `KeyboardAvoidingView` (built in, but it only shrinks the view and doesn't scroll to the focused field). Android behaviour is still to be checked (plan risk R15).

@@ -387,12 +387,13 @@ Conventions for every step:
   - Done when: hook returns the right class; text scales with system font size.
   - Commit: `feat(ui): layout classes, text and screen wrapper`
   - Result: done. Rules in `src/theme/layout.ts` (`getLayoutClass`, unit-tested with 9 sizes): wide when the short side ≥ 600; compact when the long side < 700 or the short side < 360; otherwise regular. Using short/long sides keeps the class the same in landscape. The test iPhone is 375 × 667 pt (iPhone SE/8 class), so it shows the **compact** layouts; regular layouts need a bigger phone or the Android emulator. `Screen` uses the design's screen margins (16 sides, 8 top, 24 bottom) and a `gap` prop; on wide screens content is centred at max 480 pt.
-- [ ] **1.3 Buttons, icon button, text fields**
+- [x] **1.3 Buttons, icon button, text fields** (done 2026-10-26)
   - Files: `src/components/{Button,IconButton,TextField,PasswordField,Icon}.tsx`.
   - Libraries: `lucide-react-native` (+ `react-native-svg`); Expo Go: yes (react-native-svg is in Expo Go).
   - Test: iPhone via the gallery route (1.5) or a temp screen: pressed/disabled/error states, 44 pt targets, VoiceOver labels.
   - Done when: matches the kit's Buttons and Inputs sections.
   - Commit: `feat(ui): buttons and text fields`
+  - Result: done. `Icon` imports each Lucide icon the design uses on its own (`lucide-react-native/icons/play`), 44 icons under the design's names ("music" maps to Lucide's renamed "eighth-notes"). `Button` (primary / secondary / ghost, default / pressed / disabled, optional icon, `fullWidth`), `IconButton` (44 × 44, required accessibility label), `TextField` (label row with optional accessory, focused amber border, error with icon, helper or green success line, `trailing` and `footer` slots), `PasswordField` (Show / Hide text button as on the Sign in / Sign up screens). New text style `helper14`. iOS bundle 2.5 → 2.8 MB. The check screen in `src/app/index.tsx` shows all of them. Testing on the iPhone SE showed the keyboard covering a focused field; fixed in `Screen` with the scroll view's `automaticallyAdjustKeyboardInsets` (iOS), see R15.
 - [ ] **1.4 Content and control components**
   - Files: `Card`, `ListRow`, `SectionHeader`, `Tag`, `StatTile`, `ProgressBar`, `Switch`, `SegmentedControl`, `ToolSwitch`, `StreakStrip`.
   - Libraries: none.
@@ -619,6 +620,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R11 | Expo Go login requirement or network blocks loading on the iPhone | `npx expo login` + login in Expo Go; try `npx expo start --tunnel` on school Wi-Fi |
 | R12 | ~~expo-doctor warns about duplicate `@expo/log-box` / `@expo/dom-webview`~~ (resolved 2026-10-26: caused by the old global npm 7; reinstalled with npm 10) | — |
 | R13 | ~~The old global npm 7 is still used~~ (resolved 2026-10-26: global npm updated to 10) by `npm install` and `npx expo install`, and would break `node_modules` again | Update the global npm once (manual task 10). Until then install with `npx npm@10 install` |
+| R15 | Keyboard covers inputs on Android: `automaticallyAdjustKeyboardInsets` is iOS-only, and Expo's recommended `react-native-keyboard-controller` isn't in Expo Go | Check the auth screens on the Android emulator or the Android phone (step A.0). If fields are covered, wrap `Screen` in `KeyboardAvoidingView` on Android, or add `react-native-keyboard-controller` with the dev build |
 | R14 | The `react-dom` override must match React's version; after an SDK upgrade npm may fail with ERESOLVE again | On every SDK upgrade, set `overrides.react-dom` to the new `react` version |
 
 ---
@@ -659,3 +661,5 @@ Still open:
 - 2026-10-26: global npm updated to 10 (manual task 10); R13 resolved.
 - 2026-10-26: step 1.1 done (theme tokens, text styles, fonts).
 - 2026-10-26: step 1.2 done (layout classes, AppText, Screen). Note: the test iPhone is compact class.
+- 2026-10-26: step 1.3 done (Icon, Button, IconButton, TextField, PasswordField; added lucide-react-native + react-native-svg).
+- 2026-10-26: keyboard fix in `Screen` after iPhone SE test; added R15 (Android keyboard).

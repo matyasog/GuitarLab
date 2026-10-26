@@ -43,7 +43,14 @@ export function Screen({
   return (
     <SafeAreaView edges={edges} style={styles.safeArea}>
       {scroll ? (
-        <ScrollView contentContainerStyle={content} keyboardShouldPersistTaps="handled">
+        // automaticallyAdjustKeyboardInsets (iOS): when the keyboard opens, the scroll area gets
+        // room for it and the focused field scrolls into view, so it is never hidden.
+        // keyboardShouldPersistTaps: a tap on a button works while the keyboard is open.
+        <ScrollView
+          contentContainerStyle={content}
+          automaticallyAdjustKeyboardInsets
+          keyboardShouldPersistTaps="handled"
+        >
           {children}
         </ScrollView>
       ) : (
