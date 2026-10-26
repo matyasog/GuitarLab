@@ -1,0 +1,39 @@
+rules_version = '2';
+
+// Firestore security rules for GuitarLab. Data model: docs/data-model.md.
+// Principle: everything a user owns lives under users/{uid}, and only that signed-in user
+// can read or write it. Anything not matched below is denied.
+// Deploy (only after review): npx firebase-tools deploy --only firestore:rules
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // The profile document, created once on sign-up.
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+
+      allow create: if isOwner(uid)
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 40
+        // createdAt must be the server's time (serverTimestamp()), not a value from the phone.
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if isOwner(uid)
+        // The creation date can never be changed afterwards.
+        && request.resource.data.createdAt == resource.data.createdAt;
+
+      // Lets a user delete their own data (needed for account deletion later).
+      allow delete: if isOwner(uid);
+
+      // Days, sessions, lesson progress and achievements (Phase 6).
+      // Field checks for these are added when the collections are built.
+      match /{subcollection}/{document=**} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+  }
+}

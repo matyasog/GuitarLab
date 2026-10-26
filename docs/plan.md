@@ -420,7 +420,7 @@ Conventions for every step:
   - Docs: decisions (migration), data-model (none yet).
   - Commit: `refactor(firebase): move config to src/firebase and add auth persistence`
   - Result: done. `src/firebase/config.ts` exports `app`, `auth` (with AsyncStorage persistence) and `db`; it throws a clear error if an env value is missing and reuses the existing app/auth on fast refresh. `src/lib/` deleted; the env test now reads the new file. The TS error appeared as expected and is fixed by a one-function declaration file. The iOS bundle contains only the React Native build of Firebase Auth. Bundle 3.9 → 5.6 MB (Firebase Auth + Firestore). The home placeholder shows the auth state. AsyncStorage chosen over `expo-sqlite/localStorage`: Expo's SDK 58 docs and Firebase guide still use AsyncStorage and don't mark it deprecated.
-- [ ] **2.2 First security rules, deployed with the CLI**
+- [x] **2.2 First security rules, deployed with the CLI** (done 2026-10-26)
   - Goal: deploy our first rules. The database is in production mode (everything denied), so the app can't use Firestore until this is done.
   - Files: `firebase.json`, `.firebaserc`, `firestore.rules` (draft from `docs/data-model.md`), `firestore.indexes.json`.
   - Libraries: none in the app; Firebase CLI via `npx firebase-tools` (dev tool on Windows; needs `npx firebase-tools login` by you).
@@ -428,6 +428,7 @@ Conventions for every step:
   - Done when: rules deployed (**only after your OK**) and playground checks pass.
   - Docs: data-model (rules section), decisions (CLI deployment).
   - Commit: `feat(firebase): firestore security rules`
+  - Result: done. Rules: owner-only access to `users/{uid}` and everything under it; create needs a 1–40 character `displayName` and a server-time `createdAt`; update can't change `createdAt`; everything else denied. Compiled with `--dry-run`, then deployed on 2026-10-26 with your OK (`npx firebase-tools deploy --only firestore:rules`). The CLI was already logged in. Rules Playground (console) checked by you on 2026-10-26: own profile read allowed, other user denied, signed out denied.
 - [ ] **2.3 Auth provider and gated navigation**
   - Files: `src/firebase/AuthProvider.tsx`, `src/hooks/useAuth.ts`, `src/app/_layout.tsx`, `src/app/(auth)/_layout.tsx`, `src/app/(app)/_layout.tsx`, a placeholder home with "Sign out".
   - Libraries: none.
@@ -632,7 +633,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 
 1. ~~Firebase console check~~ (done 2026-10-25).
 2. ~~Enable Email/Password~~ (done 2026-10-25).
-3. **Firebase CLI login** before step 2.2: `npx firebase-tools login` (opens the browser).
+3. ~~**Firebase CLI login**~~ (already logged in as of 2026-10-26).
 4. **Expo login** on PC (`npx expo login`) and in Expo Go on the iPhone (same account).
 5. **PNG exports from pen.dev** into `docs/design/screens/` (@2x, names in `docs/design-map.md` §5). Before Phase 1 (components) and Phase 4 (metronome).
 6. **Instrument layer exports** (@2x and @3x) into `assets/instruments/…` with the file names in `docs/design-map.md` §5: Metronome static-body, pendulum (with the weight hidden), weight, glass-overlay before step 4.3; Tuner static-body and glass-overlay before step 7.2. The tuner's moving parts are drawn in code, so no new frames are needed.
@@ -669,3 +670,4 @@ Still open:
 - 2026-10-26: step 1.4 done (Card, ListRow, SectionHeader, Tag, StatTile, ProgressBar, StreakStrip, Switch, SegmentedControl, ToolSwitch).
 - 2026-10-26: step 1.5 done; Phase 1 (theme and base components) complete.
 - 2026-10-26: step 2.1 done (Firebase config in src/firebase, Auth persistence with AsyncStorage); R4 resolved.
+- 2026-10-26: step 2.2 done: firestore.rules, firebase.json, .firebaserc, firestore.indexes.json; rules compiled (dry run) and deployed to guitarlab-25e83 with your OK.

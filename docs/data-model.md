@@ -149,28 +149,10 @@ Example (`users/abc123/achievements/streak-7`): `{ "earnedAt": "2026-10-20T19:31
 | `users/{uid}/**` | owner only | owner only, basic type/size checks |
 | anything else | nobody | nobody |
 
-Draft of `firestore.rules` (created in Phase 2, deployed only with my OK):
+The rules live in `firestore.rules` in the repo root (written in step 2.2, compiled with `npx firebase-tools deploy --only firestore:rules --dry-run`). In short:
 
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    function isOwner(uid) {
-      return request.auth != null && request.auth.uid == uid;
-    }
-
-    match /users/{uid} {
-      allow read, delete: if isOwner(uid);
-      allow create: if isOwner(uid) && request.resource.data.displayName is string;
-      allow update: if isOwner(uid)
-        && request.resource.data.createdAt == resource.data.createdAt;
-
-      match /{sub=**} {
-        allow read, write: if isOwner(uid);
-      }
-    }
-  }
-}
-```
+- `users/{uid}`: only the signed-in owner can read it. **Create** also requires `displayName` to be a string of 1–40 characters and `createdAt` to be the server's time (`serverTimestamp()`). **Update** can't change `createdAt`. **Delete** is allowed for the owner (for account deletion later).
+- `users/{uid}/{subcollection}/…` (days, sessions, lessons, achievements): owner only. Field checks are added when these collections are built in Phase 6.
+- Anything else: denied (Firestore denies everything that no rule allows).
 
 **Known limit (for the thesis):** XP and streaks are calculated on the phone and written by the app, so a user who edits requests by hand could give themselves XP. Rules can only check types and ownership, not "was this earned". Doing it properly needs Cloud Functions, which require the paid Blaze plan. For a single-user school project this is an accepted trade-off.
