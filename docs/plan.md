@@ -349,12 +349,13 @@ Conventions for every step:
 
 ### Phase 0: Foundation
 
-- [ ] **0.1 Template cleanup and app config**
+- [x] **0.1 Template cleanup and app config** (done 2026-10-26)
   - Goal: remove template leftovers so only GuitarLab code remains.
   - Files: delete template images and `example/`; `package.json` (scripts; uninstall `expo-symbols`, `expo-glass-effect`, `@expo/ui`, `expo-web-browser`, `expo-device`, `react-native-web`, `react-dom` per D11); `app.json` (dark UI, colours, name); `README.md` (short project README); `.vscode/settings.json` (drop `sortMembers`).
   - Libraries: none (maybe removals, see D11).
-  - Test: iPhone: app opens on a dark background.
+  - Test: iPhone: the app opens and shows the "GuitarLab" placeholder. (The screen itself stays light until the theme is applied in 1.1; `app.json` dark settings only affect real builds.)
   - Done when: no template assets/scripts left; `npx expo-doctor` passes.
+  - Result: done. Also updated Expo packages to the latest SDK 57 patch versions (`npx expo install --fix`) and regenerated `package-lock.json` from scratch. `npx expo-doctor`: 20/21 checks pass. The remaining one is a pre-existing duplicate of `@expo/log-box` / `@expo/dom-webview` inside Expo's own packages (same version twice; npm can't merge them because of a peer conflict). It doesn't affect Expo Go; see risk R12.
   - Docs: decisions (cleanup).
   - Commit: `chore: remove Expo template leftovers`
 - [ ] **0.2 Folder structure, env and checks**
@@ -613,6 +614,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R9 | Synthesised strum sounds too artificial | Record my own guitar samples (D3 option B) |
 | R10 | Time runs short before February | Phases 0–6 are the core; Phase 7 screens can ship with fewer states |
 | R11 | Expo Go login requirement or network blocks loading on the iPhone | `npx expo login` + login in Expo Go; try `npx expo start --tunnel` on school Wi-Fi |
+| R12 | expo-doctor warns about duplicate `@expo/log-box` / `@expo/dom-webview` (same version, nested inside `expo` and `expo-router`) | Harmless in Expo Go. Re-check after the SDK 58 upgrade (U.1) and before the first Android dev build (A.0); if still there, fix with an npm `overrides` entry |
 
 ---
 
@@ -645,3 +647,4 @@ Still open:
 - 2026-10-25: Firebase audit completed (project/app confirmed, Email/Password on, location europe-central2, rules locked, not test mode); R2 resolved.
 - 2026-10-26: decisions D1–D12 approved; added D13 (Google sign-in → Android dev build) and D14 (lesson content); tuner moving parts drawn in code; achievements proposal; Phase A added; open questions reduced to 3.
 - 2026-10-26: achievements list confirmed; Chord Lab fretboard reuses the walnut texture instead of the Unsplash photo.
+- 2026-10-26: step 0.1 done (template cleanup); added risk R12 (expo-doctor duplicate warning).

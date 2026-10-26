@@ -182,3 +182,11 @@ Goal: smooth and professional, with optimisation considered at all times.
 - **Tests:** `jest-expo` for the pure logic (music theory, gamification rules, scheduler math).
 - **Lesson content:** 12 lessons as metadata, 3 with full exercise content, because the mic doesn't work yet.
 - **Chord Lab wood:** the fretboard reuses the walnut texture `design/generated-1.png` instead of the remote Unsplash photo in the design, so the app ships only our own generated asset.
+
+---
+
+## 2026-10-26 · Template cleanup
+
+**Decision:** Removed everything left over from `create-expo-app`: example images and tab icons, the `example/` folder, the broken `reset-project` script, the web favicon and web config, and seven unused packages (`expo-symbols`, `expo-glass-effect`, `@expo/ui`, `expo-web-browser`, `expo-device`, `react-native-web`, `react-dom`). `app.json` now uses the dark interface style and `color.bg` (`#13110E`) for the root, splash and Android icon backgrounds. The placeholder app icons stay until there is a real icon.
+**Reason:** Every file and dependency in the project should have a reason I can explain. Web is not a target platform, so the web packages aren't needed (they are only optional peer dependencies of `expo` and `expo-router`).
+**Alternatives:** keep the unused packages (harmless, but more to explain and update). `app.json` changes only take effect in real builds, so they don't need a new build until the first Android dev build.
