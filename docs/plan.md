@@ -457,11 +457,12 @@ Conventions for every step:
   - Test: iPhone: all tabs, Tuner/Metronome switch, tab bar height 84 incl. home indicator.
   - Commit: `feat(nav): tab bar and tool switch`
   - Result: done, tested on the iPhone. `Tabs` from `expo-router/js-tabs` (SDK 58 path; the old `Tabs` export from `expo-router` is deprecated) with our `TabBar` passed as `tabBar`; a small adapter maps the router state to it and presses work like the default bar (`tabPress` event, then `navigateToTab`). Third tab renamed from the design's "Tuner" to **"Tools"** (audio-waveform icon) at your request, so the Metronome is findable; it is a `tools/` stack (tuner, metronome; no animation) switched by `ToolHeader` with `router.replace`. Screens without a tab bar in the design (Lesson detail, All chords, Settings, Results, Practice, Input check) go next to `(tabs)` in `(app)`, so routes for lesson detail and all chords moved there.
-- [ ] **3.2 Profile hook + Settings**
+- [x] **3.2 Profile hook + Settings** (done 2026-10-26)
   - Files: `src/hooks/useProfile.ts` (live `onSnapshot`), `src/app/(app)/settings.tsx`, You header settings button.
   - Test: iPhone: change daily goal → value in the console changes; sign out works.
   - Done when: all Settings controls persist (Listening ones stored only).
   - Commit: `feat(settings): settings screen backed by the user profile`
+  - Result: done, tested on the iPhone (changes saved to Firestore, Sign out). `ProfileProvider` (in `(app)/_layout.tsx`) keeps `users/{uid}` live with one `onSnapshot` listener; `useProfile()` reads it and `updateSettings` saves single fields (`settings.dailyGoalMin`). A missing profile is created by `ensureUserProfile` (a Firestore transaction, also used by sign-up), but only when the server, not the offline cache, says it is missing (fixes R17). Settings follows the design: Playing (hand, guitar, headstock, daily goal, A4 stepper 430–450), Listening (sensitivity slider, noise gate), Feedback (4 switch rows), Account (email, red Sign out). New components: `Slider` (React Native touch-responder props, no library; first version with PanResponder broke the React Compiler "no refs during render" lint rule), `SwitchRow` (whole row toggles), `Stepper`. Settings is opened from the You header; Sign out moved there from Today. "Run an input check" comes in 7.3. Loading = skeleton cards; error copy "Couldn't load your settings" / "Check your connection and try again." is not in the design (approved 2026-10-26).
 - [ ] **3.3 Onboarding (level, guitar, microphone intro)**
   - Files: `src/app/(app)/onboarding/{_layout,level,guitar,microphone,low-e}.tsx` (low-e as a placeholder until 7.3), onboarding guard in root layout.
   - Test: iPhone: new account goes through onboarding; Skip works; existing account goes straight to Today.
@@ -630,7 +631,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R13 | ~~The old global npm 7 is still used~~ (resolved 2026-10-26: global npm updated to 10) by `npm install` and `npx expo install`, and would break `node_modules` again | Update the global npm once (manual task 10). Until then install with `npx npm@10 install` |
 | R15 | Keyboard covers inputs on Android: `automaticallyAdjustKeyboardInsets` is iOS-only, and Expo's recommended `react-native-keyboard-controller` isn't in Expo Go | Check the auth screens on the Android emulator or the Android phone (step A.0). If fields are covered, wrap `Screen` in `KeyboardAvoidingView` on Android, or add `react-native-keyboard-controller` with the dev build |
 | R16 | The running dev server's typed-routes generator can list new non-route files (e.g. `/../firebase/AuthProvider`) in `.expo/types/router.d.ts`, so `tsc` rejects valid links like `"/"` | Restart the dev server with `npx expo start --clear`; a fresh generation is correct (checked 2026-10-26) |
-| R17 | After `createUserWithEmailAndPassword` the user is signed in and the guard switches to the app before the profile document is written; if that write fails (e.g. connection lost), the account has no profile | Step 3.2's `useProfile` creates the profile when it is missing (name from the Firebase account) |
+| R17 | ~~After `createUserWithEmailAndPassword` the user is signed in and the guard switches to the app before the profile document is written; if that write fails (e.g. connection lost), the account has no profile~~ (resolved in 3.2: `ProfileProvider` creates a missing profile) | Step 3.2's `useProfile` creates the profile when it is missing (name from the Firebase account) |
 | R14 | The `react-dom` override must match React's version; after an SDK upgrade npm may fail with ERESOLVE again | On every SDK upgrade, set `overrides.react-dom` to the new `react` version |
 
 ---
@@ -686,3 +687,5 @@ Still open:
 - 2026-10-26: step 2.5 done; Phase 2 (Firebase and auth) complete. "Email already in use" stays a submit-time check (email enumeration protection).
 - 2026-10-26: step 3.1 built (tabs, tool switch); route paths for lesson detail and all chords moved outside the tabs.
 - 2026-10-26: third tab renamed "Tools" (design said "Tuner"), your choice among four options.
+- 2026-10-26: step 3.2 built (ProfileProvider, Settings, Slider, SwitchRow, Stepper); R17 resolved.
+- 2026-10-26: step 3.2 done (tested on iPhone).

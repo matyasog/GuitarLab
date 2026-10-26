@@ -10,7 +10,7 @@ import {
 import { createContext, useEffect, useState, type ReactNode } from 'react';
 
 import { auth } from './config';
-import { createUserProfile } from './users';
+import { ensureUserProfile } from './users';
 
 export type AuthState = {
   // The signed-in Firebase user, or null when signed out.
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // From here the user is signed in, so the route guard already switches to the app.
       // The name is also stored on the Firebase account (shown in the console's user list).
       await updateProfile(newUser, { displayName: displayName.trim() });
-      await createUserProfile(newUser.uid, displayName);
+      await ensureUserProfile(newUser.uid, displayName);
     },
     signOut: () => firebaseSignOut(auth),
     resetPassword: (email) => sendPasswordResetEmail(auth, email.trim()),

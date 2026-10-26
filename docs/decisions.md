@@ -344,3 +344,19 @@ Text-size rule: text scales with the phone setting everywhere except labels insi
 **Decision:** The tab that holds the Tuner and the Metronome is labelled **"Tools"** with the audio-waveform icon, instead of the design's "Tuner" with a speaker icon. Inside, the Tuner | Metronome switch stays as designed.
 **Reason:** With the label "Tuner", someone looking for the metronome has no reason to open that tab. "Tools" says the tab holds more than one tool, and keeps the five-tab bar of the design. The sliders icon was not used because the design already uses it for the Settings button.
 **Alternatives (I chose among these):** a separate Metronome tab (six tabs, ~62 pt each on a 375 pt phone; Apple recommends 3 to 5); Metronome as a tab and You moved to the Today level badge (profile less visible); a tab whose label follows the last-used tool (a new user still can't see the metronome).
+
+---
+
+## 2026-10-26 · One live profile listener for the signed-in app
+
+**Decision:** `ProfileProvider` (wrapping the signed-in routes) listens to `users/{uid}` with Firestore's `onSnapshot` and shares it through `useProfile()`. Settings are saved field by field (`updateDoc` with `settings.dailyGoalMin` etc.). If the document is missing, `ensureUserProfile` creates it in a transaction (read, then write only if still missing), but only when the answer comes from the server, not the offline cache. Sign-up uses the same function.
+**Reason:** One listener serves every screen and keeps the profile up to date, also when it changes on another device. Firestore applies local writes to its cache at once, so a setting changes on screen immediately and is sent in the background (also queued while offline). Saving single fields means two quick changes can't overwrite each other. The transaction makes "create the profile" safe even if sign-up and the listener try at the same moment, which closes the gap where an account could end up without a profile (plan risk R17).
+**Alternatives:** reading the profile once per screen with `getDoc` (no live updates, more reads); saving the whole `settings` object (a fast second change could undo the first).
+
+---
+
+## 2026-10-26 · Slider built on React Native's touch responder
+
+**Decision:** The input-sensitivity slider is our own small component (`src/components/Slider.tsx`) using the View's built-in touch-responder props (`onResponderGrant`, `onResponderMove`, `onResponderRelease`): the finger's x position inside the slider becomes the value, in steps of 5. It saves only when the finger lifts, and screen readers adjust it with swipe up/down.
+**Reason:** The design's slider (4 pt amber rail, round thumb) can't be styled from the system slider, and the community slider would be an extra dependency. A first version with `PanResponder` kept the latest values in refs, which the React Compiler's lint rule forbids during render; the responder props need no refs at all.
+**Alternatives:** `@react-native-community/slider` (in Expo Go, but native look); a Gesture Handler pan gesture (more setup for one control).

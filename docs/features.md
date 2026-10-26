@@ -111,10 +111,10 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 
 | Feature | Phase | Status | Notes |
 |---|---|---|---|
-| Playing: hand, guitar, headstock, daily goal, A4 reference | 3 → 6 | planned | |
-| Listening: input sensitivity, noise gate, run input check | 7 | mock only | stored now, used by real audio later |
-| Feedback: feel the beat, visual pulse, count-in, sound effects | 4 | planned | |
-| Account: email, sign out | 2 | planned | |
+| Playing: hand, guitar, headstock, daily goal, A4 reference | 3 | done | saved to the profile |
+| Listening: input sensitivity, noise gate, run input check | 3 / 7 | in progress | sensitivity and noise gate saved; input check row in 7.3 |
+| Feedback: feel the beat, visual pulse, count-in, sound effects | 3 | in progress | saved; used by the metronome in Phase 4 |
+| Account: email, sign out | 3 | done | |
 
 ## Out of scope for now
 

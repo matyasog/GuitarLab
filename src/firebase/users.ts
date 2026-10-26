@@ -1,4 +1,4 @@
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, runTransaction, serverTimestamp, updateDoc } from 'firebase/firestore';
 
 import type { UserProfile, UserSettings } from '@/types/user';
 
@@ -42,8 +42,26 @@ export function newUserProfile(displayName: string, timeZone: string): UserProfi
   };
 }
 
-// Creates users/{uid}. The rules allow this only once: a second write would change
-// createdAt, which the update rule forbids.
-export async function createUserProfile(uid: string, displayName: string): Promise<void> {
-  await setDoc(doc(db, 'users', uid), newUserProfile(displayName, deviceTimeZone()));
+export function userDocRef(uid: string) {
+  return doc(db, 'users', uid);
+}
+
+// Creates users/{uid} if it doesn't exist yet. Runs as a transaction ("read, then write only
+// if still missing"), so sign-up and the profile listener can both call it at the same moment
+// without the second one overwriting the first (which the rules would reject anyway).
+export async function ensureUserProfile(uid: string, displayName: string): Promise<void> {
+  const ref = userDocRef(uid);
+  await runTransaction(db, async (transaction) => {
+    const existing = await transaction.get(ref);
+    if (!existing.exists()) {
+      transaction.set(ref, newUserProfile(displayName, deviceTimeZone()));
+    }
+  });
+}
+
+// Saves some settings, e.g. { dailyGoalMin: 10 }. Only the given fields change
+// ("settings.dailyGoalMin"), so two quick changes never overwrite each other.
+export async function updateUserSettings(uid: string, changes: Partial<UserSettings>): Promise<void> {
+  const fields = Object.fromEntries(Object.entries(changes).map(([key, value]) => [`settings.${key}`, value]));
+  await updateDoc(userDocRef(uid), fields);
 }
