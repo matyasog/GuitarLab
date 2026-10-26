@@ -394,11 +394,12 @@ Conventions for every step:
   - Done when: matches the kit's Buttons and Inputs sections.
   - Commit: `feat(ui): buttons and text fields`
   - Result: done. `Icon` imports each Lucide icon the design uses on its own (`lucide-react-native/icons/play`), 44 icons under the design's names ("music" maps to Lucide's renamed "eighth-notes"). `Button` (primary / secondary / ghost, default / pressed / disabled, optional icon, `fullWidth`), `IconButton` (44 × 44, required accessibility label), `TextField` (label row with optional accessory, focused amber border, error with icon, helper or green success line, `trailing` and `footer` slots), `PasswordField` (Show / Hide text button as on the Sign in / Sign up screens). New text style `helper14`. iOS bundle 2.5 → 2.8 MB. The check screen in `src/app/index.tsx` shows all of them. Testing on the iPhone SE showed the keyboard covering a focused field; fixed in `Screen` with the scroll view's `automaticallyAdjustKeyboardInsets` (iOS), see R15.
-- [ ] **1.4 Content and control components**
+- [x] **1.4 Content and control components** (done 2026-10-26)
   - Files: `Card`, `ListRow`, `SectionHeader`, `Tag`, `StatTile`, `ProgressBar`, `Switch`, `SegmentedControl`, `ToolSwitch`, `StreakStrip`.
   - Libraries: none.
   - Test: iPhone gallery.
   - Commit: `feat(ui): content and control components`
+  - Result: done. All 10 components follow the kit (sizes, colours, states read with `inspect-pen.js props`). `StreakStrip` supports both the kit's compact strip and the Today screen's version (big count, last 7 days, daily-goal ring drawn with `react-native-svg`). `SegmentedControl` takes per-option label styles (DM Mono for "4/4"); the note glyphs ♩ ♫ ♬ need the **Noto Music** font named in the kit note, to be added in step 4.2. `Switch` slides its knob with Reanimated and respects Reduce Motion; the bundle grew 2.8 → 3.9 MB because Reanimated is now used for the first time. New text style `monoStrong32`. `ListRow` has a pressed state (surface colour) that the kit doesn't define.
 - [ ] **1.5 Navigation, overlays, states + dev gallery**
   - Files: `TabBar`, `ScreenHeader`, `Toast`, `Dialog`, `BottomSheet`, `Skeleton`, `EmptyState`, `ErrorState`, `ListeningIndicator`; `src/app/dev/gallery.tsx` (only reachable when `__DEV__`).
   - Libraries: none (BottomSheet built with Reanimated + gesture handler, both installed).
@@ -663,3 +664,4 @@ Still open:
 - 2026-10-26: step 1.2 done (layout classes, AppText, Screen). Note: the test iPhone is compact class.
 - 2026-10-26: step 1.3 done (Icon, Button, IconButton, TextField, PasswordField; added lucide-react-native + react-native-svg).
 - 2026-10-26: keyboard fix in `Screen` after iPhone SE test; added R15 (Android keyboard).
+- 2026-10-26: step 1.4 done (Card, ListRow, SectionHeader, Tag, StatTile, ProgressBar, StreakStrip, Switch, SegmentedControl, ToolSwitch).

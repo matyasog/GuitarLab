@@ -261,6 +261,7 @@ Metronome sounds "Click", "Woodblock", "Hi-hat" (+ accent variants), chord/strum
 5. **Metronome sound options:** the Sound segmented control uses the kit's default labels "Click / Woodblock / Hi-hat / Option 4". Resolved: "Option 4" is a placeholder and is left out (plan D1).
 6. **Achievements:** "Pick collection 4 of 12" shows 6 badges (7-day streak, Perfect pitch run, 120 BPM club, First 100%, 30-day streak, Barre chord boss). The other 6 are not designed.
 7. **Settings entry point:** opened from the `sliders-horizontal` icon button in the You header (found in frame FdMSK). OK, no gap.
+7b. **Noto Music font:** the kit note on the segmented control says subdivision glyphs (♩ ♫ ♬) use **Noto Music** at `type.20`. It is not a `.pen` font variable. Needed for the metronome (step 4.2); `@expo-google-fonts/noto-music` (OFL), to confirm then.
 8. **No designs for:** "All lessons" list on Today (it may just link to Learn), a "Details" target from Today's session card (probably Lesson detail), sign-up → onboarding transition, Lesson detail loading/error states, Chord Lab "colour chord" state (optional in spec), Input check "checking…" state.
 9. **Practice landscape on iOS:** Expo Go can lock orientation at runtime, but iOS 27 (SDK 58) makes apps resizable and `lockAsync` may have no effect.
 10. **Chord Lab wood:** the design uses a remote Unsplash photo. Resolved 2026-10-26: reuse the walnut texture `design/generated-1.png`.
