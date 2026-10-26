@@ -90,7 +90,7 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 |---|---|---|---|
 | XP and levels with rank names (Bedroom Player, Garage Band, Opening Act, Headliner) | 6 | planned | |
 | Daily goal and streak | 6 | planned | |
-| Achievements ("Pick collection", 12) | 6 | planned | 12-item proposal in plan D9 |
+| Achievements ("Pick collection", 12) | 6 | planned | list confirmed in plan D9 |
 | You: rank card, stat tiles, empty state | 6 | planned | |
 | You: "Your mix" faders and accuracy chart | 7 | mock only | they need scored runs |
 | XP from Metronome and Chord Lab activity | 6 | planned | values to approve |

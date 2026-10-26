@@ -176,8 +176,9 @@ Goal: smooth and professional, with optimisation considered at all times.
 
 - **Auth gating:** `Stack.Protected` route guards with an auth context and `useAuth()` hook (current Expo Router pattern).
 - **Security rules:** kept in `firestore.rules` and deployed with the Firebase CLI, only after my OK. The database is in production mode (everything denied) until then.
-- **Gamification:** level *n* needs 100 × (n − 1)² XP in total (matches the design's numbers); lesson runs give 40/80/120 XP; metronome and Chord Lab give small capped XP; a streak day is a local calendar day on which the daily goal is met. Achievement list is a proposal.
+- **Gamification:** level *n* needs 100 × (n − 1)² XP in total (matches the design's numbers); lesson runs give 40/80/120 XP; metronome and Chord Lab give small capped XP; a streak day is a local calendar day on which the daily goal is met. The 12 achievements are listed in `docs/plan.md` (D9), confirmed 2026-10-26.
 - **Fonts:** Google Fonts packages loaded with `useFonts`, because the `expo-font` config plugin doesn't work in Expo Go.
 - **Template cleanup:** template files and unused packages are removed in Phase 0.
 - **Tests:** `jest-expo` for the pure logic (music theory, gamification rules, scheduler math).
 - **Lesson content:** 12 lessons as metadata, 3 with full exercise content, because the mic doesn't work yet.
+- **Chord Lab wood:** the fretboard reuses the walnut texture `design/generated-1.png` instead of the remote Unsplash photo in the design, so the app ships only our own generated asset.

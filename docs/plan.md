@@ -276,7 +276,7 @@ Proposal (accepted 2026-10-26 as the starting point; values can be tuned later, 
 - **Chord Lab:** 2 XP per *different* chord strummed, max 30 XP per day.
 - **Practice time** for the daily goal: metronome playing time + lesson run time + Chord Lab active time (a minute counts if you strummed or placed a finger in it).
 - **Streak day:** a calendar day in the phone's **local time zone** where practice time ≥ the daily goal. The streak counts consecutive such days; it is not broken until a whole local day passes without meeting the goal (so "12 day streak" still shows during today before practising). Time zone is saved with each day; travelling can't erase a day already recorded.
-- **Achievements ("Pick collection", 12):** proposal, to confirm before step 6.1. The first 6 are in the design (name and glyph); conditions are mine. ⓜ = needs scored lesson runs, so it can only be earned with mock runs (dev flag) until the mic works.
+- **Achievements ("Pick collection", 12):** confirmed 2026-10-26. The first 6 are in the design (name and glyph); conditions are mine. ⓜ = needs scored lesson runs, so it can only be earned with mock runs (dev flag) until the mic works.
 
 | # | Name | Glyph | Condition |
 |---|---|---|---|
@@ -632,12 +632,10 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 
 ## 6. Open questions
 
-Answered on 2026-10-26: Firebase console, Google sign-in (D13), auth error copy (Claude drafts it, you approve it in step 2.4), lesson content (D14), gamification starting values (D9), metronome background + sound options (D1), tuner layers (D5), template packages (D11), tests (D12).
+Answered on 2026-10-26: Firebase console, Google sign-in (D13), auth error copy (Claude drafts it, you approve it in step 2.4), lesson content (D14), gamification starting values (D9), metronome background + sound options (D1), tuner layers (D5), template packages (D11), tests (D12), achievements list (D9), Chord Lab wood (reuse the walnut texture `design/generated-1.png`, step 5.3).
 
 Still open:
-1. **Achievements:** confirm or change the 12-item proposal in D9 (before step 6.1).
-2. **Chord Lab wood:** the design uses a remote Unsplash photo. Download it (Unsplash licence allows free use, attribution optional) or reuse the walnut texture `design/generated-1.png`? Needed before step 5.3.
-3. **"Coming soon" copy** for lessons without full content (D14), drafted by Claude in step 3.5.
+1. **"Coming soon" copy** for lessons without full content (D14), drafted by Claude in step 3.5.
 
 ---
 
@@ -646,3 +644,4 @@ Still open:
 - 2026-10-25: first draft (setup and planning session).
 - 2026-10-25: Firebase audit completed (project/app confirmed, Email/Password on, location europe-central2, rules locked, not test mode); R2 resolved.
 - 2026-10-26: decisions D1–D12 approved; added D13 (Google sign-in → Android dev build) and D14 (lesson content); tuner moving parts drawn in code; achievements proposal; Phase A added; open questions reduced to 3.
+- 2026-10-26: achievements list confirmed; Chord Lab fretboard reuses the walnut texture instead of the Unsplash photo.

@@ -208,7 +208,7 @@ Silkscreen text on baked instruments is part of the image, so Barlow Semi Conden
 | `design/generated-1.png` | 891 KB | walnut grain (Metronome body, Tuner headstock wood) | headstock wood: convert to WebP, resize to ~2× display size |
 | `design/generated-5.png` | 1 MB | rosewood hero art on Sign in | convert to WebP (~390 × 240 @3x) |
 | `generated-2/3/4.png` | 0.6–0.7 MB | not referenced by any frame | ignore |
-| Unsplash photo `photo-1620671716215-b2c6609996fe` | remote URL | Chord Lab fretboard wood | download, check Unsplash licence, convert to WebP (or replace with `generated-1.png`; see questions) |
+| Unsplash photo `photo-1620671716215-b2c6609996fe` | remote URL | Chord Lab fretboard wood | not used: replaced by the walnut texture `generated-1.png` (decided 2026-10-26) |
 
 ### Instrument layers (from the layer specs in the file)
 
@@ -263,4 +263,4 @@ Metronome sounds "Click", "Woodblock", "Hi-hat" (+ accent variants), chord/strum
 7. **Settings entry point:** opened from the `sliders-horizontal` icon button in the You header (found in frame FdMSK). OK, no gap.
 8. **No designs for:** "All lessons" list on Today (it may just link to Learn), a "Details" target from Today's session card (probably Lesson detail), sign-up → onboarding transition, Lesson detail loading/error states, Chord Lab "colour chord" state (optional in spec), Input check "checking…" state.
 9. **Practice landscape on iOS:** Expo Go can lock orientation at runtime, but iOS 27 (SDK 58) makes apps resizable and `lockAsync` may have no effect.
-10. **Chord Lab wood:** uses a remote Unsplash photo; we must bundle a local file.
+10. **Chord Lab wood:** the design uses a remote Unsplash photo. Resolved 2026-10-26: reuse the walnut texture `design/generated-1.png`.
