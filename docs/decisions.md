@@ -328,3 +328,19 @@ Text-size rule: text scales with the phone setting everywhere except labels insi
 **Decision:** Unlike the email format and the password rules, "That email already has an account…" appears only after tapping Create account (under the Email field), not when leaving the field.
 **Reason:** Only Firebase's server knows which emails are registered, and the project has Email Enumeration Protection on (Firebase's default): it refuses to tell anyone whether an email has an account, so nobody can use the app to collect registered addresses. The old lookup function `fetchSignInMethodsForEmail` is deprecated and returns an empty list while the protection is on. Firebase only reveals the conflict when an account is actually created.
 **Alternatives:** turning the protection off (lets anyone test which emails are registered; relies on a deprecated function); a public list of emails in Firestore (exposes users' emails). Both rejected for privacy.
+
+---
+
+## 2026-10-26 · Tab navigation with our own tab bar
+
+**Decision:** The signed-in app uses Expo Router's JavaScript `Tabs` (`expo-router/js-tabs`) with five tabs (Today, Learn, Tuner, Chord Lab, You) and our `TabBar` component passed as `tabBar`. A press emits the `tabPress` event and then calls `navigateToTab`, like the built-in bar. The Tuner tab contains a small stack with Tuner and Metronome, switched without animation by the Tuner | Metronome control (`router.replace`, so "back" never toggles between tools). Screens that have no tab bar in the design live next to the tabs, not inside them.
+**Reason:** The design's tab bar (amber LED, warm colours, 50 pt plus safe area) can't be made from the native tab bar's options; a custom component matching the kit can. The JS Tabs navigator is stable; Expo's headless `expo-router/ui` tabs are marked experimental.
+**Alternatives:** native tabs (`expo-router/native-tabs`, platform look, can't match the design); headless `expo-router/ui` tabs (experimental); one Tools screen that swaps Tuner/Metronome with React state (no separate routes, so the Lesson's "Tune" link couldn't open the tuner directly).
+
+---
+
+## 2026-10-26 · Third tab is "Tools", not "Tuner"
+
+**Decision:** The tab that holds the Tuner and the Metronome is labelled **"Tools"** with the audio-waveform icon, instead of the design's "Tuner" with a speaker icon. Inside, the Tuner | Metronome switch stays as designed.
+**Reason:** With the label "Tuner", someone looking for the metronome has no reason to open that tab. "Tools" says the tab holds more than one tool, and keeps the five-tab bar of the design. The sliders icon was not used because the design already uses it for the Settings button.
+**Alternatives (I chose among these):** a separate Metronome tab (six tabs, ~62 pt each on a 375 pt phone; Apple recommends 3 to 5); Metronome as a tab and You moved to the Today level badge (profile less visible); a tab whose label follows the last-used tool (a new user still can't see the metronome).

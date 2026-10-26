@@ -34,7 +34,9 @@ Routes are **planned** (nothing exists yet besides the template's `src/app/index
 | Microphone | `… / microphone` (l1vLe) | `…/onboarding/microphone.tsx` | EmptyState-style intro, 3 bullet lines, Button "Allow microphone", ghost "Not now…" |
 | Low E · waiting / hearing / done | `… / low-e-waiting` (DMD12), `… / low-e-hearing` (zb14N), `… / low-e-done` (tPVvO) | `…/onboarding/low-e.tsx` (mock audio) | Card with level meter, Button disabled → "Let's play" |
 
-### Tabs (tab bar: Today · Learn · Tuner · Chord Lab · You, 84 pt incl. inset)
+### Tabs (tab bar: Today · Learn · Tools · Chord Lab · You, 84 pt incl. inset)
+
+The design names the third tab "Tuner" (speaker icon). In the app it is **"Tools"** (audio-waveform icon) since 2026-10-26, because it holds both the Tuner and the Metronome (see docs/decisions.md).
 
 | Screen · state | Frame (id) | Planned route | Main components |
 |---|---|---|---|
@@ -42,19 +44,19 @@ Routes are **planned** (nothing exists yet besides the template's `src/app/index
 | Today · first-day | `Today / regular / first-day` (NDL9C) | same, state | same |
 | Today · offline | `Today / regular / offline` (RZHGr) | same, state | Toast/info "You're offline…" |
 | Today · loading | `Today / regular / loading` (xSOS8) | same, state | Skeleton/card, Skeleton/list row ×3 |
-| Learn · regular / scrolled | `Learn / regular / regular` (f5kLcb), `… / scrolled` (OrD7Z) | `src/app/(app)/(tabs)/learn/index.tsx` | ScreenHeader/tool ("7 of 12 done"), ProgressBar/XP, category Segments (All/Rhythm/Scales/Melody/Arpeggios), SectionHeader ×4 (In progress / Up next / Locked / Done), ListRow ×12, Tag/category |
+| Learn · regular / scrolled | `Learn / regular / regular` (f5kLcb), `… / scrolled` (OrD7Z) | `src/app/(app)/(tabs)/learn.tsx` | ScreenHeader/tool ("7 of 12 done"), ProgressBar/XP, category Segments (All/Rhythm/Scales/Melody/Arpeggios), SectionHeader ×4 (In progress / Up next / Locked / Done), ListRow ×12, Tag/category |
 | Learn · loading | `Learn / regular / loading` (eebgt) | same, state | Skeleton/list row ×7 |
 | Learn · error | `Learn / regular / error` (x7MjHQ) | same, state | ErrorState "Couldn't load your progress" + "Try again" |
-| Lesson detail · default (72 suggested) / tempo-64 | `Lesson detail / regular / default` (FVYUG), `… / tempo-64` (T6Kpct) | `src/app/(app)/(tabs)/learn/[lessonId].tsx` | ScreenHeader/back, scale-shape fretboard (wood), StatTile ×3, tempo Segments (warm-up/suggested/goal), "Tune first" ListRow, Button "Play at N BPM" |
+| Lesson detail · default (72 suggested) / tempo-64 | `Lesson detail / regular / default` (FVYUG), `… / tempo-64` (T6Kpct) | `src/app/(app)/lesson/[lessonId].tsx` (outside the tabs: no tab bar in the design) | ScreenHeader/back, scale-shape fretboard (wood), StatTile ×3, tempo Segments (warm-up/suggested/goal), "Tune first" ListRow, Button "Play at N BPM" |
 | Tuner · flat / in-tune (3+3) | `Tuner / regular / flat` (JZRND), `… / in-tune` (vPReW) | `src/app/(app)/(tabs)/tools/tuner.tsx` | ScreenHeader/tool, ToolSwitch, Tuner instrument (75 %), live readout, instruction line, HeadstockSwitch 3+3, TabBar |
 | Tuner · 6-in-line | `Tuner / regular / 6-in-line` (bhZhR) | same, state | HeadstockSwitch/6 in line |
 | Tuner · compact flat / in-tune | `Tuner / compact / flat` (S7joy), `… / in-tune` (KKRaE) | same, compact layout | headstock collapses to a row of 6 string buttons |
 | Metronome · stopped / beat 1 / other beat / speed trainer / above 170 | `Metronome / regular / stopped` (q6MMx), `… / playing-beat-1` (lWSm7), `… / playing-other-beat` (hjQHv), `… / speed-trainer-on` (btpDR), `… / above-170` (EQ55r) | `src/app/(app)/(tabs)/tools/metronome.tsx` | ToolSwitch, Metronome instrument (50 %), tempo name + BPM readout, ±1/±5, Start/Stop, TAP, SegmentedControl ×3 (time sig, subdivision, sound), beat lamps, Speed trainer + Switch, Timing histogram |
 | Metronome · compact stopped / beat 1 / above 170 | `Metronome / compact / …` (BYbF1, Xh1Na, AZqC3) | same, compact layout | instrument at 40 % |
 | Metronome · text 130 % | `Metronome / regular / stopped / text 130%` (QVrlc) + `Note / large text rule` (F7XFgh) | same | rows stack when `fontScale ≥ 1.2` |
-| Chord Lab · default / scrolled | `Chord Lab / regular / default` (Exwth), `… / default / scrolled` (k8gDq) | `src/app/(app)/(tabs)/chord-lab/index.tsx` | ScreenHeader/tool ("Clear", "All chords"), chord readout (name, rarity badge, long name, tone chips, STRUM), interactive fretboard (wood), quick-chord chips ×11, theory card |
+| Chord Lab · default / scrolled | `Chord Lab / regular / default` (Exwth), `… / default / scrolled` (k8gDq) | `src/app/(app)/(tabs)/chord-lab.tsx` | ScreenHeader/tool ("Clear", "All chords"), chord readout (name, rarity badge, long name, tone chips, STRUM), interactive fretboard (wood), quick-chord chips ×11, theory card |
 | Chord Lab · empty / scrolled | `Chord Lab / regular / empty` (j4LeS8), `… / empty / scrolled` (nrqag) | same, state | STRUM disabled, "Add some notes first" |
-| All chords sheet | `Chord Lab / All chords` (V8RxC) | `src/app/(app)/(tabs)/chord-lab/all-chords.tsx` (full-screen modal) | BottomSheet (full screen), root picker 6×2, grouped list with voicing buttons |
+| All chords sheet | `Chord Lab / All chords` (V8RxC) | `src/app/(app)/all-chords.tsx` (full-screen modal) | BottomSheet (full screen), root picker 6×2, grouped list with voicing buttons |
 | You · regular / empty | `You / regular / regular` (FdMSK), `… / empty` (R6rBK) | `src/app/(app)/(tabs)/you.tsx` | Rank card (level badge, XP bar, rank ladder), StatTile ×3, "Your mix" faders, accuracy chart, "Pick collection" achievements grid |
 
 ### Pushed / modal screens (no tab bar)

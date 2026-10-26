@@ -12,11 +12,13 @@ export type TabItem = {
   icon: IconName;
 };
 
-// The five tabs from "Tab bar" in the design.
+// The five tabs from "Tab bar" in the design. Keys are the route names in src/app/(app)/(tabs)/.
+// The design calls the third tab "Tuner" (speaker icon); it was renamed "Tools" (waveform icon)
+// on 2026-10-26 so the Metronome inside it is easier to find (docs/decisions.md).
 export const mainTabs: TabItem[] = [
-  { key: 'today', label: 'Today', icon: 'guitar' },
+  { key: 'index', label: 'Today', icon: 'guitar' },
   { key: 'learn', label: 'Learn', icon: 'book-open' },
-  { key: 'tools', label: 'Tuner', icon: 'speaker' },
+  { key: 'tools', label: 'Tools', icon: 'audio-waveform' },
   { key: 'chord-lab', label: 'Chord Lab', icon: 'grid-3x3' },
   { key: 'you', label: 'You', icon: 'user' },
 ];
@@ -29,7 +31,7 @@ type TabBarProps = {
 
 // Bottom tab bar, from "Tab bar" + "Tab item" in the design: 50 pt of tabs plus the
 // phone's bottom safe area (the design's 84 pt includes a 34 pt home indicator area).
-// Step 3.1 connects it to Expo Router's Tabs as a custom tab bar.
+// src/app/(app)/(tabs)/_layout.tsx connects it to Expo Router's Tabs.
 export function TabBar({ tabs, activeKey, onPress }: TabBarProps) {
   const insets = useSafeAreaInsets();
 

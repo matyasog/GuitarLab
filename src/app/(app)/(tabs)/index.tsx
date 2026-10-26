@@ -3,19 +3,19 @@ import { router } from 'expo-router';
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
+import { ScreenHeader } from '@/components/ScreenHeader';
 import { useAuth } from '@/hooks/useAuth';
 
-// Placeholder home for signed-in users until the Today screen (Phase 3).
-export default function Home() {
+// Today tab. Placeholder until step 3.6 builds the designed Today screen.
+export default function Today() {
   const { user, signOut } = useAuth();
 
   return (
-    <Screen>
-      <AppText variant="title32" accessibilityRole="header">
-        GuitarLab
-      </AppText>
+    // No bottom edge: the tab bar below already keeps clear of the home indicator.
+    <Screen edges={['top', 'left', 'right']}>
+      <ScreenHeader title="Today" />
       <AppText variant="mono14" color="muted">
-        Signed in as {user?.email ?? user?.uid}
+        Signed in as {user?.email ?? user?.uid}. Placeholder until step 3.6.
       </AppText>
       {/* Sign out moves to Settings → Account in step 3.2. */}
       <Button label="Sign out" variant="secondary" onPress={signOut} fullWidth />

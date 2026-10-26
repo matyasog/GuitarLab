@@ -36,6 +36,12 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 | Sign in / up with Google | A.1 | planned (Android dev build) | not possible in Expo Go; buttons hidden until then |
 | Offline banner on Today | 3 | planned | Firestore offline cache |
 
+## Navigation
+
+| Feature | Phase | Status | Notes |
+|---|---|---|---|
+| Tab bar (Today, Learn, Tools, Chord Lab, You) | 3 | done | Expo Router JS Tabs + our TabBar; "Tools" replaces the design's "Tuner" tab |
+
 ## Onboarding
 
 | Feature | Phase | Status | Notes |
@@ -61,7 +67,7 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 
 | Feature | Phase | Status | Notes |
 |---|---|---|---|
-| Tuner / Metronome switch | 4 | planned | |
+| Tuner / Metronome switch | 3 | done | switches between the tool routes; tools are placeholders |
 | **Metronome**: pyramid instrument, swinging pendulum, sliding weight | 4 | planned | baked images + Reanimated |
 | Metronome: BPM readout + tempo name, ±1 / ±5, TAP tempo | 4 | planned | 40–240 BPM |
 | Metronome: time signatures 4/4, 3/4, 2/4, 6/8; subdivision ♩ ♫ ♬; sound choice | 4 | planned | |

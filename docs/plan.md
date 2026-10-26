@@ -452,10 +452,11 @@ Conventions for every step:
 
 ### Phase 3: Navigation shell and quiet-studio screens
 
-- [ ] **3.1 Tabs and tool switch**
-  - Files: `src/app/(app)/(tabs)/_layout.tsx` (Expo Router `Tabs` with custom `TabBar`), placeholder `index`, `learn/index`, `tools/tuner`, `tools/metronome`, `chord-lab/index`, `you`.
+- [x] **3.1 Tabs and tool switch** (done 2026-10-26)
+  - Files: `src/app/(app)/(tabs)/_layout.tsx` (Expo Router `Tabs` with custom `TabBar`), placeholder `index`, `learn`, `tools/tuner`, `tools/metronome`, `chord-lab`, `you`.
   - Test: iPhone: all tabs, Tuner/Metronome switch, tab bar height 84 incl. home indicator.
   - Commit: `feat(nav): tab bar and tool switch`
+  - Result: done, tested on the iPhone. `Tabs` from `expo-router/js-tabs` (SDK 58 path; the old `Tabs` export from `expo-router` is deprecated) with our `TabBar` passed as `tabBar`; a small adapter maps the router state to it and presses work like the default bar (`tabPress` event, then `navigateToTab`). Third tab renamed from the design's "Tuner" to **"Tools"** (audio-waveform icon) at your request, so the Metronome is findable; it is a `tools/` stack (tuner, metronome; no animation) switched by `ToolHeader` with `router.replace`. Screens without a tab bar in the design (Lesson detail, All chords, Settings, Results, Practice, Input check) go next to `(tabs)` in `(app)`, so routes for lesson detail and all chords moved there.
 - [ ] **3.2 Profile hook + Settings**
   - Files: `src/hooks/useProfile.ts` (live `onSnapshot`), `src/app/(app)/settings.tsx`, You header settings button.
   - Test: iPhone: change daily goal → value in the console changes; sign out works.
@@ -466,11 +467,11 @@ Conventions for every step:
   - Test: iPhone: new account goes through onboarding; Skip works; existing account goes straight to Today.
   - Commit: `feat(onboarding): level and guitar setup`
 - [ ] **3.4 Lessons data + Learn**
-  - Files: `src/data/lessons.ts`, `src/types/lesson.ts`, `src/app/(app)/(tabs)/learn/index.tsx`.
+  - Files: `src/data/lessons.ts`, `src/types/lesson.ts`, `src/app/(app)/(tabs)/learn.tsx`.
   - Test: iPhone: filter chips, sections, locked row "How to unlock", loading and error states (forced via a dev toggle).
   - Commit: `feat(learn): lesson list with static content`
 - [ ] **3.5 Lesson detail**
-  - Files: `src/app/(app)/(tabs)/learn/[lessonId].tsx`, `src/components/fretboard/ScaleShape.tsx`.
+  - Files: `src/app/(app)/lesson/[lessonId].tsx` (outside the tabs: no tab bar in the design), `src/components/fretboard/ScaleShape.tsx`.
   - Test: iPhone: tempo segments change the Play button label; "Tune" opens the Tuner.
   - Commit: `feat(learn): lesson detail`
 - [ ] **3.6 Today**
@@ -525,7 +526,7 @@ Conventions for every step:
   - Test: tests generate all voicings; spot-check fingerings on a real guitar.
   - Commit: `feat(chords): chord shapes and voicings`
 - [ ] **5.3 Interactive fretboard and readout**
-  - Files: `src/app/(app)/(tabs)/chord-lab/index.tsx`, `src/components/chordlab/{Fretboard,ChordReadout,QuickChords,TheoryCard}.tsx`, wood texture asset.
+  - Files: `src/app/(app)/(tabs)/chord-lab.tsx`, `src/components/chordlab/{Fretboard,ChordReadout,QuickChords,TheoryCard}.tsx`, wood texture asset.
   - Test: iPhone: place/lift fingers, open/mute, move position, Clear → empty state, left-handed mirror (Settings), VoiceOver reads cells.
   - Commit: `feat(chordlab): interactive fretboard`
 - [ ] **5.4 Strum sound**
@@ -534,7 +535,7 @@ Conventions for every step:
   - Test: iPhone with the ring/silent switch on and off (should play in silent mode); quick repeated strums.
   - Commit: `feat(chordlab): strum sound`
 - [ ] **5.5 All chords sheet**
-  - Files: `src/app/(app)/(tabs)/chord-lab/all-chords.tsx`.
+  - Files: `src/app/(app)/all-chords.tsx`.
   - Test: iPhone: root picker, sections, tapping a voicing loads it and closes the sheet.
   - Docs: features (Chord Lab done).
   - Commit: `feat(chordlab): all chords sheet`
@@ -683,3 +684,5 @@ Still open:
 - 2026-10-26: step 2.5 built (Sign up, profile document, validation); waiting for iPhone test; added R17.
 - 2026-10-26: Sign up: four password rules, password checked on blur (your request).
 - 2026-10-26: step 2.5 done; Phase 2 (Firebase and auth) complete. "Email already in use" stays a submit-time check (email enumeration protection).
+- 2026-10-26: step 3.1 built (tabs, tool switch); route paths for lesson detail and all chords moved outside the tabs.
+- 2026-10-26: third tab renamed "Tools" (design said "Tuner"), your choice among four options.
