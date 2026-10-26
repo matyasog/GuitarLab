@@ -88,4 +88,5 @@ firestore.rules   Firestore security rules (versioned here)
 - `npx expo install <package>`: add an Expo-compatible package version
 - `npx expo-doctor`: check project health and dependency versions
 - `npx eas-cli@latest build --profile development --platform android`: build the Android dev build
-- `npx tsc --noEmit` and `npx expo lint`: type check and lint (run both before saying a task is done)
+- `npm run typecheck`, `npm run lint`, `npm test`: type check, lint and unit tests (run all three before saying a task is done)
+- Install dependencies with npm 10 or newer (`npm -v`); see `docs/decisions.md` (2026-10-26, npm 10)

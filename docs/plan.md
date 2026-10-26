@@ -358,12 +358,13 @@ Conventions for every step:
   - Result: done. Also updated Expo packages to the latest SDK 57 patch versions (`npx expo install --fix`) and regenerated `package-lock.json` from scratch. `npx expo-doctor`: 20/21 checks pass. The remaining one is a pre-existing duplicate of `@expo/log-box` / `@expo/dom-webview` inside Expo's own packages (same version twice; npm can't merge them because of a peer conflict). It doesn't affect Expo Go; see risk R12.
   - Docs: decisions (cleanup).
   - Commit: `chore: remove Expo template leftovers`
-- [ ] **0.2 Folder structure, env and checks**
+- [x] **0.2 Folder structure, env and checks** (done 2026-10-26)
   - Goal: the folder layout from `CLAUDE.md` plus a working check routine.
   - Files: `src/{components,theme,audio,firebase,hooks,data,types}/` (with short `README` or index files), `.env.example`, `package.json` scripts `typecheck`, `lint`, (`test` if D12).
   - Libraries: `jest-expo`, `jest`, `@types/jest` (dev only; Expo Go not affected) if D12 is approved.
   - Test: run `npm run typecheck`, `npm run lint` (and `npm test` with one sample test).
   - Done when: all three commands pass on Windows PowerShell.
+  - Result: done. Folders have a short README each; `.env.example`; scripts `typecheck`, `lint`, `test`, `test:watch`; Jest config `preset: jest-expo`; first test `__tests__/env-example-test.ts` checks that `.env.example` lists exactly the keys the Firebase config reads. TypeScript 6 no longer loads installed type packages automatically, so `tsconfig.json` sets `"types": ["jest"]`; the test file loads Node types itself. Found that the global npm is 7.24.2 (old); it nested Expo packages wrongly (the cause of R12 and of "Cannot find module expo-modules-core" in Jest). Reinstalled with npm 10 (`npx npm@10 install`) and added an npm `overrides` entry pinning the optional `react-dom` to React's version. expo-doctor now 20/20.
   - Docs: features (foundation), decisions (tests).
   - Commit: `chore: project structure, env example and check scripts`
 
@@ -614,7 +615,9 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R9 | Synthesised strum sounds too artificial | Record my own guitar samples (D3 option B) |
 | R10 | Time runs short before February | Phases 0–6 are the core; Phase 7 screens can ship with fewer states |
 | R11 | Expo Go login requirement or network blocks loading on the iPhone | `npx expo login` + login in Expo Go; try `npx expo start --tunnel` on school Wi-Fi |
-| R12 | expo-doctor warns about duplicate `@expo/log-box` / `@expo/dom-webview` (same version, nested inside `expo` and `expo-router`) | Harmless in Expo Go. Still present after the SDK 58 upgrade (58.x versions). Re-check before the first Android dev build (A.0); if still there, fix with an npm `overrides` entry |
+| R12 | ~~expo-doctor warns about duplicate `@expo/log-box` / `@expo/dom-webview`~~ (resolved 2026-10-26: caused by the old global npm 7; reinstalled with npm 10) | — |
+| R13 | The old global npm 7 is still used by `npm install` and `npx expo install`, and would break `node_modules` again | Update the global npm once (manual task 10). Until then install with `npx npm@10 install` |
+| R14 | The `react-dom` override must match React's version; after an SDK upgrade npm may fail with ERESOLVE again | On every SDK upgrade, set `overrides.react-dom` to the new `react` version |
 
 ---
 
@@ -628,7 +631,8 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 6. **Instrument layer exports** (@2x and @3x) into `assets/instruments/…` with the file names in `docs/design-map.md` §5: Metronome static-body, pendulum (with the weight hidden), weight, glass-overlay before step 4.3; Tuner static-body and glass-overlay before step 7.2. The tuner's moving parts are drawn in code, so no new frames are needed.
 7. **Test accounts**: create one test user in Firebase Authentication (console → Users → Add user) for step 2.3.
 8. **Check chord fingerings** on a real guitar in step 5.2.
-9. **Upgrade check**: watch the App Store for an Expo Go update ("SDK 58").
+9. **Upgrade check**: watch the App Store for an Expo Go update (next: SDK 59).
+10. **Update the global npm** (your PC still has npm 7.24.2 from 2021): run `npm install -g npm@10` in PowerShell, then check with `npm -v` (should print 10.x).
 
 ---
 
@@ -649,3 +653,4 @@ Still open:
 - 2026-10-26: achievements list confirmed; Chord Lab fretboard reuses the walnut texture instead of the Unsplash photo.
 - 2026-10-26: step 0.1 done (template cleanup); added risk R12 (expo-doctor duplicate warning).
 - 2026-10-26: step U.1 done (upgraded to SDK 58 because Expo Go on the iPhone updated); R1 updated for SDK 59.
+- 2026-10-26: step 0.2 done (folders, .env.example, scripts, jest-expo); R12 resolved; added R13, R14 and manual task 10 (update global npm).

@@ -15,6 +15,8 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 | Size classes compact / regular / wide + `useLayoutClass()` | 1 | planned | |
 | Base components (button, text field, card, list row, tab bar, …) | 1 | planned | 25 components from the kit |
 | Dev-only component gallery route | 1 | planned | hidden in production |
+| Folder structure, `.env.example`, check scripts | 0 | done | `npm run typecheck`, `npm run lint`, `npm test` |
+| Unit tests (jest-expo) | 0 | done | first test checks `.env.example` |
 
 ## Account
 

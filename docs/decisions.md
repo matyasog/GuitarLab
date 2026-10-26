@@ -199,3 +199,19 @@ Goal: smooth and professional, with optimisation considered at all times.
 **Reason:** The App Store version of Expo Go on the iPhone updated to SDK 58 and refused to open the SDK 57 project ("Project is incompatible with this version of Expo Go"). Older Expo Go versions can't be installed on iOS devices.
 **How:** `npx expo install expo@^58.0.0 --fix` updated `package.json`, but npm couldn't install it over the old packages (peer conflict between the new Reanimated and the old Worklets). So `node_modules` and `package-lock.json` were deleted and reinstalled from the SDK 58 versions. Checked with `npx expo install --check`, `npx tsc --noEmit`, `npx expo lint` and an iOS bundle export.
 **Alternatives:** none realistic: an iOS development build or an older Expo Go would both need things I don't have (Mac / Apple Developer account).
+
+---
+
+## 2026-10-26 · Unit tests with jest-expo
+
+**Decision:** Unit tests run with Jest and the `jest-expo` preset (`npm test`). Test files are named `*-test.ts` and live in `__tests__/` folders. `tsconfig.json` sets `"types": ["jest"]` so test globals (`test`, `expect`) are typed; Node's types (`fs`, `path`) are loaded only inside test files that need them, because app code runs on the phone where they don't exist.
+**Reason:** The pure logic (chord naming, gamification rules, metronome timing math, later DSP) is easy to get subtly wrong and easy to test. Tests are also evidence for the thesis. Jest is a development tool only; nothing of it ships in the app or affects Expo Go.
+**Alternatives:** no tests, checking by hand (faster now, risky later); Vitest (not the Expo-supported preset).
+
+---
+
+## 2026-10-26 · npm 10 instead of the old global npm 7
+
+**Decision:** Dependencies are installed with npm 10 (the version that comes with Node 22). `package.json` has an `overrides` entry that pins `react-dom` to the same version as `react`.
+**Reason:** The PC had a global npm 7.24.2 (2021) that shadowed Node's own npm. npm 7 placed Expo's internal packages in nested folders, which caused expo-doctor's "duplicate dependencies" warning and made Jest fail with "Cannot find module 'expo-modules-core'". A clean install with npm 10 fixed both. npm 10 then failed on any new install because it tried to add the newest optional `react-dom` (19.3.1), which needs a newer React than SDK 58 uses (19.3.0); the override keeps them equal.
+**Alternatives:** `legacy-peer-deps=true` in `.npmrc` (silences all peer checks, hiding real problems); keeping npm 7 (broken installs).
