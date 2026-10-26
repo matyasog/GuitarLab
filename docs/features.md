@@ -57,9 +57,9 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 |---|---|---|---|
 | Today: greeting, level badge, streak strip with daily goal, tonight's session card, up next | 3 → 6 | planned | static data in Phase 3, live in Phase 6 |
 | Today: first-day, offline, loading states | 3 | planned | |
-| Learn: lesson list with category filter and sections (in progress / up next / locked / done) | 3 | planned | static lessons from `src/data/` |
-| Learn: loading and error states | 3 | planned | |
-| Lesson unlock rule (≥ 80 % on the previous lesson) | 6 | planned | |
+| Learn: lesson list with category filter and sections (in progress / up next / locked / done) | 3 | done | 12 lessons from `src/data/lessons.ts`; sample progress until 6.4; tapping the selected chip returns to All |
+| Learn: loading and error states | 3 | done | dev preview `/learn?preview=loading|error` |
+| Lesson status from scores: unlock at 80 % on the required lesson, done at 90 % | 3 | in progress | `lessonStatus()` in `src/data/lessonSections.ts`; real scores in 6.4 |
 | Lesson detail: scale/riff shape on the fretboard, stats, tempo choice, tune-first nudge, Play | 3 | planned | Play opens Practice (mock) |
 | Lesson content: 12 lessons as metadata, 3 with full exercises | 3 | planned | decision D14 |
 

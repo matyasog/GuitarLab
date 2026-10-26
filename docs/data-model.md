@@ -57,7 +57,7 @@ users/{uid}/achievements/{achId}     earned achievements
 | `bestStreak` | number | |
 | `lastGoalDay` | string \| null | last day the daily goal was met (`"2026-10-25"`) |
 | `practiceSec` | number | total practice time |
-| `lessonsDone` | number | lessons with best score ≥ 80 % |
+| `lessonsDone` | number | lessons with best score ≥ 90 % (the "done" rule) |
 
 Example:
 

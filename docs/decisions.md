@@ -368,3 +368,19 @@ Text-size rule: text scales with the phone setting everywhere except labels insi
 **Decision:** Inside the signed-in part, `(app)/_layout.tsx` waits for the profile and then uses `Stack.Protected` again: while `onboarding.completedAt` is empty only the onboarding screens exist; afterwards only the tabs and Settings. Finishing onboarding ("Let's play" or "Not now, I'll look around first") writes `completedAt` with the server time, and the guard switches to Today. Answers are saved when tapping Continue (level to `onboarding.level`, guitar/hand/pegs to `settings`).
 **Reason:** The same pattern as sign-in keeps the logic in one place and needs no manual navigation; the back gesture can't return into onboarding once it's done. Keeping the answers in the profile means the user also finds them in Settings.
 **Alternatives:** a flag in the phone's storage (lost on reinstall or a second device); redirecting from the Today screen (the tabs would flash first).
+
+---
+
+## 2026-10-26 · Lessons as static data; sample progress until Phase 6
+
+**Decision:** The 12 lessons from the design are TypeScript data in `src/data/lessons.ts` (title, category, tempo, goal tempo, difficulty, unlock rule). The grouping into In progress / Up next / Locked / Done and the unlock sentence are pure functions in `src/data/lessonSections.ts`, unit-tested. Screens get progress from `useLessonProgress()`, which returns sample progress copied from the design until the real Firestore progress exists (step 6.4). In development, `?preview=loading` / `?preview=error` shows the loading and error states.
+**Reason:** Lessons are the same for every user and must work offline, so they ship with the app; only scores are personal and live in Firestore. Keeping the progress behind one hook means the Learn screen won't change when the sample is replaced. The preview parameter lets the designed loading and error states be checked on the phone before anything actually loads.
+**Alternatives:** lessons in Firestore (needs network, nothing to edit there yet); building Learn only after Phase 6 (no way to check the design now).
+
+---
+
+## 2026-10-26 · Lesson status comes from the best score
+
+**Decision:** Only each lesson's best score is stored; its status is worked out in the app (`lessonStatus` in `src/data/lessonSections.ts`): **locked** while the required lesson's best score is below its unlock score (80 %), **done** from a best score of **90 %**, **in progress** when played but below 90 %, **up next** when never played. Unlock prerequisites: A minor pentatonic after E minor pentatonic (design), Syncopated strumming after Eighth notes, Cmaj7 arpeggio after A minor arpeggio (both confirmed by me).
+**Reason:** The design's example data was inconsistent ("Triplet feel" listed as done at 78 % while unlocking needs 80 %), so it couldn't serve as the rule. A stored status could disagree with the score; a computed one can't, and it is easy to unit-test. 90 % for "done" asks for real mastery, while 80 % is enough to move on to the next lesson.
+**Alternatives:** done at 80 % (same as unlock; "done" would mean little); storing the status in Firestore (two sources of truth).

@@ -1,25 +1,25 @@
 import { StyleSheet, View } from 'react-native';
 
+import { categoryLabels } from '@/data/lessons';
 import { colors, radii, space, type ColorName } from '@/theme';
+import type { LessonCategory } from '@/types/lesson';
 
 import { AppText } from './AppText';
 
-export type LessonCategory = 'rhythm' | 'scales' | 'melody' | 'arp';
-
-// Label and colours per lesson category, from "Tag / …" in the design.
-const tags: Record<LessonCategory, { label: string; color: ColorName; background: ColorName }> = {
-  rhythm: { label: 'Rhythm', color: 'catRhythm', background: 'catRhythmBg' },
-  scales: { label: 'Scales', color: 'catScales', background: 'catScalesBg' },
-  melody: { label: 'Melody', color: 'catMelody', background: 'catMelodyBg' },
-  arp: { label: 'Arpeggios', color: 'catArp', background: 'catArpBg' },
+// Colours per lesson category, from "Tag / …" in the design.
+export const categoryColors: Record<LessonCategory, { color: ColorName; background: ColorName }> = {
+  rhythm: { color: 'catRhythm', background: 'catRhythmBg' },
+  scales: { color: 'catScales', background: 'catScalesBg' },
+  melody: { color: 'catMelody', background: 'catMelodyBg' },
+  arp: { color: 'catArp', background: 'catArpBg' },
 };
 
 export function Tag({ category }: { category: LessonCategory }) {
-  const tag = tags[category];
+  const tag = categoryColors[category];
   return (
     <View style={[styles.tag, { backgroundColor: colors[tag.background] }]}>
       <AppText variant="labelStrong12" color={tag.color}>
-        {tag.label}
+        {categoryLabels[category]}
       </AppText>
     </View>
   );

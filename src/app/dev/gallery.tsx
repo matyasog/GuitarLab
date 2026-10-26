@@ -226,6 +226,22 @@ function GalleryContent() {
       </View>
 
       <View style={styles.section}>
+        <SectionHeader title="Screen state previews" />
+        <View style={styles.row}>
+          <Button
+            label="Learn: loading"
+            variant="secondary"
+            onPress={() => router.push({ pathname: '/learn', params: { preview: 'loading' } })}
+          />
+          <Button
+            label="Learn: error"
+            variant="secondary"
+            onPress={() => router.push({ pathname: '/learn', params: { preview: 'error' } })}
+          />
+        </View>
+      </View>
+
+      <View style={styles.section}>
         <SectionHeader title="States" />
         <SkeletonCard />
         <SkeletonListRow />

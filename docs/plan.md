@@ -1,6 +1,15 @@
 # GuitarLab development plan
 
-Status: **decisions approved 2026-10-26**; waiting for the go-ahead to start Phase 0. No phase has started.
+Status (2026-10-26): Phases 0–2 done; Phase 3 in progress (3.1–3.4 done). **Next: step 3.5 Lesson detail.** On Expo SDK 58.
+
+### Where we are (read this first in a new chat)
+
+- **How we work:** one plan step at a time. Claude builds it, runs `npm run typecheck`, `npm run lint`, `npm test` and an iOS bundle export (`npx expo export -p ios --output-dir <scratch folder>`), updates the docs, then explains how to test. I test on my **iPhone SE (375 × 667 pt, compact layouts) in Expo Go**, report back, and only then say "commit". Commit messages end with the Co-Authored-By line; nothing is pushed.
+- **Before saying a step is done:** read the design frames with `scripts/design/inspect-pen.js` (`props`, `texts`, `refs`); copy, sizes and colours come from the design. Ask me before inventing copy; record every deviation from the design in `docs/decisions.md` and `docs/design-map.md`.
+- **Typed routes:** after adding or moving route files, regenerate `.expo/types/router.d.ts` by running `npx expo start --port 8099 --offline` for ~60 s (then stop it), otherwise `tsc` may reject new links (risk R16).
+- **Line endings:** docs are CRLF on disk; edit them with tools that keep CRLF.
+- **Still open:** "coming soon" copy for lessons without exercises (step 3.5). Decided recently: third tab is "Tools"; lesson done at ≥ 90 %, unlock at 80 %; tapping the selected Learn chip returns to All; four password rules on Sign up.
+
 Tick steps (`[x]`) as they are finished and note any change to the plan in the changelog at the bottom.
 
 Contents: 1. Audit · 2. Decisions to make · 3. Phases and steps · 4. Risks · 5. Manual tasks for me · 6. Open questions · 7. Changelog
@@ -468,10 +477,11 @@ Conventions for every step:
   - Test: iPhone: new account goes through onboarding; Skip works; existing account goes straight to Today.
   - Commit: `feat(onboarding): level and guitar setup`
   - Result: done, tested on the iPhone (steps, Skip, Not now, no return after finishing). Guard in `(app)/_layout.tsx` (not the root): once the profile is loaded, `Stack.Protected` shows `onboarding/` while `onboarding.completedAt` is empty and the tabs + Settings after. Screens follow the design: level (4 options, Continue disabled until one is picked, Skip), guitar (photo cards, hand, pegs; Continue disabled until a guitar is picked), microphone ("Allow microphone" goes to the low-E placeholder for now; "Not now" finishes), low E (placeholder, "Let's play" finishes). New components `OnboardingHeader`, `ChoiceRow` / `ChoiceCard` (radio semantics); `signal` icon added. Guitar photos `generated-3/4.png` → 27 KB WebPs via `scripts/assets/make-images.py` (replaces make-hero.py). Accounts created before this step have no `completedAt`, so they go through onboarding once.
-- [ ] **3.4 Lessons data + Learn**
+- [x] **3.4 Lessons data + Learn** (done 2026-10-26)
   - Files: `src/data/lessons.ts`, `src/types/lesson.ts`, `src/app/(app)/(tabs)/learn.tsx`.
   - Test: iPhone: filter chips, sections, locked row "How to unlock", loading and error states (forced via a dev toggle).
   - Commit: `feat(learn): lesson list with static content`
+  - Result: done, tested on the iPhone. `src/data/lessons.ts` (12 lessons from the design + SAMPLE progress copied from the design, replaced in 6.4), `src/data/lessonSections.ts` (grouping, done count, unlock sentence; 6 tests), `useLessonProgress()` (returns the sample until 6.4). Learn: header with "N of 12 done", 12-segment brass bar, scrolling category chips, sections as cards, `LessonRow` (category icon, meta, difficulty marks, score / NEW / expandable "How to unlock"). Dev previews `/learn?preview=loading|error` (buttons in the gallery). Rows don't open anything yet (Lesson detail is 3.5). Changes after your review: the status is now **worked out from the best score** (`lessonStatus`): locked while the required lesson is below its unlock score (80 %), **done from 90 %** (your rule), in progress below that, up next if never played. The sample therefore shows 3 done, 5 in progress, 2 up next (Cmaj7 arpeggio unlocks because A minor arpeggio is at 82 %), 2 locked. Tapping the selected category chip again returns to All. The unlock prerequisites for Syncopated strumming and Cmaj7 arpeggio are confirmed.
 - [ ] **3.5 Lesson detail**
   - Files: `src/app/(app)/lesson/[lessonId].tsx` (outside the tabs: no tab bar in the design), `src/components/fretboard/ScaleShape.tsx`.
   - Test: iPhone: tempo segments change the Play button label; "Tune" opens the Tuner.
@@ -692,3 +702,6 @@ Still open:
 - 2026-10-26: step 3.2 done (tested on iPhone).
 - 2026-10-26: step 3.3 built (onboarding with guard); guitar photos added.
 - 2026-10-26: step 3.3 done (tested on iPhone).
+- 2026-10-26: step 3.4 built (lesson data, Learn screen); two open questions added.
+- 2026-10-26: lesson "done" = best score ≥ 90 % (your rule), unlock stays 80 %; statuses derived from scores; tapping the selected chip returns to All.
+- 2026-10-26: step 3.4 done; unlock score confirmed at 80 % (done stays 90 %); "Where we are" handoff block added at the top.
