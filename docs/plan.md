@@ -616,7 +616,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R10 | Time runs short before February | Phases 0–6 are the core; Phase 7 screens can ship with fewer states |
 | R11 | Expo Go login requirement or network blocks loading on the iPhone | `npx expo login` + login in Expo Go; try `npx expo start --tunnel` on school Wi-Fi |
 | R12 | ~~expo-doctor warns about duplicate `@expo/log-box` / `@expo/dom-webview`~~ (resolved 2026-10-26: caused by the old global npm 7; reinstalled with npm 10) | — |
-| R13 | The old global npm 7 is still used by `npm install` and `npx expo install`, and would break `node_modules` again | Update the global npm once (manual task 10). Until then install with `npx npm@10 install` |
+| R13 | ~~The old global npm 7 is still used~~ (resolved 2026-10-26: global npm updated to 10) by `npm install` and `npx expo install`, and would break `node_modules` again | Update the global npm once (manual task 10). Until then install with `npx npm@10 install` |
 | R14 | The `react-dom` override must match React's version; after an SDK upgrade npm may fail with ERESOLVE again | On every SDK upgrade, set `overrides.react-dom` to the new `react` version |
 
 ---
@@ -632,7 +632,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 7. **Test accounts**: create one test user in Firebase Authentication (console → Users → Add user) for step 2.3.
 8. **Check chord fingerings** on a real guitar in step 5.2.
 9. **Upgrade check**: watch the App Store for an Expo Go update (next: SDK 59).
-10. **Update the global npm** (your PC still has npm 7.24.2 from 2021): run `npm install -g npm@10` in PowerShell, then check with `npm -v` (should print 10.x).
+10. ~~**Update the global npm**~~ (done 2026-10-26, npm 10.x) (your PC still has npm 7.24.2 from 2021): run `npm install -g npm@10` in PowerShell, then check with `npm -v` (should print 10.x).
 
 ---
 
@@ -654,3 +654,4 @@ Still open:
 - 2026-10-26: step 0.1 done (template cleanup); added risk R12 (expo-doctor duplicate warning).
 - 2026-10-26: step U.1 done (upgraded to SDK 58 because Expo Go on the iPhone updated); R1 updated for SDK 59.
 - 2026-10-26: step 0.2 done (folders, .env.example, scripts, jest-expo); R12 resolved; added R13, R14 and manual task 10 (update global npm).
+- 2026-10-26: global npm updated to 10 (manual task 10); R13 resolved.
