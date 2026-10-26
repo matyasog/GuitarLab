@@ -101,11 +101,11 @@ Routes are **planned** (nothing exists yet besides the template's `src/app/index
 | Tab item, Tab item / active, Tab bar | `src/components/TabBar.tsx` | custom `tabBar` for Expo Router `Tabs` |
 | Listening indicator | `src/components/ListeningIndicator.tsx` | green dot + "Listening" |
 | Screen header / tool · back | `src/components/ScreenHeader.tsx` | |
-| Bottom sheet | `src/components/BottomSheet.tsx` | |
-| Toast / info · success · error | `src/components/Toast.tsx` | |
+| Bottom sheet | `src/components/BottomSheet.tsx` | React Native `Modal`; grabber is visual only (no drag-to-close yet) |
+| Toast / info · success · error | `src/components/Toast.tsx` | placed inline in the screens (Today offline, Results save-failed), not floating |
 | Dialog | `src/components/Dialog.tsx` | |
-| Skeleton / card · list row | `src/components/Skeleton.tsx` | |
-| Empty state, Error state | `src/components/EmptyState.tsx`, `ErrorState.tsx` | |
+| Skeleton / card · list row | `src/components/Skeleton.tsx` (`SkeletonCard`, `SkeletonListRow`) | opacity pulse, off with Reduce Motion |
+| Empty state, Error state | `src/components/StateMessage.tsx` (`EmptyState`, `ErrorState`) | same layout, so one file |
 | Tuner / static-body · glass-overlay (100 %, 75 %) | `src/components/tuner/TunerInstrument.tsx` | baked images |
 | Metronome / static-body · moving-pendulum · glass-overlay (100 %, 50 %, 40 %) | `src/components/metronome/MetronomeInstrument.tsx` | baked images |
 

@@ -16,8 +16,9 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 | Base text and screen wrapper (`AppText`, `Screen`) | 1 | done | safe areas, margins, max width on tablets |
 | Icons, buttons, icon button, text and password fields | 1 | done | Lucide icons; states from the kit |
 | Content and control components (card, list row, section header, tag, stat tile, XP bar, streak strip, switch, segmented control, tool switch) | 1 | done | |
+| Navigation, overlays and states (tab bar, screen header, listening indicator, toast, dialog, bottom sheet, skeletons, empty and error states) | 1 | done | bottom sheet has no drag-to-close yet |
 | Base components (button, text field, card, list row, tab bar, …) | 1 | planned | 25 components from the kit |
-| Dev-only component gallery route | 1 | planned | hidden in production |
+| Dev-only component gallery route | 1 | done | `/dev/gallery`, redirects home outside development |
 | Folder structure, `.env.example`, check scripts | 0 | done | `npm run typecheck`, `npm run lint`, `npm test` |
 | Unit tests (jest-expo) | 0 | done | first test checks `.env.example` |
 

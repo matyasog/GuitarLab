@@ -256,3 +256,12 @@ Goal: smooth and professional, with optimisation considered at all times.
 **Decision:** `Screen` turns on the scroll view's `automaticallyAdjustKeyboardInsets`: when the keyboard opens on iOS, the screen gets extra scroll room and the focused field scrolls into view.
 **Reason:** On the iPhone SE (375 × 667 pt) the keyboard with its suggestion bar covers about half the screen, so the email field on the check screen was hidden while typing. The Sign in and Sign up screens would hit the same problem (hero image, several fields, password rules). The fix is one built-in property in one place, so every screen gets it.
 **Alternatives:** `react-native-keyboard-controller` (Expo's recommendation for forms, but not included in Expo Go; possible with the Android dev build); `KeyboardAvoidingView` (built in, but it only shrinks the view and doesn't scroll to the focused field). Android behaviour is still to be checked (plan risk R15).
+
+---
+
+## 2026-10-26 · Overlays with React Native's Modal; text-size caps
+
+**Decision:** `Dialog` and `BottomSheet` use React Native's built-in `Modal`. The sheet's background fades in and the sheet slides up with a Reanimated entering animation; it closes with ✕, a tap outside or the back gesture, not by dragging. Reduce Motion turns off the fade, slide, skeleton pulse and switch animation. Toasts are plain banners placed in the screen content, because that is how the screens in the design use them.
+Text-size rule: text scales with the phone setting everywhere except labels inside instruments. One more exception: the "9/15" inside the 48 pt daily-goal ring is capped at 1.2× because it must fit inside a fixed circle, like an instrument label. Tab bar labels are not capped; at the very largest sizes a long label like "Chord Lab" is cut off with "…" rather than breaking the layout.
+**Reason:** `Modal` handles the Android back button, screen-reader focus and drawing above everything without extra libraries. Drag-to-close needs gesture handling and is not essential; it can be added later if a sheet feels wrong without it.
+**Alternatives:** a bottom-sheet library (e.g. `@gorhom/bottom-sheet`; extra dependency to check for Expo Go); Expo Router modal routes (used for the full-screen "All chords" sheet in step 5.5).

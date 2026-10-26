@@ -63,6 +63,7 @@ export const textStyles = {
   // Labels (row titles, control labels, tabs, tags)
   label16: style(f.ui500, t[16]),
   label14: style(f.ui500, t[14]),
+  message14: style(f.ui500, t[14], { lineHeight: lineHeight(t[14], 1.4) }),
   labelStrong14: style(f.ui600, t[14]),
   labelCaps14: style(f.ui600, t[14], { letterSpacing: 1.5 }),
   label12: style(f.ui500, t[12]),

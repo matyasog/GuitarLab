@@ -400,13 +400,14 @@ Conventions for every step:
   - Test: iPhone gallery.
   - Commit: `feat(ui): content and control components`
   - Result: done. All 10 components follow the kit (sizes, colours, states read with `inspect-pen.js props`). `StreakStrip` supports both the kit's compact strip and the Today screen's version (big count, last 7 days, daily-goal ring drawn with `react-native-svg`). `SegmentedControl` takes per-option label styles (DM Mono for "4/4"); the note glyphs ♩ ♫ ♬ need the **Noto Music** font named in the kit note, to be added in step 4.2. `Switch` slides its knob with Reanimated and respects Reduce Motion; the bundle grew 2.8 → 3.9 MB because Reanimated is now used for the first time. New text style `monoStrong32`. `ListRow` has a pressed state (surface colour) that the kit doesn't define.
-- [ ] **1.5 Navigation, overlays, states + dev gallery**
+- [x] **1.5 Navigation, overlays, states + dev gallery** (done 2026-10-26; Phase 1 complete)
   - Files: `TabBar`, `ScreenHeader`, `Toast`, `Dialog`, `BottomSheet`, `Skeleton`, `EmptyState`, `ErrorState`, `ListeningIndicator`; `src/app/dev/gallery.tsx` (only reachable when `__DEV__`).
   - Libraries: none (BottomSheet built with Reanimated + gesture handler, both installed).
   - Test: iPhone: open `/dev/gallery`, compare with `docs/design/screens/Components.png`.
   - Done when: all 25 kit components exist; reduced motion disables sheet/toast animations.
   - Docs: features.
   - Commit: `feat(ui): overlays, states and a dev component gallery`
+  - Result: done. `TabBar` (5 tabs, amber LED, bottom safe area instead of a fixed 34 pt; connected to Expo Router in 3.1), `ScreenHeader` (tool / back variants with a trailing slot), `ListeningIndicator` (green dot + 6 level bars), `Toast` (inline banner with optional detail line and action), `Dialog` and `BottomSheet` (React Native `Modal`; the sheet slides up with a Reanimated entering animation, no drag-to-close yet), `SkeletonCard` / `SkeletonListRow` (opacity pulse), `EmptyState` / `ErrorState` (in `StateMessage.tsx`). Reduce Motion turns off the dialog fade, sheet slide, skeleton pulse and switch slide. The check screen moved to `src/app/dev/gallery.tsx` (redirects home outside development); `src/app/index.tsx` is a placeholder with a dev-only link to it. New text style `message14`.
 
 ### Phase 2: Firebase and auth
 
@@ -665,3 +666,4 @@ Still open:
 - 2026-10-26: step 1.3 done (Icon, Button, IconButton, TextField, PasswordField; added lucide-react-native + react-native-svg).
 - 2026-10-26: keyboard fix in `Screen` after iPhone SE test; added R15 (Android keyboard).
 - 2026-10-26: step 1.4 done (Card, ListRow, SectionHeader, Tag, StatTile, ProgressBar, StreakStrip, Switch, SegmentedControl, ToolSwitch).
+- 2026-10-26: step 1.5 done; Phase 1 (theme and base components) complete.
