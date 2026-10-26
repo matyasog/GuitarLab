@@ -1,5 +1,6 @@
 import {
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   type User,
@@ -15,6 +16,9 @@ export type AuthState = {
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  // Sends Firebase's password reset email. For privacy, Firebase reports success even when
+  // no account uses that email, so the app can't be used to find out who has an account.
+  resetPassword: (email: string) => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthState | null>(null);
@@ -43,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await signInWithEmailAndPassword(auth, email.trim(), password);
     },
     signOut: () => firebaseSignOut(auth),
+    resetPassword: (email) => sendPasswordResetEmail(auth, email.trim()),
   };
 
   return <AuthContext value={value}>{children}</AuthContext>;

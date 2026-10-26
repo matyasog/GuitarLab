@@ -436,11 +436,12 @@ Conventions for every step:
   - Done when: no flash of the wrong screen (splash stays until auth is known).
   - Commit: `feat(auth): auth context and protected routes`
   - Result: done. `AuthProvider` keeps the Firebase user in React state via `onAuthStateChanged` and offers `signIn` / `signOut`; `useAuth()` reads it (React 19 `use`). The root layout keeps the splash until fonts and the restored sign-in are ready, then `Stack.Protected` shows either the `(app)` group (signed in) or the `(auth)` group (signed out). Screens never navigate after sign-in/out themselves; the guards do it. `(auth)/sign-in.tsx` is a temporary test form (Firebase's raw error messages) until 2.4; `(app)/index.tsx` is a placeholder home with "Sign out". The dev gallery stays outside both groups. See R16 for a typed-routes glitch. First iPhone test showed "Unmatched Route" when opening the app signed out: the blocked `/` fell back to the `(auth)` group, which has no `/`. Fixed with SDK 58's `redirectTo` on both guards (`/sign-in` and `/`).
-- [ ] **2.4 Sign in + forgot password**
+- [x] **2.4 Sign in + forgot password** (done 2026-10-26)
   - Files: `src/app/(auth)/sign-in.tsx`, `src/firebase/authErrors.ts` (Firebase error code → friendly copy). Google buttons hidden (D13).
   - Test: iPhone: wrong password, unknown email, invalid email, no network (airplane mode), reset email arrives.
   - Done when: matches `Sign in / regular / default` and `/ forgot-password`; errors use approved copy.
   - Commit: `feat(auth): sign in and password reset`
+  - Result: done 2026-10-26; error copy approved; tested on the iPhone (errors, forgot password with the email arriving, offline message, sign in). `sign-in.tsx` follows the design (hero behind the status bar, brand, flexible space, form, Sign in); `SignInHero` rebuilds the hero from the WebP photo (`scripts/assets/make-hero.py`: 1 MB JPEG → 162 KB WebP), a dark layer, frets and strings as views and an SVG fade; `LinkButton` for "Forgot password?"; `TextField` got `inputRef` so the keyboard's "Next" jumps to Password; `authErrors.ts` maps Firebase codes to a message and a field (unit-tested). "New here? Create an account" comes with Sign up in 2.5.
 - [ ] **2.5 Sign up + user document**
   - Files: `src/app/(auth)/sign-up.tsx`, `src/firebase/users.ts` (create profile with defaults), `firestore.rules` update if needed.
   - Test: iPhone: create an account → `users/{uid}` appears in the console with default settings; email error on blur; live password rules.
@@ -674,3 +675,6 @@ Still open:
 - 2026-10-26: step 2.1 done (Firebase config in src/firebase, Auth persistence with AsyncStorage); R4 resolved.
 - 2026-10-26: step 2.2 done: firestore.rules, firebase.json, .firebaserc, firestore.indexes.json; rules compiled (dry run) and deployed to guitarlab-25e83 with your OK.
 - 2026-10-26: step 2.3 done (AuthProvider, useAuth, (auth)/(app) groups with Stack.Protected); added R16.
+- 2026-10-26: step 2.4 built (Sign in screen, forgot password, error mapping); waiting for error copy approval and iPhone test.
+- 2026-10-26: auth error copy approved.
+- 2026-10-26: step 2.4 done (tested on iPhone).

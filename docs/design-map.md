@@ -206,7 +206,7 @@ Silkscreen text on baked instruments is part of the image, so Barlow Semi Conden
 |---|---|---|---|
 | `design/generated.png` | 709 KB | brushed-metal texture of the Tuner case | baked into Tuner static-body; not needed separately |
 | `design/generated-1.png` | 891 KB | walnut grain (Metronome body, Tuner headstock wood) | headstock wood: convert to WebP, resize to ~2× display size |
-| `design/generated-5.png` | 1 MB | rosewood hero art on Sign in | convert to WebP (~390 × 240 @3x) |
+| `design/generated-5.png` | 1 MB (actually a 1408 × 768 JPEG) | rosewood hero art on Sign in | done: `assets/images/sign-in-hero.webp`, 1320 × 720, 162 KB, made by `scripts/assets/make-hero.py`; frets, strings, dim layer and fade are drawn in code (`SignInHero`) |
 | `generated-2/3/4.png` | 0.6–0.7 MB | not referenced by any frame | ignore |
 | Unsplash photo `photo-1620671716215-b2c6609996fe` | remote URL | Chord Lab fretboard wood | not used: replaced by the walnut texture `generated-1.png` (decided 2026-10-26) |
 

@@ -289,3 +289,25 @@ Text-size rule: text scales with the phone setting everywhere except labels insi
 **Decision:** `AuthProvider` (`src/firebase/AuthProvider.tsx`) listens to Firebase's `onAuthStateChanged` and keeps the current user in React state; screens read it with `useAuth()`. The routes are split into two groups: `(auth)` for signed-out screens and `(app)` for everything else. The root layout wraps each group in `Stack.Protected`, so only one group exists at a time. The splash screen stays until the fonts and the saved sign-in are ready. Each guard has `redirectTo` (signed out → `/sign-in`, signed in → `/`); without it, a signed-out user opening `/` was sent to the `(auth)` group, which has no screen at `/`, and saw "Unmatched Route".
 **Reason:** This is the pattern in Expo Router's authentication guide for SDK 58. Firebase is the single source of truth for "who is signed in": signing in or out only changes the user, and the guards then show the right screens and remove the other group's history (the back gesture can't return to the app after signing out). Waiting with the splash avoids a flash of the sign-in screen for users who are already signed in.
 **Alternatives:** redirecting inside each screen with `<Redirect>` or `router.replace` (older pattern, more code, the wrong screen can flash); a state library such as Redux or Zustand (unnecessary for one value).
+
+---
+
+## 2026-10-26 · Auth error messages
+
+**Decision:** `src/firebase/authErrors.ts` maps each Firebase Auth error code to a short message and to where it is shown (under Email, under Password, or above the Sign in button). Wrong password and unknown account show the same message. Approved copy:
+
+| Code | Shown under | Message |
+|---|---|---|
+| auth/invalid-email | Email | That doesn't look like an email. Try you@example.com (design) |
+| auth/missing-email | Email | Enter your email. |
+| auth/missing-password | Password | Enter your password. |
+| auth/invalid-credential, wrong-password, user-not-found | Password | That email and password don't match. Check them, or reset your password. |
+| auth/too-many-requests | Form | Too many tries. Wait a few minutes, or reset your password. |
+| auth/network-request-failed | Form | You're offline. Connect to the internet and try again. |
+| auth/user-disabled | Form | This account can't sign in right now. |
+| anything else | Form | Something went wrong. Try again. |
+| reset without email | Email | Type your email above, then tap Forgot password? again. |
+| reset sent | Password (green) | Reset link sent. Check your inbox (and spam, just in case). (design) |
+
+**Reason:** Firebase's own messages ("auth/invalid-credential") mean nothing to a beginner. Each message says what to do next, in the tone of the design's existing copy. Firebase deliberately answers "wrong password" and "no such account" the same way (email enumeration protection), so the app does too; otherwise anyone could test which emails have an account.
+**Alternatives:** showing Firebase's messages (technical); one generic "Sign in failed" (doesn't help the user fix it).

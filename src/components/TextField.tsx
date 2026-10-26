@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react';
-import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
+import { useState, type ReactNode, type Ref } from 'react';
+import { StyleSheet, TextInput, View, type TextInputInstance, type TextInputProps } from 'react-native';
 
 import { colors, fontFamilies, radii, space, typeSize } from '@/theme';
 
@@ -19,6 +19,8 @@ export type TextFieldProps = Omit<TextInputProps, 'style' | 'placeholderTextColo
   trailing?: ReactNode;
   // Under the field instead of the helper, e.g. the live password rules on Sign up.
   footer?: ReactNode;
+  // Lets a screen move the focus here, e.g. from Email to Password with the keyboard's "Next".
+  inputRef?: Ref<TextInputInstance>;
 };
 
 // Labelled single-line input, from "Text field / default · focused · error" in the design.
@@ -30,6 +32,7 @@ export function TextField({
   error,
   trailing,
   footer,
+  inputRef,
   onFocus,
   onBlur,
   ...inputProps
@@ -50,6 +53,7 @@ export function TextField({
       <View style={[styles.field, { borderColor }, trailing ? styles.withTrailing : null]}>
         <TextInput
           {...inputProps}
+          ref={inputRef}
           accessibilityLabel={label}
           accessibilityHint={error ?? helper}
           placeholderTextColor={colors.subtle}
