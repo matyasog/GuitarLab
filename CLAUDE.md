@@ -11,8 +11,8 @@ School graduation project, October–February. I build it with Claude ("vibecodi
 I don't have an Android phone yet, so I can't test live audio. Build everything that doesn't need the microphone. Screens that need the mic (Tuner, Practice, Results, Input problems, the metronome's "strums vs click" histogram) get their full UI, driven by the mock audio implementation. The working plan is in `docs/plan.md`; follow it and tick off steps as they're done.
 
 ## Tech stack (do not change without asking me)
-- React Native + **Expo** (latest stable SDK), **TypeScript** (strict mode)
-- **Expo Router** for navigation (file-based routes in `app/`)
+- React Native + **Expo SDK 57**, **TypeScript** (strict mode). Stay on the SDK that the App Store version of Expo Go runs; upgrade only when Expo Go moves on (SDK 58 is announced for "the next few weeks" after 2026-10-21).
+- **Expo Router** for navigation (file-based routes in `src/app/`)
 - **Firebase JS SDK** (`firebase` npm package), NOT `@react-native-firebase`, because it must also run in Expo Go
   - Auth (email + password) with persistence via `getReactNativePersistence(AsyncStorage)`
   - Firestore for user data, progress and session results
@@ -37,7 +37,7 @@ I don't have an Android phone yet, so I can't test live audio. Build everything 
 
 ## Project structure
 ```
-app/              Expo Router screens
+src/app/          Expo Router screens (routes only; no shared code here)
 src/components/   reusable UI components
 src/theme/        design tokens (colors, spacing, typography, radii, size classes)
 src/audio/        audio stream interface, real + mock implementation, dsp/, metronome/
@@ -51,8 +51,8 @@ firestore.rules   Firestore security rules (versioned here)
 ```
 
 ## Design & UX
-- **Source of truth:** the pen.dev design file `DESIGN_FILE_PATH.pen` in this repo. There is no Pencil MCP: read the raw file with small scripts, never load it into context whole. `docs/design-map.md` is the index (screen → frame → route → components). PNG exports, if present, are in `docs/design/screens/`.
-- The design brief (`design/guitarlab-design/SKILL.md`) and the design rules in `docs/decisions.md` (two visual modes, realism rules, responsiveness, performance) are binding.
+- **Source of truth:** the pen.dev design file `design/guitarlab.pen` in this repo (plain JSON, ~3.9 MB). There is no Pencil MCP: read the raw file with small scripts (`scripts/design/inspect-pen.js`), never load it into context whole. `docs/design-map.md` is the index (screen → frame → route → components). PNG exports, if present, are in `docs/design/screens/`.
+- The design brief (`design/guitarlab design/SKILL.md`, note the space in the folder name) and the design rules in `docs/decisions.md` (two visual modes, realism rules, responsiveness, performance) are binding.
 - Match the design closely. Never invent screens, flows or copy; if something is unclear, ask.
 - All colors, spacing, radii and fonts come from `src/theme/`, named after the `.pen` variables. No hard-coded values in screens.
 - **Dark mode only for now** (the design is dark-only), but structure the theme so a light theme can be added later.
@@ -87,5 +87,5 @@ firestore.rules   Firestore security rules (versioned here)
 - `npx expo start --dev-client`: dev server for the Android development build
 - `npx expo install <package>`: add an Expo-compatible package version
 - `npx expo-doctor`: check project health and dependency versions
-- `eas build --profile development --platform android`: build the Android dev build
-- `npx tsc --noEmit`: type check (run before saying a task is done)
+- `npx eas-cli@latest build --profile development --platform android`: build the Android dev build
+- `npx tsc --noEmit` and `npx expo lint`: type check and lint (run both before saying a task is done)
