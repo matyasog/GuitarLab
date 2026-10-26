@@ -379,13 +379,14 @@ Conventions for every step:
   - Docs: design-map (token names confirmed).
   - Commit: `feat(theme): design tokens and fonts from the .pen file`
   - Result: done. `src/theme/` has all 67 `color.*` variables, space, radii, type sizes, font families and 28 named text styles taken from the text nodes the screens use. Fonts load per weight from subpaths (`@expo-google-fonts/archivo/600SemiBold`), so only the 6 files the design uses are bundled (~560 KB). The root layout keeps the splash screen until fonts are ready, hides the header and sets `color.bg`. `src/app/index.tsx` is a temporary font check. New test `__tests__/theme-tokens-test.ts` compares every token with the `.pen` variables.
-- [ ] **1.2 Layout class, text and screen wrapper**
+- [x] **1.2 Layout class, text and screen wrapper** (done 2026-10-26)
   - Goal: `useLayoutClass()` (compact/regular/wide) and the base `AppText` / `Screen` components.
   - Files: `src/hooks/useLayoutClass.ts`, `src/components/AppText.tsx`, `src/components/Screen.tsx` (safe areas, background, optional scroll, max width on wide).
   - Libraries: none.
   - Test: iPhone (regular); Android emulator 360×640 for compact (optional).
   - Done when: hook returns the right class; text scales with system font size.
   - Commit: `feat(ui): layout classes, text and screen wrapper`
+  - Result: done. Rules in `src/theme/layout.ts` (`getLayoutClass`, unit-tested with 9 sizes): wide when the short side ≥ 600; compact when the long side < 700 or the short side < 360; otherwise regular. Using short/long sides keeps the class the same in landscape. The test iPhone is 375 × 667 pt (iPhone SE/8 class), so it shows the **compact** layouts; regular layouts need a bigger phone or the Android emulator. `Screen` uses the design's screen margins (16 sides, 8 top, 24 bottom) and a `gap` prop; on wide screens content is centred at max 480 pt.
 - [ ] **1.3 Buttons, icon button, text fields**
   - Files: `src/components/{Button,IconButton,TextField,PasswordField,Icon}.tsx`.
   - Libraries: `lucide-react-native` (+ `react-native-svg`); Expo Go: yes (react-native-svg is in Expo Go).
@@ -657,3 +658,4 @@ Still open:
 - 2026-10-26: step 0.2 done (folders, .env.example, scripts, jest-expo); R12 resolved; added R13, R14 and manual task 10 (update global npm).
 - 2026-10-26: global npm updated to 10 (manual task 10); R13 resolved.
 - 2026-10-26: step 1.1 done (theme tokens, text styles, fonts).
+- 2026-10-26: step 1.2 done (layout classes, AppText, Screen). Note: the test iPhone is compact class.

@@ -223,3 +223,12 @@ Goal: smooth and professional, with optimisation considered at all times.
 **Decision:** `src/theme/` holds the design tokens with the same names as the `.pen` variables (camelCase): colours, spacing, radii, type sizes, plus named text styles. Each font weight is loaded as its own family (`Archivo_600SemiBold`) with `useFonts`, imported from per-weight subpaths, and text styles choose the family instead of `fontWeight`. A unit test compares every token with the `.pen` file.
 **Reason:** Choosing the family per weight renders identically on iOS and Android (Android doesn't reliably pick the right face from `fontWeight` for custom fonts). Per-weight imports bundle only the 6 files the design uses (~560 KB) instead of every weight. The test catches the design and the code drifting apart.
 **Alternatives:** one family with `fontWeight` (depends on platform font matching); the `expo-font` config plugin (fonts embedded at build time, faster start, but doesn't work in Expo Go; possible later in the Android dev build).
+
+---
+
+## 2026-10-26 · Size class rules
+
+**Decision:** The size class comes from the window's short and long side: **wide** if the short side is at least 600 pt (tablets), **compact** if the long side is under 700 pt or the short side under 360 pt, otherwise **regular**. On wide screens, content is a centred column of at most 480 pt.
+**Reason:** The compact frames in the design (360 × 640) exist for short screens, where the instrument and readouts must still fit; that is about height more than width. Common tall Android phones (360 × 800) have room for the regular layout. Using the short and long side means a phone keeps its class in landscape (Practice). The 480 pt column is not in the design (there are no tablet frames); it is slightly wider than the largest phone so phone layouts don't stretch.
+**Note:** My test iPhone is 375 × 667 pt (iPhone SE/8 class), so it shows the compact layouts. The regular layouts are checked on the Android emulator or a bigger phone.
+**Alternatives:** width-only breakpoints (would show cramped regular layouts on short phones like the iPhone SE); separate landscape rules (more cases, no design for them).
