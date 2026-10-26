@@ -69,16 +69,16 @@ In plain language:
 
 | Item | Status | What to do |
 |---|---|---|
-| `src/lib/firebase.ts` initialises app + Firestore from env vars | Done | Move to `src/firebase/config.ts` in step 2.1 |
+| `src/lib/firebase.ts` initialises app + Firestore from env vars | Done | Moved to `src/firebase/config.ts` in step 2.1 (2026-10-26) |
 | Keys hard-coded in code | Done (no) | They come from `EXPO_PUBLIC_*` env variables |
-| Auth initialised with `initializeAuth` + `getReactNativePersistence(AsyncStorage)` | Missing | Step 2.1 |
-| `@react-native-async-storage/async-storage` installed | Missing | Step 2.1: `npx expo install @react-native-async-storage/async-storage` (Expo Go: yes; recheck the pinned version and the newer `expo-sqlite/localStorage` alternative for SDK 58 in step 2.1) |
+| Auth initialised with `initializeAuth` + `getReactNativePersistence(AsyncStorage)` | Done (2.1) | — |
+| `@react-native-async-storage/async-storage` installed | Done (2.1) | 2.2.0, pinned by SDK 58; in Expo Go |
 | `.env` exists with 6 values (project `guitarlab-25e83`) | Done | — |
 | `.env` git-ignored | Done | `.gitignore` line `.env`; `git check-ignore` confirms |
 | `.env` ever committed | Done (never) | Git history has no `.env` and no API key, so nothing to rotate |
 | `.env.example` | Missing | Step 0.2 |
 | `metro.config.js` Firebase settings | Done (none needed) | Expo's current Firebase guide: Firebase JS SDK ≥ 12 needs no extra Metro config; older versions caused ES-module errors |
-| TypeScript types for `getReactNativePersistence` | Unknown, I'll check in 2.1 | `firebase/auth`'s type entry points to the web typings; an open Firebase issue reports the TS error "no exported member 'getReactNativePersistence'" on v12 while runtime works. Fix if it appears: import types from the RN entry or a small typed shim, explained in a comment |
+| TypeScript types for `getReactNativePersistence` | Done (2.1): the error appeared; fixed with `src/types/firebase-auth-react-native.d.ts` | `firebase/auth`'s type entry points to the web typings; an open Firebase issue reports the TS error "no exported member 'getReactNativePersistence'" on v12 while runtime works. Fix if it appears: import types from the RN entry or a small typed shim, explained in a comment |
 | `firestore.rules`, `firebase.json` in repo | Missing | Step 2.2 |
 | Which Firebase project and web app the config belongs to | Done | Checked 2026-10-25 via Firebase MCP: project `guitarlab-25e83` ("GuitarLab", created 13 Oct 2026), one web app "GuitarLab"; its App ID matches `.env`. No Android/iOS apps (not needed) |
 | Email/Password sign-in enabled | Done | Confirmed in the console 2026-10-25 |
@@ -411,7 +411,7 @@ Conventions for every step:
 
 ### Phase 2: Firebase and auth
 
-- [ ] **2.1 Firebase config migration + Auth persistence**
+- [x] **2.1 Firebase config migration + Auth persistence** (done 2026-10-26)
   - Goal: one `src/firebase/config.ts` exporting `app`, `auth`, `db`.
   - Files: `src/firebase/config.ts` (from `src/lib/firebase.ts`, then delete `src/lib/`), `.env.example`.
   - Libraries: `@react-native-async-storage/async-storage` (Expo Go: yes).
@@ -419,6 +419,7 @@ Conventions for every step:
   - Done when: no "already initialized" error on fast refresh; TS types for `getReactNativePersistence` resolved.
   - Docs: decisions (migration), data-model (none yet).
   - Commit: `refactor(firebase): move config to src/firebase and add auth persistence`
+  - Result: done. `src/firebase/config.ts` exports `app`, `auth` (with AsyncStorage persistence) and `db`; it throws a clear error if an env value is missing and reuses the existing app/auth on fast refresh. `src/lib/` deleted; the env test now reads the new file. The TS error appeared as expected and is fixed by a one-function declaration file. The iOS bundle contains only the React Native build of Firebase Auth. Bundle 3.9 → 5.6 MB (Firebase Auth + Firestore). The home placeholder shows the auth state. AsyncStorage chosen over `expo-sqlite/localStorage`: Expo's SDK 58 docs and Firebase guide still use AsyncStorage and don't mark it deprecated.
 - [ ] **2.2 First security rules, deployed with the CLI**
   - Goal: deploy our first rules. The database is in production mode (everything denied), so the app can't use Firestore until this is done.
   - Files: `firebase.json`, `.firebaserc`, `firestore.rules` (draft from `docs/data-model.md`), `firestore.indexes.json`.
@@ -612,7 +613,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R1 | ~~App Store Expo Go switches to SDK 58 mid-project~~ (happened 2026-10-26, upgraded in U.1) | The same will happen with SDK 59 (~early 2027, possibly before February): keep dependencies minimal and do the upgrade as its own step. Avoid APIs removed in 58 (`InteractionManager`, `Touchable`, deep `react-native/Libraries` imports, `StatusBar` `backgroundColor`/`translucent`, `ImageBackground`) |
 | R2 | ~~Firestore test-mode rules expire~~ (resolved 2026-10-25: the database is in production mode, locked) | Until step 2.2 every read/write fails with "permission denied"; this is expected |
 | R3 | Metronome jitter in Expo Go is audible | Switch the engine to option B (pre-rendered loop); the dev-build engine (C) later |
-| R4 | `getReactNativePersistence` TypeScript error with firebase 13 | Small typed shim with an explanatory comment; runtime is unaffected |
+| R4 | ~~`getReactNativePersistence` TypeScript error with firebase 13~~ (happened; fixed in 2.1 with `src/types/firebase-auth-react-native.d.ts`) | Remove the file if a future Firebase version ships the type itself (tsc will then report a duplicate) |
 | R5 | Firestore JS SDK on React Native has only a memory cache, so writes made offline are lost if the app is closed before reconnecting | Results "save-failed" flow keeps unsent sessions in AsyncStorage and retries (design already has "kept on your phone and we'll retry") |
 | R6 | ~~Moving tuner layers aren't in the design as separate frames~~ (resolved 2026-10-26: drawn in code with SVG, D5) | If the SVG strobe looks too flat next to the baked body, add a pre-rendered ring image later |
 | R7 | Practice landscape doesn't lock on newer iOS (iOS 27 resizable apps) | Show a "rotate your phone" hint and lay out for whichever orientation is current |
@@ -667,3 +668,4 @@ Still open:
 - 2026-10-26: keyboard fix in `Screen` after iPhone SE test; added R15 (Android keyboard).
 - 2026-10-26: step 1.4 done (Card, ListRow, SectionHeader, Tag, StatTile, ProgressBar, StreakStrip, Switch, SegmentedControl, ToolSwitch).
 - 2026-10-26: step 1.5 done; Phase 1 (theme and base components) complete.
+- 2026-10-26: step 2.1 done (Firebase config in src/firebase, Auth persistence with AsyncStorage); R4 resolved.

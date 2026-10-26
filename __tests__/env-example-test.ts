@@ -17,7 +17,7 @@ function keysInEnvExample(): string[] {
 }
 
 function keysReadByFirebaseConfig(): string[] {
-  const code = readFileSync(join(root, 'src/lib/firebase.ts'), 'utf8');
+  const code = readFileSync(join(root, 'src/firebase/config.ts'), 'utf8');
   const matches = code.match(/process\.env\.(EXPO_PUBLIC_\w+)/g) ?? [];
   return matches.map((m) => m.replace('process.env.', '')).sort();
 }

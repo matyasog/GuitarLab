@@ -265,3 +265,11 @@ Goal: smooth and professional, with optimisation considered at all times.
 Text-size rule: text scales with the phone setting everywhere except labels inside instruments. One more exception: the "9/15" inside the 48 pt daily-goal ring is capped at 1.2× because it must fit inside a fixed circle, like an instrument label. Tab bar labels are not capped; at the very largest sizes a long label like "Chord Lab" is cut off with "…" rather than breaking the layout.
 **Reason:** `Modal` handles the Android back button, screen-reader focus and drawing above everything without extra libraries. Drag-to-close needs gesture handling and is not essential; it can be added later if a sheet feels wrong without it.
 **Alternatives:** a bottom-sheet library (e.g. `@gorhom/bottom-sheet`; extra dependency to check for Expo Go); Expo Router modal routes (used for the full-screen "All chords" sheet in step 5.5).
+
+---
+
+## 2026-10-26 · Firebase config in `src/firebase/config.ts`, Auth remembered with AsyncStorage
+
+**Decision:** One file, `src/firebase/config.ts`, creates the Firebase app, Auth and Firestore. Auth uses `initializeAuth` with `getReactNativePersistence(AsyncStorage)` (`@react-native-async-storage/async-storage` 2.2.0, included in Expo Go). The file stops with a clear message if a `.env` value is missing, and reuses the already-created app and Auth on fast refresh. A small declaration file (`src/types/firebase-auth-react-native.d.ts`) tells TypeScript about `getReactNativePersistence`.
+**Reason:** Without persistence, Firebase Auth on React Native forgets the user every time the app restarts. AsyncStorage is what both Expo's SDK 58 docs and Expo's Firebase guide use. TypeScript reads Firebase's web type definitions, which leave out this React Native-only function (a known Firebase issue); the app itself loads the React Native build (checked in the iOS bundle), so only the types needed fixing.
+**Alternatives:** `expo-sqlite/localStorage` (mentioned by Expo's upgrade tool as a newer option, but not in the SDK 58 docs or the Firebase guide, and it would need a wrapper); `// @ts-ignore` on the import (hides any other error on that line too); React Native Firebase (`@react-native-firebase`, not in Expo Go).
