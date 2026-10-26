@@ -370,7 +370,7 @@ Conventions for every step:
 
 ### Phase 1: Theme and base components
 
-- [ ] **1.1 Tokens and fonts**
+- [x] **1.1 Tokens and fonts** (done 2026-10-26)
   - Goal: `src/theme/` mirrors the `.pen` variables; fonts load before the first screen.
   - Files: `src/theme/{colors,spacing,radii,typography,index}.ts`, `src/app/_layout.tsx` (load fonts, keep splash).
   - Libraries: `@expo-google-fonts/archivo`, `@expo-google-fonts/dm-mono`, `@expo-google-fonts/barlow-semi-condensed` (Expo Go: yes, JS + `expo-font`).
@@ -378,6 +378,7 @@ Conventions for every step:
   - Done when: every token from `docs/design-map.md` §3 exists; text styles (title, body, label, readout…) defined from the kit's text nodes.
   - Docs: design-map (token names confirmed).
   - Commit: `feat(theme): design tokens and fonts from the .pen file`
+  - Result: done. `src/theme/` has all 67 `color.*` variables, space, radii, type sizes, font families and 28 named text styles taken from the text nodes the screens use. Fonts load per weight from subpaths (`@expo-google-fonts/archivo/600SemiBold`), so only the 6 files the design uses are bundled (~560 KB). The root layout keeps the splash screen until fonts are ready, hides the header and sets `color.bg`. `src/app/index.tsx` is a temporary font check. New test `__tests__/theme-tokens-test.ts` compares every token with the `.pen` variables.
 - [ ] **1.2 Layout class, text and screen wrapper**
   - Goal: `useLayoutClass()` (compact/regular/wide) and the base `AppText` / `Screen` components.
   - Files: `src/hooks/useLayoutClass.ts`, `src/components/AppText.tsx`, `src/components/Screen.tsx` (safe areas, background, optional scroll, max width on wide).
@@ -655,3 +656,4 @@ Still open:
 - 2026-10-26: step U.1 done (upgraded to SDK 58 because Expo Go on the iPhone updated); R1 updated for SDK 59.
 - 2026-10-26: step 0.2 done (folders, .env.example, scripts, jest-expo); R12 resolved; added R13, R14 and manual task 10 (update global npm).
 - 2026-10-26: global npm updated to 10 (manual task 10); R13 resolved.
+- 2026-10-26: step 1.1 done (theme tokens, text styles, fonts).

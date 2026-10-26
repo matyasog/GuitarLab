@@ -215,3 +215,11 @@ Goal: smooth and professional, with optimisation considered at all times.
 **Decision:** Dependencies are installed with npm 10 (the version that comes with Node 22). `package.json` has an `overrides` entry that pins `react-dom` to the same version as `react`.
 **Reason:** The PC had a global npm 7.24.2 (2021) that shadowed Node's own npm. npm 7 placed Expo's internal packages in nested folders, which caused expo-doctor's "duplicate dependencies" warning and made Jest fail with "Cannot find module 'expo-modules-core'". A clean install with npm 10 fixed both. npm 10 then failed on any new install because it tried to add the newest optional `react-dom` (19.3.1), which needs a newer React than SDK 58 uses (19.3.0); the override keeps them equal.
 **Alternatives:** `legacy-peer-deps=true` in `.npmrc` (silences all peer checks, hiding real problems); keeping npm 7 (broken installs).
+
+---
+
+## 2026-10-26 · Theme tokens and fonts in code
+
+**Decision:** `src/theme/` holds the design tokens with the same names as the `.pen` variables (camelCase): colours, spacing, radii, type sizes, plus named text styles. Each font weight is loaded as its own family (`Archivo_600SemiBold`) with `useFonts`, imported from per-weight subpaths, and text styles choose the family instead of `fontWeight`. A unit test compares every token with the `.pen` file.
+**Reason:** Choosing the family per weight renders identically on iOS and Android (Android doesn't reliably pick the right face from `fontWeight` for custom fonts). Per-weight imports bundle only the 6 files the design uses (~560 KB) instead of every weight. The test catches the design and the code drifting apart.
+**Alternatives:** one family with `fontWeight` (depends on platform font matching); the `expo-font` config plugin (fonts embedded at build time, faster start, but doesn't work in Expo Go; possible later in the Android dev build).

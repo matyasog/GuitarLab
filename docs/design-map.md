@@ -181,7 +181,7 @@ Most material/gradient tokens are only needed for drawing the instruments; once 
 | radius.pill | radii.pill | 999 |
 | type.12 … type.96 | `typeSize[12]` … `typeSize[96]` | 12, 14, 16, 20, 24, 32, 44, 64, 96 |
 
-Line heights and letter spacing are set per text node in the `.pen` file, not as variables. Phase 1 will read them from the component kit and define named text styles (e.g. `title`, `body`, `label`, `readout`) in `src/theme/typography.ts`.
+Line heights and letter spacing are set per text node in the `.pen` file, not as variables. Step 1.1 collected the combinations the screens use and defined them as named text styles in `src/theme/typography.ts` (e.g. `title24`, `body16`, `label14`, `readout64`, `silkscreen12`). Line heights in the `.pen` file are multiples of the font size (1.45 → 16 × 1.45 ≈ 23 pt). Sizes like 15.6 / 18.2 / 20.8 appear only in the "text 130 %" frame and are not tokens. Every token is checked against the `.pen` file by `__tests__/theme-tokens-test.ts`.
 
 ---
 
@@ -194,7 +194,7 @@ Line heights and letter spacing are set per text node in the `.pen` file, not as
 | font.silkscreen | Barlow Semi Condensed | 400, 500, 600 | Google Fonts, npm `@expo-google-fonts/barlow-semi-condensed` | SIL Open Font License 1.1 |
 | — | Michroma | — | only on the Tokens sheet (rejected silkscreen option) | not needed |
 
-Silkscreen text on baked instruments is part of the image, so Barlow Semi Condensed is only needed in code for live labels drawn over instruments (if any).
+Silkscreen text on baked instruments is part of the image, so Barlow Semi Condensed is only needed in code for live labels (FLAT / SHARP / IN TUNE / AUTO / MANUAL, PERSONAL BEST). These all use weight 600, so only that weight is loaded. Loaded fonts: Archivo 400/500/600, DM Mono 400/500, Barlow Semi Condensed 600.
 
 ---
 

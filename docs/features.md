@@ -10,8 +10,8 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 
 | Feature | Phase | Status | Notes |
 |---|---|---|---|
-| Theme tokens from the `.pen` variables (colours, space, radii, type) | 1 | planned | dark only, structured for a light theme later |
-| Fonts: Archivo, DM Mono, Barlow Semi Condensed | 1 | planned | `useFonts` at runtime (Expo Go) |
+| Theme tokens from the `.pen` variables (colours, space, radii, type) | 1 | done | dark only, structured for a light theme later |
+| Fonts: Archivo, DM Mono, Barlow Semi Condensed | 1 | done | `useFonts` at runtime (Expo Go) |
 | Size classes compact / regular / wide + `useLayoutClass()` | 1 | planned | |
 | Base components (button, text field, card, list row, tab bar, …) | 1 | planned | 25 components from the kit |
 | Dev-only component gallery route | 1 | planned | hidden in production |
