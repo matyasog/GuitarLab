@@ -11,7 +11,7 @@ School graduation project, October–February. I build it with Claude ("vibecodi
 I don't have an Android phone yet, so I can't test live audio. Build everything that doesn't need the microphone. Screens that need the mic (Tuner, Practice, Results, Input problems, the metronome's "strums vs click" histogram) get their full UI, driven by the mock audio implementation. The working plan is in `docs/plan.md`; follow it and tick off steps as they're done.
 
 ## Tech stack (do not change without asking me)
-- React Native + **Expo SDK 57**, **TypeScript** (strict mode). Stay on the SDK that the App Store version of Expo Go runs; upgrade only when Expo Go moves on (SDK 58 is announced for "the next few weeks" after 2026-10-21).
+- React Native + **Expo SDK 58** (React Native 0.88, React 19.3), **TypeScript** (strict mode). Stay on the SDK that the App Store version of Expo Go runs (Expo Go on iOS supports only one SDK); upgrade only when Expo Go moves on.
 - **Expo Router** for navigation (file-based routes in `src/app/`)
 - **Firebase JS SDK** (`firebase` npm package), NOT `@react-native-firebase`, because it must also run in Expo Go
   - Auth (email + password) with persistence via `getReactNativePersistence(AsyncStorage)`

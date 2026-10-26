@@ -11,7 +11,7 @@ Contents: 1. Audit · 2. Decisions to make · 3. Phases and steps · 4. Risks ·
 
 ### 1.1 Repo and Expo
 
-- **Expo SDK 57** (`expo ~57.0.28`, React Native 0.86.3, React 19.2.3, TypeScript ~6.0.3). `tsconfig.json` has `"strict": true` and the alias `@/*` → `src/*`.
+- **Expo SDK 57** at the audit (`expo ~57.0.28`, React Native 0.86.3, React 19.2.3, TypeScript ~6.0.3); **upgraded to SDK 58 on 2026-10-26** (step U.1: React Native 0.88.0, React 19.3.0). `tsconfig.json` has `"strict": true` and the alias `@/*` → `src/*`.
 - **Expo Go on the iPhone:** the App Store version of Expo Go currently runs SDK 57 ([Expo changelog, 3 Sep 2026](https://expo.dev/changelog/expo-go-57-login)), and Metro logs show iOS bundles were already served. It works today. **But** SDK 58 was released on 21 Oct 2026, and Expo says the new Expo Go "comes to the App Store and Google Play in the next few weeks" and supports **only** SDK 58 ([upgrade guide](https://expo.dev/blog/how-to-upgrade-to-sdk-58)). When that happens, the project must be upgraded to SDK 58 the same day, or the iPhone can't open it. Step **U.1** below covers this.
 - Expo Go 57 requires being logged in to the same Expo account in `npx expo login` and in the Expo Go app (iOS).
 - Routes are in **`src/app/`** (the template's layout). `CLAUDE.md` said `app/`; corrected.
@@ -72,7 +72,7 @@ In plain language:
 | `src/lib/firebase.ts` initialises app + Firestore from env vars | Done | Move to `src/firebase/config.ts` in step 2.1 |
 | Keys hard-coded in code | Done (no) | They come from `EXPO_PUBLIC_*` env variables |
 | Auth initialised with `initializeAuth` + `getReactNativePersistence(AsyncStorage)` | Missing | Step 2.1 |
-| `@react-native-async-storage/async-storage` installed | Missing | Step 2.1: `npx expo install @react-native-async-storage/async-storage` (Expo Go: yes, SDK 57 pins 2.2.0) |
+| `@react-native-async-storage/async-storage` installed | Missing | Step 2.1: `npx expo install @react-native-async-storage/async-storage` (Expo Go: yes; recheck the pinned version and the newer `expo-sqlite/localStorage` alternative for SDK 58 in step 2.1) |
 | `.env` exists with 6 values (project `guitarlab-25e83`) | Done | — |
 | `.env` git-ignored | Done | `.gitignore` line `.env`; `git check-ignore` confirms |
 | `.env` ever committed | Done (never) | Git history has no `.env` and no API key, so nothing to rotate |
@@ -339,7 +339,7 @@ Conventions for every step:
 
 ### Phase U: SDK upgrade (floating, do it when it's needed)
 
-- [ ] **U.1 Upgrade to SDK 58** when the App Store Expo Go updates to SDK 58.
+- [x] **U.1 Upgrade to SDK 58** when the App Store Expo Go updates to SDK 58. (done 2026-10-26: Expo Go on the iPhone updated and refused the SDK 57 project. `npx expo install expo@^58.0.0 --fix` failed with an npm peer conflict between the old and new reanimated/worklets, so `package.json` was set to the SDK 58 versions and `node_modules` + `package-lock.json` were reinstalled clean. tsc, lint and an iOS bundle export pass; expo-doctor 19/20, only R12.)
   - Files: `package.json`, `package-lock.json`, possibly `app.json`; follow the official upgrade guide (`npx expo install expo@^58 --fix`, `npx expo-doctor`).
   - Libraries: version bumps only.
   - Test: iPhone with the updated Expo Go; open every finished screen.
@@ -603,7 +603,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 
 | # | Risk | If it happens |
 |---|---|---|
-| R1 | App Store Expo Go switches to SDK 58 mid-project | Do step U.1 immediately (≈ 1 session). Until then, avoid APIs removed in 58 (`InteractionManager`, `Touchable`, deep `react-native/Libraries` imports) |
+| R1 | ~~App Store Expo Go switches to SDK 58 mid-project~~ (happened 2026-10-26, upgraded in U.1) | The same will happen with SDK 59 (~early 2027, possibly before February): keep dependencies minimal and do the upgrade as its own step. Avoid APIs removed in 58 (`InteractionManager`, `Touchable`, deep `react-native/Libraries` imports, `StatusBar` `backgroundColor`/`translucent`, `ImageBackground`) |
 | R2 | ~~Firestore test-mode rules expire~~ (resolved 2026-10-25: the database is in production mode, locked) | Until step 2.2 every read/write fails with "permission denied"; this is expected |
 | R3 | Metronome jitter in Expo Go is audible | Switch the engine to option B (pre-rendered loop); the dev-build engine (C) later |
 | R4 | `getReactNativePersistence` TypeScript error with firebase 13 | Small typed shim with an explanatory comment; runtime is unaffected |
@@ -614,7 +614,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R9 | Synthesised strum sounds too artificial | Record my own guitar samples (D3 option B) |
 | R10 | Time runs short before February | Phases 0–6 are the core; Phase 7 screens can ship with fewer states |
 | R11 | Expo Go login requirement or network blocks loading on the iPhone | `npx expo login` + login in Expo Go; try `npx expo start --tunnel` on school Wi-Fi |
-| R12 | expo-doctor warns about duplicate `@expo/log-box` / `@expo/dom-webview` (same version, nested inside `expo` and `expo-router`) | Harmless in Expo Go. Re-check after the SDK 58 upgrade (U.1) and before the first Android dev build (A.0); if still there, fix with an npm `overrides` entry |
+| R12 | expo-doctor warns about duplicate `@expo/log-box` / `@expo/dom-webview` (same version, nested inside `expo` and `expo-router`) | Harmless in Expo Go. Still present after the SDK 58 upgrade (58.x versions). Re-check before the first Android dev build (A.0); if still there, fix with an npm `overrides` entry |
 
 ---
 
@@ -648,3 +648,4 @@ Still open:
 - 2026-10-26: decisions D1–D12 approved; added D13 (Google sign-in → Android dev build) and D14 (lesson content); tuner moving parts drawn in code; achievements proposal; Phase A added; open questions reduced to 3.
 - 2026-10-26: achievements list confirmed; Chord Lab fretboard reuses the walnut texture instead of the Unsplash photo.
 - 2026-10-26: step 0.1 done (template cleanup); added risk R12 (expo-doctor duplicate warning).
+- 2026-10-26: step U.1 done (upgraded to SDK 58 because Expo Go on the iPhone updated); R1 updated for SDK 59.

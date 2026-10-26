@@ -190,3 +190,12 @@ Goal: smooth and professional, with optimisation considered at all times.
 **Decision:** Removed everything left over from `create-expo-app`: example images and tab icons, the `example/` folder, the broken `reset-project` script, the web favicon and web config, and seven unused packages (`expo-symbols`, `expo-glass-effect`, `@expo/ui`, `expo-web-browser`, `expo-device`, `react-native-web`, `react-dom`). `app.json` now uses the dark interface style and `color.bg` (`#13110E`) for the root, splash and Android icon backgrounds. The placeholder app icons stay until there is a real icon.
 **Reason:** Every file and dependency in the project should have a reason I can explain. Web is not a target platform, so the web packages aren't needed (they are only optional peer dependencies of `expo` and `expo-router`).
 **Alternatives:** keep the unused packages (harmless, but more to explain and update). `app.json` changes only take effect in real builds, so they don't need a new build until the first Android dev build.
+
+---
+
+## 2026-10-26 · Upgraded to Expo SDK 58
+
+**Decision:** Upgraded the project from SDK 57 to SDK 58 (React Native 0.88.0, React 19.3.0, Reanimated 4.7, Gesture Handler 3.3). This replaces the "stay on SDK 57" decision of 2026-10-25, as planned.
+**Reason:** The App Store version of Expo Go on the iPhone updated to SDK 58 and refused to open the SDK 57 project ("Project is incompatible with this version of Expo Go"). Older Expo Go versions can't be installed on iOS devices.
+**How:** `npx expo install expo@^58.0.0 --fix` updated `package.json`, but npm couldn't install it over the old packages (peer conflict between the new Reanimated and the old Worklets). So `node_modules` and `package-lock.json` were deleted and reinstalled from the SDK 58 versions. Checked with `npx expo install --check`, `npx tsc --noEmit`, `npx expo lint` and an iOS bundle export.
+**Alternatives:** none realistic: an iOS development build or an older Expo Go would both need things I don't have (Mac / Apple Developer account).

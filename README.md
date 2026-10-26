@@ -3,7 +3,7 @@
 A mobile app for practising guitar: strobe tuner, pyramid metronome, Chord Lab, lessons, and progress tracking with XP, streaks and achievements.
 Graduation project (maturitní práce), 2026/27.
 
-Built with React Native, Expo (SDK 57), Expo Router, TypeScript and Firebase (Auth + Firestore).
+Built with React Native, Expo (SDK 58), Expo Router, TypeScript and Firebase (Auth + Firestore).
 
 ## Run it
 
