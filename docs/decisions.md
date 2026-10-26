@@ -360,3 +360,11 @@ Text-size rule: text scales with the phone setting everywhere except labels insi
 **Decision:** The input-sensitivity slider is our own small component (`src/components/Slider.tsx`) using the View's built-in touch-responder props (`onResponderGrant`, `onResponderMove`, `onResponderRelease`): the finger's x position inside the slider becomes the value, in steps of 5. It saves only when the finger lifts, and screen readers adjust it with swipe up/down.
 **Reason:** The design's slider (4 pt amber rail, round thumb) can't be styled from the system slider, and the community slider would be an extra dependency. A first version with `PanResponder` kept the latest values in refs, which the React Compiler's lint rule forbids during render; the responder props need no refs at all.
 **Alternatives:** `@react-native-community/slider` (in Expo Go, but native look); a Gesture Handler pan gesture (more setup for one control).
+
+---
+
+## 2026-10-26 · Onboarding shown by a second route guard
+
+**Decision:** Inside the signed-in part, `(app)/_layout.tsx` waits for the profile and then uses `Stack.Protected` again: while `onboarding.completedAt` is empty only the onboarding screens exist; afterwards only the tabs and Settings. Finishing onboarding ("Let's play" or "Not now, I'll look around first") writes `completedAt` with the server time, and the guard switches to Today. Answers are saved when tapping Continue (level to `onboarding.level`, guitar/hand/pegs to `settings`).
+**Reason:** The same pattern as sign-in keeps the logic in one place and needs no manual navigation; the back gesture can't return into onboarding once it's done. Keeping the answers in the profile means the user also finds them in Settings.
+**Alternatives:** a flag in the phone's storage (lost on reinstall or a second device); redirecting from the Today screen (the tabs would flash first).

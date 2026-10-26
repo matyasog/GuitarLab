@@ -29,6 +29,7 @@ import Play from 'lucide-react-native/icons/play';
 import Plus from 'lucide-react-native/icons/plus';
 import RotateCcwSquare from 'lucide-react-native/icons/rotate-ccw-square';
 import RotateCw from 'lucide-react-native/icons/rotate-cw';
+import Signal from 'lucide-react-native/icons/signal';
 import SignalHigh from 'lucide-react-native/icons/signal-high';
 import SignalLow from 'lucide-react-native/icons/signal-low';
 import SignalMedium from 'lucide-react-native/icons/signal-medium';
@@ -80,6 +81,7 @@ const icons = {
   plus: Plus,
   'rotate-ccw-square': RotateCcwSquare,
   'rotate-cw': RotateCw,
+  signal: Signal,
   'signal-high': SignalHigh,
   'signal-low': SignalLow,
   'signal-medium': SignalMedium,

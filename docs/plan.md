@@ -441,7 +441,7 @@ Conventions for every step:
   - Test: iPhone: wrong password, unknown email, invalid email, no network (airplane mode), reset email arrives.
   - Done when: matches `Sign in / regular / default` and `/ forgot-password`; errors use approved copy.
   - Commit: `feat(auth): sign in and password reset`
-  - Result: done 2026-10-26; error copy approved; tested on the iPhone (errors, forgot password with the email arriving, offline message, sign in). `sign-in.tsx` follows the design (hero behind the status bar, brand, flexible space, form, Sign in); `SignInHero` rebuilds the hero from the WebP photo (`scripts/assets/make-hero.py`: 1 MB JPEG → 162 KB WebP), a dark layer, frets and strings as views and an SVG fade; `LinkButton` for "Forgot password?"; `TextField` got `inputRef` so the keyboard's "Next" jumps to Password; `authErrors.ts` maps Firebase codes to a message and a field (unit-tested). "New here? Create an account" comes with Sign up in 2.5.
+  - Result: done 2026-10-26; error copy approved; tested on the iPhone (errors, forgot password with the email arriving, offline message, sign in). `sign-in.tsx` follows the design (hero behind the status bar, brand, flexible space, form, Sign in); `SignInHero` rebuilds the hero from the WebP photo (`scripts/assets/make-hero.py`, now `make-images.py`: 1 MB JPEG → 162 KB WebP), a dark layer, frets and strings as views and an SVG fade; `LinkButton` for "Forgot password?"; `TextField` got `inputRef` so the keyboard's "Next" jumps to Password; `authErrors.ts` maps Firebase codes to a message and a field (unit-tested). "New here? Create an account" comes with Sign up in 2.5.
 - [x] **2.5 Sign up + user document** (done 2026-10-26; Phase 2 complete)
   - Files: `src/app/(auth)/sign-up.tsx`, `src/firebase/users.ts` (create profile with defaults), `firestore.rules` update if needed.
   - Test: iPhone: create an account → `users/{uid}` appears in the console with default settings; email error on blur; live password rules.
@@ -463,10 +463,11 @@ Conventions for every step:
   - Done when: all Settings controls persist (Listening ones stored only).
   - Commit: `feat(settings): settings screen backed by the user profile`
   - Result: done, tested on the iPhone (changes saved to Firestore, Sign out). `ProfileProvider` (in `(app)/_layout.tsx`) keeps `users/{uid}` live with one `onSnapshot` listener; `useProfile()` reads it and `updateSettings` saves single fields (`settings.dailyGoalMin`). A missing profile is created by `ensureUserProfile` (a Firestore transaction, also used by sign-up), but only when the server, not the offline cache, says it is missing (fixes R17). Settings follows the design: Playing (hand, guitar, headstock, daily goal, A4 stepper 430–450), Listening (sensitivity slider, noise gate), Feedback (4 switch rows), Account (email, red Sign out). New components: `Slider` (React Native touch-responder props, no library; first version with PanResponder broke the React Compiler "no refs during render" lint rule), `SwitchRow` (whole row toggles), `Stepper`. Settings is opened from the You header; Sign out moved there from Today. "Run an input check" comes in 7.3. Loading = skeleton cards; error copy "Couldn't load your settings" / "Check your connection and try again." is not in the design (approved 2026-10-26).
-- [ ] **3.3 Onboarding (level, guitar, microphone intro)**
+- [x] **3.3 Onboarding (level, guitar, microphone intro)** (done 2026-10-26)
   - Files: `src/app/(app)/onboarding/{_layout,level,guitar,microphone,low-e}.tsx` (low-e as a placeholder until 7.3), onboarding guard in root layout.
   - Test: iPhone: new account goes through onboarding; Skip works; existing account goes straight to Today.
   - Commit: `feat(onboarding): level and guitar setup`
+  - Result: done, tested on the iPhone (steps, Skip, Not now, no return after finishing). Guard in `(app)/_layout.tsx` (not the root): once the profile is loaded, `Stack.Protected` shows `onboarding/` while `onboarding.completedAt` is empty and the tabs + Settings after. Screens follow the design: level (4 options, Continue disabled until one is picked, Skip), guitar (photo cards, hand, pegs; Continue disabled until a guitar is picked), microphone ("Allow microphone" goes to the low-E placeholder for now; "Not now" finishes), low E (placeholder, "Let's play" finishes). New components `OnboardingHeader`, `ChoiceRow` / `ChoiceCard` (radio semantics); `signal` icon added. Guitar photos `generated-3/4.png` → 27 KB WebPs via `scripts/assets/make-images.py` (replaces make-hero.py). Accounts created before this step have no `completedAt`, so they go through onboarding once.
 - [ ] **3.4 Lessons data + Learn**
   - Files: `src/data/lessons.ts`, `src/types/lesson.ts`, `src/app/(app)/(tabs)/learn.tsx`.
   - Test: iPhone: filter chips, sections, locked row "How to unlock", loading and error states (forced via a dev toggle).
@@ -689,3 +690,5 @@ Still open:
 - 2026-10-26: third tab renamed "Tools" (design said "Tuner"), your choice among four options.
 - 2026-10-26: step 3.2 built (ProfileProvider, Settings, Slider, SwitchRow, Stepper); R17 resolved.
 - 2026-10-26: step 3.2 done (tested on iPhone).
+- 2026-10-26: step 3.3 built (onboarding with guard); guitar photos added.
+- 2026-10-26: step 3.3 done (tested on iPhone).

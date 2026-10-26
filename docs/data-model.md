@@ -28,7 +28,7 @@ users/{uid}/achievements/{achId}     earned achievements
 | `displayName` | string | "What should we call you?" (1–40 chars) |
 | `createdAt` | timestamp | server time |
 | `timeZone` | string | IANA name, e.g. `"Europe/Prague"`, updated on app start |
-| `onboarding` | map | `{ level: "brand-new" \| "campfire" \| "songs" \| "gigging" \| null, completedAt: timestamp \| null }` |
+| `onboarding` | map | `{ level: "brand-new" \| "campfire" \| "songs" \| "gigging" \| null, completedAt: timestamp \| null }` `level` is written by onboarding step 1 (null = skipped); `completedAt` (server time) when onboarding ends. While it is null the app shows onboarding. |
 | `settings` | map | see below |
 | `progress` | map | summary shown on Today and You, see below |
 

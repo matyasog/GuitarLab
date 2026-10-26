@@ -46,9 +46,9 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 
 | Feature | Phase | Status | Notes |
 |---|---|---|---|
-| Level picker (4 levels, skip) | 3 | planned | saved to profile |
-| Guitar: acoustic/electric, strumming hand, headstock layout | 3 | planned | saved to settings |
-| Microphone explanation screen ("Let us hear you") | 7 | planned | permission request is real; listening is mock |
+| Level picker (4 levels, skip) | 3 | done | saved to `onboarding.level` |
+| Guitar: acoustic/electric, strumming hand, headstock layout | 3 | done | saved to settings |
+| Microphone explanation screen ("Let us hear you") | 3 / 7 | in progress | screen built; permission request in 7.3 |
 | Pluck your low E (input level) | 7 | mock only | |
 
 ## Today, Learn, Lessons

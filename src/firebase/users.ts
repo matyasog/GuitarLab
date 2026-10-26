@@ -1,6 +1,6 @@
 import { doc, runTransaction, serverTimestamp, updateDoc } from 'firebase/firestore';
 
-import type { UserProfile, UserSettings } from '@/types/user';
+import type { OnboardingLevel, UserProfile, UserSettings } from '@/types/user';
 
 import { db } from './config';
 
@@ -64,4 +64,14 @@ export async function ensureUserProfile(uid: string, displayName: string): Promi
 export async function updateUserSettings(uid: string, changes: Partial<UserSettings>): Promise<void> {
   const fields = Object.fromEntries(Object.entries(changes).map(([key, value]) => [`settings.${key}`, value]));
   await updateDoc(userDocRef(uid), fields);
+}
+
+// Onboarding step 1: the playing level, or null for "Skip, I'll pick later".
+export async function saveOnboardingLevel(uid: string, level: OnboardingLevel | null): Promise<void> {
+  await updateDoc(userDocRef(uid), { 'onboarding.level': level });
+}
+
+// Marks onboarding as finished. The app's route guard then shows the tabs instead.
+export async function completeOnboarding(uid: string): Promise<void> {
+  await updateDoc(userDocRef(uid), { 'onboarding.completedAt': serverTimestamp() });
 }

@@ -2,15 +2,23 @@ import { onSnapshot } from 'firebase/firestore';
 import { createContext, useEffect, useState, type ReactNode } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import type { UserProfile, UserSettings } from '@/types/user';
+import type { OnboardingLevel, UserProfile, UserSettings } from '@/types/user';
 
-import { ensureUserProfile, updateUserSettings, userDocRef } from './users';
+import {
+  completeOnboarding,
+  ensureUserProfile,
+  saveOnboardingLevel,
+  updateUserSettings,
+  userDocRef,
+} from './users';
 
 export type ProfileState = {
   profile: UserProfile | null;
   status: 'loading' | 'ready' | 'error';
   // Saves setting changes; the screen updates at once from Firestore's local copy.
   updateSettings: (changes: Partial<UserSettings>) => Promise<void>;
+  setOnboardingLevel: (level: OnboardingLevel | null) => Promise<void>;
+  completeOnboarding: () => Promise<void>;
 };
 
 export const ProfileContext = createContext<ProfileState | null>(null);
@@ -56,6 +64,16 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     updateSettings: async (changes) => {
       if (uid) {
         await updateUserSettings(uid, changes);
+      }
+    },
+    setOnboardingLevel: async (level) => {
+      if (uid) {
+        await saveOnboardingLevel(uid, level);
+      }
+    },
+    completeOnboarding: async () => {
+      if (uid) {
+        await completeOnboarding(uid);
       }
     },
   };
