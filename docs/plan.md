@@ -429,12 +429,13 @@ Conventions for every step:
   - Docs: data-model (rules section), decisions (CLI deployment).
   - Commit: `feat(firebase): firestore security rules`
   - Result: done. Rules: owner-only access to `users/{uid}` and everything under it; create needs a 1–40 character `displayName` and a server-time `createdAt`; update can't change `createdAt`; everything else denied. Compiled with `--dry-run`, then deployed on 2026-10-26 with your OK (`npx firebase-tools deploy --only firestore:rules`). The CLI was already logged in. Rules Playground (console) checked by you on 2026-10-26: own profile read allowed, other user denied, signed out denied.
-- [ ] **2.3 Auth provider and gated navigation**
+- [x] **2.3 Auth provider and gated navigation** (done 2026-10-26)
   - Files: `src/firebase/AuthProvider.tsx`, `src/hooks/useAuth.ts`, `src/app/_layout.tsx`, `src/app/(auth)/_layout.tsx`, `src/app/(app)/_layout.tsx`, a placeholder home with "Sign out".
   - Libraries: none.
   - Test: iPhone: signed out → sign-in placeholder; after sign-in (test user created in the console) → home; kill and reopen the app → still signed in.
   - Done when: no flash of the wrong screen (splash stays until auth is known).
   - Commit: `feat(auth): auth context and protected routes`
+  - Result: done. `AuthProvider` keeps the Firebase user in React state via `onAuthStateChanged` and offers `signIn` / `signOut`; `useAuth()` reads it (React 19 `use`). The root layout keeps the splash until fonts and the restored sign-in are ready, then `Stack.Protected` shows either the `(app)` group (signed in) or the `(auth)` group (signed out). Screens never navigate after sign-in/out themselves; the guards do it. `(auth)/sign-in.tsx` is a temporary test form (Firebase's raw error messages) until 2.4; `(app)/index.tsx` is a placeholder home with "Sign out". The dev gallery stays outside both groups. See R16 for a typed-routes glitch. First iPhone test showed "Unmatched Route" when opening the app signed out: the blocked `/` fell back to the `(auth)` group, which has no `/`. Fixed with SDK 58's `redirectTo` on both guards (`/sign-in` and `/`).
 - [ ] **2.4 Sign in + forgot password**
   - Files: `src/app/(auth)/sign-in.tsx`, `src/firebase/authErrors.ts` (Firebase error code → friendly copy). Google buttons hidden (D13).
   - Test: iPhone: wrong password, unknown email, invalid email, no network (airplane mode), reset email arrives.
@@ -625,6 +626,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R12 | ~~expo-doctor warns about duplicate `@expo/log-box` / `@expo/dom-webview`~~ (resolved 2026-10-26: caused by the old global npm 7; reinstalled with npm 10) | — |
 | R13 | ~~The old global npm 7 is still used~~ (resolved 2026-10-26: global npm updated to 10) by `npm install` and `npx expo install`, and would break `node_modules` again | Update the global npm once (manual task 10). Until then install with `npx npm@10 install` |
 | R15 | Keyboard covers inputs on Android: `automaticallyAdjustKeyboardInsets` is iOS-only, and Expo's recommended `react-native-keyboard-controller` isn't in Expo Go | Check the auth screens on the Android emulator or the Android phone (step A.0). If fields are covered, wrap `Screen` in `KeyboardAvoidingView` on Android, or add `react-native-keyboard-controller` with the dev build |
+| R16 | The running dev server's typed-routes generator can list new non-route files (e.g. `/../firebase/AuthProvider`) in `.expo/types/router.d.ts`, so `tsc` rejects valid links like `"/"` | Restart the dev server with `npx expo start --clear`; a fresh generation is correct (checked 2026-10-26) |
 | R14 | The `react-dom` override must match React's version; after an SDK upgrade npm may fail with ERESOLVE again | On every SDK upgrade, set `overrides.react-dom` to the new `react` version |
 
 ---
@@ -671,3 +673,4 @@ Still open:
 - 2026-10-26: step 1.5 done; Phase 1 (theme and base components) complete.
 - 2026-10-26: step 2.1 done (Firebase config in src/firebase, Auth persistence with AsyncStorage); R4 resolved.
 - 2026-10-26: step 2.2 done: firestore.rules, firebase.json, .firebaserc, firestore.indexes.json; rules compiled (dry run) and deployed to guitarlab-25e83 with your OK.
+- 2026-10-26: step 2.3 done (AuthProvider, useAuth, (auth)/(app) groups with Stack.Protected); added R16.
