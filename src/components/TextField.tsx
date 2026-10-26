@@ -17,7 +17,7 @@ export type TextFieldProps = Omit<TextInputProps, 'style' | 'placeholderTextColo
   error?: string;
   // Inside the field on the right, e.g. the Show/Hide button of PasswordField.
   trailing?: ReactNode;
-  // Under the field instead of the helper, e.g. the live password rules on Sign up.
+  // Under the error or helper line, always visible, e.g. the live password rules on Sign up.
   footer?: ReactNode;
   // Lets a screen move the focus here, e.g. from Email to Password with the keyboard's "Next".
   inputRef?: Ref<TextInputInstance>;
@@ -79,13 +79,14 @@ export function TextField({
             {error}
           </AppText>
         </View>
-      ) : footer ? (
-        footer
       ) : helper ? (
         <AppText variant="helper14" color={helperTone === 'success' ? 'green' : 'muted'}>
           {helper}
         </AppText>
       ) : null}
+
+      {/* The footer stays visible under an error, e.g. the password rules show what is missing. */}
+      {footer}
     </View>
   );
 }

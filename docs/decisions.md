@@ -311,3 +311,20 @@ Text-size rule: text scales with the phone setting everywhere except labels insi
 
 **Reason:** Firebase's own messages ("auth/invalid-credential") mean nothing to a beginner. Each message says what to do next, in the tone of the design's existing copy. Firebase deliberately answers "wrong password" and "no such account" the same way (email enumeration protection), so the app does too; otherwise anyone could test which emails have an account.
 **Alternatives:** showing Firebase's messages (technical); one generic "Sign in failed" (doesn't help the user fix it).
+
+---
+
+## 2026-10-26 · Sign up creates the account, then the profile document
+
+**Decision:** `signUp` runs three steps: `createUserWithEmailAndPassword`, `updateProfile` (stores the name on the Firebase account), then `setDoc(users/{uid})` with the defaults from the data model, `createdAt: serverTimestamp()` and the phone's time zone. Inputs are checked on the phone first (`src/firebase/authValidation.ts`): name 1–40 characters, email format, and four password rules shown live under the field: "8+ characters", "A number" (both from the design), "An uppercase letter" and "A lowercase letter" (added at my request for stronger passwords). Email and password are checked when the field loses focus; the rules stay visible under the error. Sign-up copy: "That email already has an account. Sign in instead, or reset your password.", "Your password needs to meet all the rules below." and "Enter a first name or nickname." Upper/lowercase is detected by comparing the password with its lower/upper-case version, so Czech letters like Č count.
+**Reason:** Firebase Auth only stores email and password; the app's own data (settings, progress) lives in Firestore under the user's id. The security rules let the profile be created once (server time required, `createdAt` unchangeable), so it can't be overwritten by accident. Checking on the phone gives instant feedback without a network round trip; Firebase's own checks still apply.
+**Known gap:** once the account exists, the user is signed in and the route guard opens the app before the profile write finishes. If that write fails, step 3.2 creates the missing profile (plan risk R17).
+**Alternatives:** a Cloud Function that creates the profile on the server (reliable, but needs the paid Blaze plan); waiting with navigation until the write finishes (more state to manage for a rare failure).
+
+---
+
+## 2026-10-26 · "Email already has an account" is checked only when creating the account
+
+**Decision:** Unlike the email format and the password rules, "That email already has an account…" appears only after tapping Create account (under the Email field), not when leaving the field.
+**Reason:** Only Firebase's server knows which emails are registered, and the project has Email Enumeration Protection on (Firebase's default): it refuses to tell anyone whether an email has an account, so nobody can use the app to collect registered addresses. The old lookup function `fetchSignInMethodsForEmail` is deprecated and returns an empty list while the protection is on. Firebase only reveals the conflict when an account is actually created.
+**Alternatives:** turning the protection off (lets anyone test which emails are registered; relies on a deprecated function); a public list of emails in Firestore (exposes users' emails). Both rejected for privacy.

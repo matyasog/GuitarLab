@@ -2,7 +2,7 @@
 // they belong under. Copy marked "design" comes from design/guitarlab.pen; the rest was
 // drafted in the design's tone (short, says what to do next) and approved on 2026-10-26.
 
-export type AuthErrorField = 'email' | 'password' | 'form';
+export type AuthErrorField = 'name' | 'email' | 'password' | 'form';
 
 export type AuthErrorMessage = {
   field: AuthErrorField;
@@ -39,6 +39,21 @@ const messages: Record<string, AuthErrorMessage> = {
   'auth/user-disabled': {
     field: 'form',
     message: "This account can't sign in right now.",
+  },
+  // Sign up
+  'auth/email-already-in-use': {
+    field: 'email',
+    message: 'That email already has an account. Sign in instead, or reset your password.',
+  },
+  // The rules themselves are listed under the field (Sign up), so the message points to them.
+  'auth/weak-password': {
+    field: 'password',
+    message: 'Your password needs to meet all the rules below.',
+  },
+  // Not a Firebase code: our own check before creating the account.
+  'app/missing-display-name': {
+    field: 'name',
+    message: 'Enter a first name or nickname.',
   },
 };
 

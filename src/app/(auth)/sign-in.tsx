@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import { StyleSheet, View, type TextInputInstance } from 'react-native';
 
@@ -16,8 +17,7 @@ import { space } from '@/theme';
 type Errors = { email?: string; password?: string; form?: string };
 
 // Sign in, from "Sign in / regular / default · forgot-password" in the design.
-// The "Continue with Google" button is hidden until the Android dev build (decision D13);
-// "New here? Create an account" is added with the Sign up screen in step 2.5.
+// The "Continue with Google" button is hidden until the Android dev build (decision D13).
 export default function SignIn() {
   const { signIn, resetPassword } = useAuth();
   const passwordRef = useRef<TextInputInstance>(null);
@@ -131,6 +131,13 @@ export default function SignIn() {
             {errors.form ? <Toast tone="error" message={errors.form} /> : null}
             <Button label="Sign in" onPress={submit} disabled={busy} fullWidth />
           </View>
+
+          <View style={styles.footer}>
+            <AppText variant="helper14" color="muted">
+              New here?
+            </AppText>
+            <LinkButton label="Create an account" color="text2" onPress={() => router.push('/sign-up')} />
+          </View>
         </View>
       </View>
     </Screen>
@@ -163,5 +170,12 @@ const styles = StyleSheet.create({
   actions: {
     gap: space[12],
     paddingTop: space[24],
+  },
+  footer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: space[8],
   },
 });

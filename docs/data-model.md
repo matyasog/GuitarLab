@@ -1,6 +1,6 @@
 # Firestore data model
 
-> **DRAFT (2026-10-25).** Nothing is implemented yet. Field names and XP values may change when the gamification decisions in `docs/plan.md` are approved. Update this file whenever the model changes.
+> **Status (2026-10-26):** `users/{uid}` is implemented (created on sign-up by `src/firebase/users.ts`, type `src/types/user.ts`, rules in `firestore.rules`). The subcollections are still a draft until Phase 6. Update this file whenever the model changes.
 
 ## Principles
 

@@ -442,12 +442,13 @@ Conventions for every step:
   - Done when: matches `Sign in / regular / default` and `/ forgot-password`; errors use approved copy.
   - Commit: `feat(auth): sign in and password reset`
   - Result: done 2026-10-26; error copy approved; tested on the iPhone (errors, forgot password with the email arriving, offline message, sign in). `sign-in.tsx` follows the design (hero behind the status bar, brand, flexible space, form, Sign in); `SignInHero` rebuilds the hero from the WebP photo (`scripts/assets/make-hero.py`: 1 MB JPEG → 162 KB WebP), a dark layer, frets and strings as views and an SVG fade; `LinkButton` for "Forgot password?"; `TextField` got `inputRef` so the keyboard's "Next" jumps to Password; `authErrors.ts` maps Firebase codes to a message and a field (unit-tested). "New here? Create an account" comes with Sign up in 2.5.
-- [ ] **2.5 Sign up + user document**
+- [x] **2.5 Sign up + user document** (done 2026-10-26; Phase 2 complete)
   - Files: `src/app/(auth)/sign-up.tsx`, `src/firebase/users.ts` (create profile with defaults), `firestore.rules` update if needed.
   - Test: iPhone: create an account → `users/{uid}` appears in the console with default settings; email error on blur; live password rules.
   - Done when: matches `Sign up / regular / empty` and `/ email-error`; profile created exactly once.
   - Docs: data-model (confirm fields), features.
   - Commit: `feat(auth): sign up with user profile document`
+  - Result: done 2026-10-26, tested on the iPhone. `sign-up.tsx` follows the design (back button, "Join the band", name / email / password, live rules, "Create account" at the bottom; Google and the divider hidden). Email is checked when the field loses focus; typing clears only that field's error. `AuthProvider.signUp` creates the account, sets its display name and writes `users/{uid}` via `src/firebase/users.ts` (defaults from the data model, server `createdAt`, phone time zone). `authValidation.ts` (email, password rules, name length) is unit-tested; 27 tests. Sign in links to Sign up. No rules change was needed. Copy: "That email already has an account. Sign in instead, or reset your password." (approved); "Enter a first name or nickname." (empty name, accepted with the commit). Changed on your request 2026-10-26: two extra password rules ("An uppercase letter", "A lowercase letter"; the design has only "8+ characters" and "A number"), the password is checked when leaving the field, the rules stay visible under the error, and the weak-password message is "Your password needs to meet all the rules below." See R17.
 
 ### Phase 3: Navigation shell and quiet-studio screens
 
@@ -628,6 +629,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 | R13 | ~~The old global npm 7 is still used~~ (resolved 2026-10-26: global npm updated to 10) by `npm install` and `npx expo install`, and would break `node_modules` again | Update the global npm once (manual task 10). Until then install with `npx npm@10 install` |
 | R15 | Keyboard covers inputs on Android: `automaticallyAdjustKeyboardInsets` is iOS-only, and Expo's recommended `react-native-keyboard-controller` isn't in Expo Go | Check the auth screens on the Android emulator or the Android phone (step A.0). If fields are covered, wrap `Screen` in `KeyboardAvoidingView` on Android, or add `react-native-keyboard-controller` with the dev build |
 | R16 | The running dev server's typed-routes generator can list new non-route files (e.g. `/../firebase/AuthProvider`) in `.expo/types/router.d.ts`, so `tsc` rejects valid links like `"/"` | Restart the dev server with `npx expo start --clear`; a fresh generation is correct (checked 2026-10-26) |
+| R17 | After `createUserWithEmailAndPassword` the user is signed in and the guard switches to the app before the profile document is written; if that write fails (e.g. connection lost), the account has no profile | Step 3.2's `useProfile` creates the profile when it is missing (name from the Firebase account) |
 | R14 | The `react-dom` override must match React's version; after an SDK upgrade npm may fail with ERESOLVE again | On every SDK upgrade, set `overrides.react-dom` to the new `react` version |
 
 ---
@@ -678,3 +680,6 @@ Still open:
 - 2026-10-26: step 2.4 built (Sign in screen, forgot password, error mapping); waiting for error copy approval and iPhone test.
 - 2026-10-26: auth error copy approved.
 - 2026-10-26: step 2.4 done (tested on iPhone).
+- 2026-10-26: step 2.5 built (Sign up, profile document, validation); waiting for iPhone test; added R17.
+- 2026-10-26: Sign up: four password rules, password checked on blur (your request).
+- 2026-10-26: step 2.5 done; Phase 2 (Firebase and auth) complete. "Email already in use" stays a submit-time check (email enumeration protection).

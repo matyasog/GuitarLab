@@ -26,12 +26,12 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 
 | Feature | Phase | Status | Notes |
 |---|---|---|---|
-| Sign up with email + password (name, live password rules) | 2 | planned | |
+| Sign up with email + password (name, live password rules) | 2 | done | four password rules; email and password checked on leaving the field |
 | Sign in with email + password | 2 | done | |
 | Forgot password (reset email + "Reset link sent…" message) | 2 | done | |
 | Sign out (Settings → Account) | 2 | planned | |
 | Auth-gated navigation | 2 | done | `Stack.Protected`; splash until the saved sign-in is restored |
-| User profile document created on sign-up | 2 | planned | `users/{uid}` |
+| User profile document created on sign-up | 2 | done | `users/{uid}`, `src/firebase/users.ts` |
 | Friendly auth error messages | 2 | done | `src/firebase/authErrors.ts`; copy approved 2026-10-26 |
 | Sign in / up with Google | A.1 | planned (Android dev build) | not possible in Expo Go; buttons hidden until then |
 | Offline banner on Today | 3 | planned | Firestore offline cache |

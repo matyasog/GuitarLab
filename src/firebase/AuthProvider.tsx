@@ -1,13 +1,16 @@
 import {
+  createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
+  updateProfile,
   type User,
 } from 'firebase/auth';
 import { createContext, useEffect, useState, type ReactNode } from 'react';
 
 import { auth } from './config';
+import { createUserProfile } from './users';
 
 export type AuthState = {
   // The signed-in Firebase user, or null when signed out.
@@ -15,6 +18,8 @@ export type AuthState = {
   // True until Firebase has restored (or not) the saved sign-in at app start.
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  // Creates the account and its profile document users/{uid}.
+  signUp: (displayName: string, email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   // Sends Firebase's password reset email. For privacy, Firebase reports success even when
   // no account uses that email, so the app can't be used to find out who has an account.
@@ -45,6 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // show the right screens automatically.
     signIn: async (email, password) => {
       await signInWithEmailAndPassword(auth, email.trim(), password);
+    },
+    signUp: async (displayName, email, password) => {
+      const { user: newUser } = await createUserWithEmailAndPassword(auth, email.trim(), password);
+      // From here the user is signed in, so the route guard already switches to the app.
+      // The name is also stored on the Firebase account (shown in the console's user list).
+      await updateProfile(newUser, { displayName: displayName.trim() });
+      await createUserProfile(newUser.uid, displayName);
     },
     signOut: () => firebaseSignOut(auth),
     resetPassword: (email) => sendPasswordResetEmail(auth, email.trim()),

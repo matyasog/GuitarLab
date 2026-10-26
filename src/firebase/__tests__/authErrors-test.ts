@@ -27,6 +27,12 @@ test('network and rate-limit errors are about the whole form', () => {
   expect(getAuthErrorMessage(firebaseError('auth/too-many-requests')).field).toBe('form');
 });
 
+test('sign-up errors point at the field to fix', () => {
+  expect(getAuthErrorMessage(firebaseError('auth/email-already-in-use')).field).toBe('email');
+  expect(getAuthErrorMessage(firebaseError('auth/weak-password')).field).toBe('password');
+  expect(getAuthErrorMessage({ code: 'app/missing-display-name' }).field).toBe('name');
+});
+
 test('unknown codes and non-Firebase errors fall back to a general message', () => {
   const fallback = { field: 'form', message: 'Something went wrong. Try again.' };
   expect(getAuthErrorMessage(firebaseError('auth/something-new'))).toEqual(fallback);

@@ -7,7 +7,8 @@ import { AppText } from './AppText';
 import { IconButton } from './IconButton';
 
 type ScreenHeaderProps = {
-  title: string;
+  // Optional only with onBack: Sign up shows just the back button.
+  title?: string;
   // With onBack: "Screen header / back" (back button + smaller title).
   // Without: "Screen header / tool" (big title, used on tab screens).
   onBack?: () => void;
@@ -21,9 +22,13 @@ export function ScreenHeader({ title, onBack, trailing }: ScreenHeaderProps) {
     return (
       <View style={styles.row}>
         <IconButton icon="arrow-left" accessibilityLabel="Back" onPress={onBack} />
-        <AppText variant="title20" accessibilityRole="header" style={styles.title}>
-          {title}
-        </AppText>
+        {title ? (
+          <AppText variant="title20" accessibilityRole="header" style={styles.title}>
+            {title}
+          </AppText>
+        ) : (
+          <View style={styles.title} />
+        )}
         {/* Keeps the title's position the same whether or not there is a trailing element. */}
         <View style={styles.trailingSlot}>{trailing}</View>
       </View>
