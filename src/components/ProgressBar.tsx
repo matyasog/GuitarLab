@@ -13,11 +13,13 @@ type ProgressBarProps = {
   valueText?: string;
   // Line under the bar, e.g. "360 XP to level 5 · Garage Band".
   caption?: string;
+  // DM Mono caption for numbers, e.g. "1,240 / 1,600 XP to level 5" on You.
+  captionMono?: boolean;
   accessibilityLabel: string;
 };
 
 // Brass progress bar (XP), from "Progress bar / XP" in the design.
-export function ProgressBar({ progress, title, valueText, caption, accessibilityLabel }: ProgressBarProps) {
+export function ProgressBar({ progress, title, valueText, caption, captionMono, accessibilityLabel }: ProgressBarProps) {
   const clamped = Math.min(1, Math.max(0, progress));
   const percent = Math.round(clamped * 100);
 
@@ -49,7 +51,7 @@ export function ProgressBar({ progress, title, valueText, caption, accessibility
       </View>
 
       {caption ? (
-        <AppText variant="helper14" color="muted">
+        <AppText variant={captionMono ? 'mono14' : 'helper14'} color="muted">
           {caption}
         </AppText>
       ) : null}

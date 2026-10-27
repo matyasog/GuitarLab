@@ -1,4 +1,4 @@
-import { lastSevenDays } from '../useTodaySummary';
+import { lastSevenDays } from '../useProgressSummary';
 
 test('the week ends today and marks the days before it (Monday 12 October 2026 as in the design)', () => {
   const week = lastSevenDays(new Date(2026, 9, 12), 6);

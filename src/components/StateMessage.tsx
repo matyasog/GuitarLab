@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { colors, radii, space } from '@/theme';
@@ -11,6 +12,8 @@ type StateMessageProps = {
   body: string;
   actionLabel?: string;
   onAction?: () => void;
+  // Drawing shown instead of the icon circle, e.g. the faders at zero on You.
+  illustration?: ReactNode;
 };
 
 type BaseProps = StateMessageProps & {
@@ -20,14 +23,16 @@ type BaseProps = StateMessageProps & {
 
 // Shared layout of "Empty state" and "Error state" in the design: icon in a circle,
 // centred title and body, one button.
-function StateMessage({ icon, tone, title, body, actionLabel, onAction }: BaseProps) {
+function StateMessage({ icon, tone, title, body, actionLabel, onAction, illustration }: BaseProps) {
   const isError = tone === 'error';
 
   return (
     <View style={styles.container} accessibilityRole={isError ? 'alert' : undefined}>
-      <View style={[styles.iconCircle, { backgroundColor: isError ? colors.redSoft : colors.surface2 }]}>
-        <Icon name={icon} size={24} color={isError ? 'red' : 'muted'} />
-      </View>
+      {illustration ?? (
+        <View style={[styles.iconCircle, { backgroundColor: isError ? colors.redSoft : colors.surface2 }]}>
+          <Icon name={icon} size={24} color={isError ? 'red' : 'muted'} />
+        </View>
+      )}
       <View style={styles.text}>
         <AppText variant="title20" style={styles.centered}>
           {title}

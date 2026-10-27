@@ -102,9 +102,9 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 |---|---|---|---|
 | XP and levels with rank names (Bedroom Player, Garage Band, Opening Act, Headliner) | 6 | planned | |
 | Daily goal and streak | 6 | planned | |
-| Achievements ("Pick collection", 12) | 6 | planned | list confirmed in plan D9 |
-| You: rank card, stat tiles, empty state | 6 | planned | |
-| You: "Your mix" faders and accuracy chart | 7 | mock only | they need scored runs |
+| Achievements ("Pick collection", 12) | 3 → 6 | in progress | grid built in 3.7 (`AchievementGrid`, `src/data/achievements.ts`); earned picks are SAMPLE until 6.4; conditions in 6.1 |
+| You: rank card, stat tiles, empty state | 3 → 6 | in progress | done in 3.7; level curve and ranks in `src/data/ranks.ts` (tested); XP, streak, time SAMPLE until 6.4; dev previews `/you?preview=empty|loading|error` |
+| You: "Your mix" faders and accuracy chart | 7 | planned | they need scored runs; until 7.6 You shows the designed "Your mix starts at zero" card |
 | XP from Metronome and Chord Lab activity | 6 | planned | values to approve |
 
 ## Settings

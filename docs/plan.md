@@ -1,6 +1,6 @@
 # GuitarLab development plan
 
-Status (2026-10-26): Phases 0–2 done; Phase 3 in progress (3.1–3.6 done). **Next: step 3.7 You.** On Expo SDK 58.
+Status (2026-10-27): Phases 0–3 done. **Next: Phase 4, step 4.1 Metronome engine + timing measurement.** On Expo SDK 58.
 
 ### Where we are (read this first in a new chat)
 
@@ -493,10 +493,11 @@ Conventions for every step:
   - Test: iPhone: regular, first-day (new account), offline (airplane mode), loading.
   - Commit: `feat(today): today screen`
   - Result: done 2026-10-27. `@react-native-community/netinfo` 12.0.1 added (your OK). Today shows the date, "Hi, name" with a `LevelBadge` (opens You), the offline banner (`useIsOffline`), `StreakStrip` with the daily goal from Settings, `SessionCard` (fretboard preview via the new `ScaleShape variant="preview"`, chips, coach line, Play / Details, landscape hint) and two Up next rows (`ListRow` got category icon colours). Picks in `src/data/todayPicks.ts` (tested); level / streak / minutes SAMPLE in `useTodaySummary` until 6.4. Quarter notes got the "open low E" shape and lessons a `minutes` field. Play shows the dev note until Practice (7.4); Details opens Lesson detail; All lessons opens Learn. Dev previews `/?preview=first-day|offline|loading|error`, with buttons in the gallery. Quarter notes' description changed to match the first-day coach line ("Pluck the open low E on every click…").
-- [ ] **3.7 You (static progress)**
+- [x] **3.7 You (static progress)** (done 2026-10-27; Phase 3 complete)
   - Files: `src/app/(app)/(tabs)/you.tsx`, `src/components/progress/{RankCard,AchievementGrid}.tsx`.
   - Test: iPhone: regular and empty states.
   - Commit: `feat(you): profile screen`
+  - Result: done, tested on the iPhone. `RankCard` (brass pick with the level, rank name, XP bar with a mono caption, 4-step rank ladder), 3 stat tiles (streak, lessons done from the scores, time practised), the designed empty "Your mix" card with `FadersAtZero` (its button opens Today; real mix in 7.6), `AchievementGrid` with all 12 picks (`Pick` draws the design's pick path with an SVG gradient). New data: `src/data/ranks.ts` (level curve, ranks, XP text, practice time; tested), `src/data/achievements.ts`. `useTodaySummary` became `useProgressSummary` (adds XP, total time, earned picks). `StateMessage` got an `illustration` slot. Dev previews `/you?preview=empty|loading|error`, buttons in the gallery. With the sample scores "lessons done" is 3/12 (the design shows 7, but Learn says 3 of 12).
 
 ### Phase 4: Metronome
 
@@ -711,3 +712,5 @@ Nothing open. ("Coming soon" copy approved 2026-10-26 in step 3.5.)
 - 2026-10-27: step 3.5 done (tested on iPhone); coming-soon toast closable.
 - 2026-10-27: step 3.6 built (Today, session picks, netinfo).
 - 2026-10-27: step 3.6 done; Today previews in the gallery; Quarter notes description matches the design.
+- 2026-10-27: step 3.7 built (You, ranks, picks); level curve from 6.1 done early.
+- 2026-10-27: step 3.7 done (tested on iPhone); Phase 3 complete.

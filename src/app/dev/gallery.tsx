@@ -261,6 +261,23 @@ function GalleryContent() {
             onPress={() => router.push({ pathname: '/', params: { preview: 'error' } })}
           />
         </View>
+        <View style={styles.row}>
+          <Button
+            label="You: empty"
+            variant="secondary"
+            onPress={() => router.push({ pathname: '/you', params: { preview: 'empty' } })}
+          />
+          <Button
+            label="You: loading"
+            variant="secondary"
+            onPress={() => router.push({ pathname: '/you', params: { preview: 'loading' } })}
+          />
+          <Button
+            label="You: error"
+            variant="secondary"
+            onPress={() => router.push({ pathname: '/you', params: { preview: 'error' } })}
+          />
+        </View>
       </View>
 
       <View style={styles.section}>

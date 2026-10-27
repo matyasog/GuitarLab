@@ -397,6 +397,14 @@ Text-size rule: text scales with the phone setting everywhere except labels insi
 
 ## 2026-10-27 · Today: what the session card and Up next show; offline detection
 
-**Decision:** `src/data/todayPicks.ts` (unit-tested) picks the session lesson: nothing played yet → Quarter notes ("Your first session"); otherwise the in-progress lesson **with exercises** that has the lowest best score; otherwise the first new one. "Up next" shows the weakest other in-progress lesson, then new lessons, easiest first (2 rows). The kicker is "Tonight's session" from 17:00 and "Today's session" before. Level, streak, week and minutes today are SAMPLE numbers from the design (`useTodaySummary`) until step 6.4; the greeting and daily goal come from the real profile. The offline banner uses `@react-native-community/netinfo` (works in Expo Go, no config plugin).
+**Decision:** `src/data/todayPicks.ts` (unit-tested) picks the session lesson: nothing played yet → Quarter notes ("Your first session"); otherwise the in-progress lesson **with exercises** that has the lowest best score; otherwise the first new one. "Up next" shows the weakest other in-progress lesson, then new lessons, easiest first (2 rows). The kicker is "Tonight's session" from 17:00 and "Today's session" before. Level, streak, week and minutes today are SAMPLE numbers from the design (`useProgressSummary`, renamed in 3.7) until step 6.4; the greeting and daily goal come from the real profile. The offline banner uses `@react-native-community/netinfo` (works in Expo Go, no config plugin).
 **Reason:** Both rules reproduce exactly what the regular and first-day designs show, and point the user at the lesson that needs most work. Only lessons with exercises can be played, so only they can be the session. NetInfo reports the connection directly; Firestore's cache flags can't tell offline from "not answered yet".
 **Alternatives:** the most recently played lesson (no play history yet); a hand-picked lesson per day; detecting offline from Firestore `fromCache`.
+
+---
+
+## 2026-10-27 · You: level curve early, sample progress, empty mix card until 7.6
+
+**Decision:** The level curve and ranks from D9 are in `src/data/ranks.ts` now (unit-tested), because the rank card needs them; the rest of the gamification rules stay in step 6.1. The XP bar shows total XP against the next level's total (1,240 / 1,600 = 77.5 %), exactly as the design. `useProgressSummary` (was `useTodaySummary`) holds the SAMPLE numbers for Today and You (1,240 XP, 12-day streak, 9 h 40, 4 picks) until 6.4; "lessons done" comes from the lesson scores. "Your mix" and the accuracy chart need real runs, so You shows the designed "Your mix starts at zero" card until step 7.6. All 12 picks are shown in rows of 3, earned first. Picks are drawn with `react-native-svg` from the design's pick path.
+**Reason:** Showing invented mix numbers would look real but mean nothing; the empty card is honest and already designed. Computing the level from XP (instead of storing it) means it can never disagree with the XP.
+**Alternatives:** sample faders and chart now (more code that 7.6 replaces anyway); storing the level in Firestore.

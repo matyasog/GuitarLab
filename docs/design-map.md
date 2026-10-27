@@ -57,7 +57,7 @@ The design names the third tab "Tuner" (speaker icon). In the app it is **"Tools
 | Chord Lab · default / scrolled | `Chord Lab / regular / default` (Exwth), `… / default / scrolled` (k8gDq) | `src/app/(app)/(tabs)/chord-lab.tsx` | ScreenHeader/tool ("Clear", "All chords"), chord readout (name, rarity badge, long name, tone chips, STRUM), interactive fretboard (wood), quick-chord chips ×11, theory card |
 | Chord Lab · empty / scrolled | `Chord Lab / regular / empty` (j4LeS8), `… / empty / scrolled` (nrqag) | same, state | STRUM disabled, "Add some notes first" |
 | All chords sheet | `Chord Lab / All chords` (V8RxC) | `src/app/(app)/all-chords.tsx` (full-screen modal) | BottomSheet (full screen), root picker 6×2, grouped list with voicing buttons |
-| You · regular / empty | `You / regular / regular` (FdMSK), `… / empty` (R6rBK) | `src/app/(app)/(tabs)/you.tsx` | Rank card (level badge, XP bar, rank ladder), StatTile ×3, "Your mix" faders, accuracy chart, "Pick collection" achievements grid |
+| You · regular / empty | `You / regular / regular` (FdMSK), `… / empty` (R6rBK) | `src/app/(app)/(tabs)/you.tsx` | Rank card (level badge, XP bar, rank ladder), StatTile ×3, "Your mix" faders, accuracy chart, "Pick collection" achievements grid | Built in 3.7: `progress/{Pick,RankCard,AchievementGrid,FadersAtZero}`. Not in the design: all 12 picks (design shows 6), earned first; empty mix card shown in the regular state until 7.6; "Play your first session" opens Today; loading/error states |
 
 ### Pushed / modal screens (no tab bar)
 

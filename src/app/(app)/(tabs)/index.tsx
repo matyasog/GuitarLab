@@ -17,30 +17,31 @@ import { categoryColors } from '@/components/Tag';
 import { Toast } from '@/components/Toast';
 import { lessonStatus } from '@/data/lessonSections';
 import { categoryLabels, lessons } from '@/data/lessons';
+import { levelForXp } from '@/data/ranks';
 import { pickSession, pickUpNext, sessionCoach, sessionKicker } from '@/data/todayPicks';
 import { useLessonProgress } from '@/hooks/useLessonProgress';
 import { useIsOffline } from '@/hooks/useNetworkStatus';
 import { useProfile } from '@/hooks/useProfile';
-import { firstDaySummary, useTodaySummary } from '@/hooks/useTodaySummary';
+import { emptyProgressSummary, useProgressSummary } from '@/hooks/useProgressSummary';
 import { colors, radii, space } from '@/theme';
 import type { Lesson, LessonProgress } from '@/types/lesson';
 
 type Preview = 'first-day' | 'offline' | 'loading' | 'error';
 
 // Today, from "Today / regular / regular · first-day · offline · loading" in the design.
-// Streak, level and minutes are SAMPLE numbers until step 6.4 (useTodaySummary). In development,
+// Streak, level and minutes are SAMPLE numbers until step 6.4 (useProgressSummary). In development,
 // "/?preview=first-day|offline|loading|error" shows those states.
 export default function Today() {
   const { preview: previewParam } = useLocalSearchParams<{ preview?: string }>();
   const preview = __DEV__ ? (previewParam as Preview | undefined) : undefined;
   const { profile } = useProfile();
   const loaded = useLessonProgress();
-  const sampleSummary = useTodaySummary();
+  const sampleSummary = useProgressSummary();
   const isOffline = useIsOffline() || preview === 'offline';
   const [showPlayNote, setShowPlayNote] = useState(false);
 
   const firstDay = preview === 'first-day';
-  const summary = firstDay ? firstDaySummary() : sampleSummary;
+  const summary = firstDay ? emptyProgressSummary() : sampleSummary;
   const progress: Record<string, LessonProgress> = firstDay ? {} : loaded.progress;
   const status = preview === 'loading' || preview === 'error' ? preview : loaded.status;
 
@@ -58,7 +59,7 @@ export default function Today() {
           {firstDay ? `Welcome, ${name}` : `Hi, ${name}`}
         </AppText>
       </View>
-      <LevelBadge level={summary.level} onPress={() => router.navigate('/you')} />
+      <LevelBadge level={levelForXp(summary.xp)} onPress={() => router.navigate('/you')} />
     </View>
   );
 
