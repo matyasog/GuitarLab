@@ -42,6 +42,7 @@ function AppNavigator() {
       <Stack.Protected guard={onboarded} redirectTo="/onboarding/level">
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="settings" />
+        <Stack.Screen name="lesson/[lessonId]" />
       </Stack.Protected>
       <Stack.Protected guard={!onboarded} redirectTo="/">
         <Stack.Screen name="onboarding" />

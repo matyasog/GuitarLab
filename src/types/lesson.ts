@@ -14,6 +14,22 @@ export type Lesson = {
   difficulty: 1 | 2 | 3 | 4 | 5;
   // Locked until the user scores this much on another lesson.
   unlock?: { lessonId: string; minScore: number };
+  // Text under the title on Lesson detail. Only lessons with written exercises have one.
+  description?: string;
+  // Notes drawn on the Lesson detail fretboard (scales and arpeggios in open position).
+  shape?: FretShape;
+  // True when the notes for the Practice run exist (decision D14: 3 lessons for now).
+  hasExercises?: boolean;
+};
+
+// Strings named as on the fretboard, from the thinnest (high e) to the thickest (low E).
+export type GuitarString = 'e' | 'B' | 'G' | 'D' | 'A' | 'E';
+
+export type FretShape = {
+  // Root note name for the legend ("Root (E)"). Shapes without roots (chromatic) leave it out.
+  root?: string;
+  // Fret 0 = open string.
+  notes: { string: GuitarString; fret: number; name: string }[];
 };
 
 // Worked out from the scores (src/data/lessonSections.ts), never stored.
@@ -23,4 +39,6 @@ export type LessonStatus = 'in-progress' | 'up-next' | 'locked' | 'done';
 export type LessonProgress = {
   // Best run score in percent, if the lesson was played.
   bestScore?: number;
+  // How many runs were finished.
+  runs?: number;
 };

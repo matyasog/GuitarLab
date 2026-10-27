@@ -6,6 +6,7 @@ import { colors, minTouchTarget, radii, space } from '@/theme';
 import type { Lesson, LessonCategory, LessonProgress, LessonStatus } from '@/types/lesson';
 
 import { AppText } from './AppText';
+import { DifficultyMarks } from './DifficultyMarks';
 import { Icon, type IconName } from './Icon';
 import { categoryColors } from './Tag';
 
@@ -105,17 +106,6 @@ export function LessonRow({ lesson, status, progress, unlockText, onPress }: Les
   );
 }
 
-// Five small bars, the first `level` lit, from "Difficulty N of 5".
-function DifficultyMarks({ level }: { level: number }) {
-  return (
-    <View style={styles.marks} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-      {[1, 2, 3, 4, 5].map((mark) => (
-        <View key={mark} style={[styles.mark, { backgroundColor: mark <= level ? colors.text2 : colors.line2 }]} />
-      ))}
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   row: {
     minHeight: 64,
@@ -144,16 +134,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     gap: space[8],
-  },
-  marks: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-  },
-  mark: {
-    width: 4,
-    height: 10,
-    borderRadius: 2,
   },
   newTag: {
     minHeight: 28,

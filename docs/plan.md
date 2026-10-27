@@ -1,6 +1,6 @@
 # GuitarLab development plan
 
-Status (2026-10-26): Phases 0–2 done; Phase 3 in progress (3.1–3.4 done). **Next: step 3.5 Lesson detail.** On Expo SDK 58.
+Status (2026-10-26): Phases 0–2 done; Phase 3 in progress (3.1–3.5 done). **Next: step 3.6 Today.** On Expo SDK 58.
 
 ### Where we are (read this first in a new chat)
 
@@ -8,7 +8,7 @@ Status (2026-10-26): Phases 0–2 done; Phase 3 in progress (3.1–3.4 done). **
 - **Before saying a step is done:** read the design frames with `scripts/design/inspect-pen.js` (`props`, `texts`, `refs`); copy, sizes and colours come from the design. Ask me before inventing copy; record every deviation from the design in `docs/decisions.md` and `docs/design-map.md`.
 - **Typed routes:** after adding or moving route files, regenerate `.expo/types/router.d.ts` by running `npx expo start --port 8099 --offline` for ~60 s (then stop it), otherwise `tsc` may reject new links (risk R16).
 - **Line endings:** docs are CRLF on disk; edit them with tools that keep CRLF.
-- **Still open:** "coming soon" copy for lessons without exercises (step 3.5). Decided recently: third tab is "Tools"; lesson done at ≥ 90 %, unlock at 80 %; tapping the selected Learn chip returns to All; four password rules on Sign up.
+- **Still open:** nothing. Decided recently: answers short and direct; coming-soon copy approved (3.5); third tab is "Tools"; lesson done at ≥ 90 %, unlock at 80 %; tapping the selected Learn chip returns to All; four password rules on Sign up.
 
 Tick steps (`[x]`) as they are finished and note any change to the plan in the changelog at the bottom.
 
@@ -482,10 +482,11 @@ Conventions for every step:
   - Test: iPhone: filter chips, sections, locked row "How to unlock", loading and error states (forced via a dev toggle).
   - Commit: `feat(learn): lesson list with static content`
   - Result: done, tested on the iPhone. `src/data/lessons.ts` (12 lessons from the design + SAMPLE progress copied from the design, replaced in 6.4), `src/data/lessonSections.ts` (grouping, done count, unlock sentence; 6 tests), `useLessonProgress()` (returns the sample until 6.4). Learn: header with "N of 12 done", 12-segment brass bar, scrolling category chips, sections as cards, `LessonRow` (category icon, meta, difficulty marks, score / NEW / expandable "How to unlock"). Dev previews `/learn?preview=loading|error` (buttons in the gallery). Rows don't open anything yet (Lesson detail is 3.5). Changes after your review: the status is now **worked out from the best score** (`lessonStatus`): locked while the required lesson is below its unlock score (80 %), **done from 90 %** (your rule), in progress below that, up next if never played. The sample therefore shows 3 done, 5 in progress, 2 up next (Cmaj7 arpeggio unlocks because A minor arpeggio is at 82 %), 2 locked. Tapping the selected category chip again returns to All. The unlock prerequisites for Syncopated strumming and Cmaj7 arpeggio are confirmed.
-- [ ] **3.5 Lesson detail**
+- [x] **3.5 Lesson detail** (done 2026-10-27)
   - Files: `src/app/(app)/lesson/[lessonId].tsx` (outside the tabs: no tab bar in the design), `src/components/fretboard/ScaleShape.tsx`.
   - Test: iPhone: tempo segments change the Play button label; "Tune" opens the Tuner.
   - Commit: `feat(learn): lesson detail`
+  - Result: done, tested on the iPhone. Learn rows open `lesson/[lessonId]`. Header with back, category tag and difficulty marks (`DifficultyMarks`, moved out of `LessonRow`); title and description; `ScaleShape` fretboard (views, mirrors for left-handed from Settings); stat tiles (best, runs, goal); `TempoOptions` (warm-up / suggested / goal from `tempoOptions`, unit-tested); Tune nudge opens the Tuner; Play fixed at the bottom via the new `Screen footer` prop. Lessons got `description`, `shape`, `hasExercises`; progress got `runs` (sample). Play shows "coming soon" for the 9 lessons without exercises (in development, a note for the other 3 until Practice in 7.4). Dev previews `?preview=loading|error`; unknown id shows "Lesson not found". New text style `monoStrong24`. After your test: the toast got an × close button (`Toast onClose`).
 - [ ] **3.6 Today**
   - Files: `src/app/(app)/(tabs)/index.tsx`, `src/hooks/useNetworkStatus.ts`.
   - Libraries: maybe `@react-native-community/netinfo` (Expo Go: yes) for the offline banner. Ask first.
@@ -667,7 +668,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 Answered on 2026-10-26: Firebase console, Google sign-in (D13), auth error copy (Claude drafts it, you approve it in step 2.4), lesson content (D14), gamification starting values (D9), metronome background + sound options (D1), tuner layers (D5), template packages (D11), tests (D12), achievements list (D9), Chord Lab wood (reuse the walnut texture `design/generated-1.png`, step 5.3).
 
 Still open:
-1. **"Coming soon" copy** for lessons without full content (D14), drafted by Claude in step 3.5.
+Nothing open. ("Coming soon" copy approved 2026-10-26 in step 3.5.)
 
 ---
 
@@ -705,3 +706,5 @@ Still open:
 - 2026-10-26: step 3.4 built (lesson data, Learn screen); two open questions added.
 - 2026-10-26: lesson "done" = best score ≥ 90 % (your rule), unlock stays 80 %; statuses derived from scores; tapping the selected chip returns to All.
 - 2026-10-26: step 3.4 done; unlock score confirmed at 80 % (done stays 90 %); "Where we are" handoff block added at the top.
+- 2026-10-26: step 3.5 built (Lesson detail, fretboard shapes, tempo rule); coming-soon copy approved; open questions cleared.
+- 2026-10-27: step 3.5 done (tested on iPhone); coming-soon toast closable.

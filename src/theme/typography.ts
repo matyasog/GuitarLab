@@ -74,6 +74,7 @@ export const textStyles = {
   readoutStrong64: style(f.mono500, t[64], { lineHeight: lineHeight(t[64], 1) }),
   mono32: style(f.mono400, t[32], { lineHeight: lineHeight(t[32], 1) }),
   monoStrong32: style(f.mono500, t[32]),
+  monoStrong24: style(f.mono500, t[24]),
   monoStrong20: style(f.mono500, t[20]),
   mono16: style(f.mono400, t[16]),
   monoStrong16: style(f.mono500, t[16]),

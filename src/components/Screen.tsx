@@ -16,6 +16,8 @@ type ScreenProps = {
   // Standard screen margins from the design: 16 at the sides, 8 on top, 24 at the bottom.
   padded?: boolean;
   contentStyle?: StyleProp<ViewStyle>;
+  // Fixed below the scrolling content, e.g. Lesson detail's "Play" button.
+  footer?: ReactNode;
 };
 
 const allEdges: Edge[] = ['top', 'right', 'bottom', 'left'];
@@ -29,6 +31,7 @@ export function Screen({
   gap = 16,
   padded = true,
   contentStyle,
+  footer,
 }: ScreenProps) {
   const isWide = useLayoutClass() === 'wide';
 
@@ -56,6 +59,7 @@ export function Screen({
       ) : (
         <View style={[content, styles.fill]}>{children}</View>
       )}
+      {footer ? <View style={[styles.footer, isWide && styles.wide]}>{footer}</View> : null}
     </SafeAreaView>
   );
 }
@@ -75,6 +79,11 @@ const styles = StyleSheet.create({
     paddingTop: space[8],
     paddingHorizontal: space[16],
     paddingBottom: space[24],
+  },
+  footer: {
+    paddingTop: space[8],
+    paddingHorizontal: space[16],
+    paddingBottom: space[8],
   },
   wide: {
     width: '100%',

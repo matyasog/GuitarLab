@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -97,6 +97,7 @@ export default function Learn() {
                         status={section.status}
                         progress={progress[lesson.id]}
                         unlockText={unlockText(lesson, progress)}
+                        onPress={() => router.push({ pathname: '/lesson/[lessonId]', params: { lessonId: lesson.id } })}
                       />
                     </View>
                   ))}

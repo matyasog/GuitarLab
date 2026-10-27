@@ -23,17 +23,19 @@ type ToastProps = {
   // Optional action on the right, e.g. "Retry".
   actionLabel?: string;
   onAction?: () => void;
+  // Shows an × button that closes the toast (not in the kit; added for "Coming soon").
+  onClose?: () => void;
 };
 
 // Message banner, from "Toast / info · success · error" in the design.
 // The screens place it inside the content (e.g. Today's offline banner), not floating.
-export function Toast({ tone, message, detail, icon, actionLabel, onAction }: ToastProps) {
+export function Toast({ tone, message, detail, icon, actionLabel, onAction, onClose }: ToastProps) {
   const look = tones[tone];
   const hasAction = actionLabel !== undefined && onAction !== undefined;
 
   return (
     <View
-      style={[styles.toast, hasAction && styles.withAction]}
+      style={[styles.toast, (hasAction || onClose) && styles.withAction]}
       // Screen readers announce the message when it appears.
       accessibilityLiveRegion={tone === 'error' ? 'assertive' : 'polite'}
       accessibilityRole={tone === 'error' ? 'alert' : undefined}
@@ -57,6 +59,16 @@ export function Toast({ tone, message, detail, icon, actionLabel, onAction }: To
           <AppText variant="labelStrong14" color="amber">
             {actionLabel}
           </AppText>
+        </Pressable>
+      ) : null}
+      {onClose ? (
+        <Pressable
+          onPress={onClose}
+          accessibilityRole="button"
+          accessibilityLabel="Close"
+          style={({ pressed }) => [styles.action, pressed && styles.actionPressed]}
+        >
+          <Icon name="x" color="muted" />
         </Pressable>
       ) : null}
     </View>
