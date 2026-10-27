@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { colors, radii, space } from '@/theme';
+import { colors, radii, space, type ColorName } from '@/theme';
 
 import { AppText } from './AppText';
 import { Icon, type IconName } from './Icon';
@@ -9,8 +9,10 @@ import { Icon, type IconName } from './Icon';
 type ListRowProps = {
   title: string;
   subtitle?: string;
-  // Icon in a small square on the left.
+  // Icon in a small square on the left; lesson rows colour it by category.
   icon?: IconName;
+  iconColor?: ColorName;
+  iconBackground?: ColorName;
   // Text on the right ("Value"), or any element (a score, a "NEW" tag, a lock).
   value?: string | ReactNode;
   // Rows that open something show a chevron; it is on by default when onPress is set.
@@ -20,7 +22,17 @@ type ListRowProps = {
 };
 
 // Row in a list, from "List row" in the design: 64 pt tall, hairline line below, no shadow.
-export function ListRow({ title, subtitle, icon, value, showChevron, onPress, accessibilityHint }: ListRowProps) {
+export function ListRow({
+  title,
+  subtitle,
+  icon,
+  iconColor = 'text2',
+  iconBackground = 'surface2',
+  value,
+  showChevron,
+  onPress,
+  accessibilityHint,
+}: ListRowProps) {
   const chevron = showChevron ?? onPress !== undefined;
   const valueText = typeof value === 'string' ? value : undefined;
 
@@ -35,8 +47,8 @@ export function ListRow({ title, subtitle, icon, value, showChevron, onPress, ac
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}
     >
       {icon ? (
-        <View style={styles.iconBox}>
-          <Icon name={icon} color="text2" />
+        <View style={[styles.iconBox, { backgroundColor: colors[iconBackground] }]}>
+          <Icon name={icon} color={iconColor} />
         </View>
       ) : null}
 
@@ -80,7 +92,6 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: radii.chip,
-    backgroundColor: colors.surface2,
     alignItems: 'center',
     justifyContent: 'center',
   },

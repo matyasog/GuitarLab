@@ -22,6 +22,12 @@ export const emPentatonicBox1: FretShape = {
   ],
 };
 
+// Just the open low E string, from the first-day session card ("open low E only").
+export const openLowE: FretShape = {
+  root: 'E',
+  notes: [{ string: 'E', fret: 0, name: 'E' }],
+};
+
 // Frets 1-2-3-4 on every string, one finger per fret. No root: it is a finger exercise.
 export const chromaticWarmUp: FretShape = {
   notes: [

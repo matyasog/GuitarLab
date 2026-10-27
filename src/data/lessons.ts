@@ -1,6 +1,6 @@
 import type { Lesson, LessonCategory, LessonProgress } from '@/types/lesson';
 
-import { aMinorArpeggio, cMajorOpen, chromaticWarmUp, emPentatonicBox1 } from './lessonShapes';
+import { aMinorArpeggio, cMajorOpen, chromaticWarmUp, emPentatonicBox1, openLowE } from './lessonShapes';
 
 // The 12 lessons shown on the Learn screen in the design (titles, category, tempo, difficulty).
 // Three of them have exercises (`hasExercises`, decision D14); the others show "coming soon".
@@ -11,9 +11,12 @@ export const lessons: Lesson[] = [
     category: 'rhythm',
     bpm: 60,
     difficulty: 1,
-    // Not in the design (approved 2026-10-26).
-    description: 'Play one muted strum on every click. We check that each strum lands right on the beat.',
+    // Matches the first-day Today design ("pluck the open low E on every beat"); changed 2026-10-27.
+    description: 'Pluck the open low E on every click. We check that each note lands right on the beat.',
+    shape: openLowE,
     hasExercises: true,
+    // From the first-day Today design.
+    minutes: 3,
   },
   {
     id: 'chromatic-warm-up',
@@ -26,6 +29,8 @@ export const lessons: Lesson[] = [
       'Frets 1-2-3-4 on every string, one finger per fret, up and back down. We check pitch, timing and clean fretting on every note.',
     shape: chromaticWarmUp,
     hasExercises: true,
+    // Not in the design (chosen 2026-10-27).
+    minutes: 4,
   },
   {
     id: 'c-major-scale-open',
@@ -51,6 +56,8 @@ export const lessons: Lesson[] = [
       'Up the box and back down, one note per eighth-note click. We check pitch, timing and clean fretting on every note.',
     shape: emPentatonicBox1,
     hasExercises: true,
+    // From the Today design.
+    minutes: 6,
   },
   { id: 'riff-in-e', title: 'Riff in E, palm-muted', category: 'melody', bpm: 100, difficulty: 3 },
   {

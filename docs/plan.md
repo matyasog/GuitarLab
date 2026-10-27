@@ -1,6 +1,6 @@
 # GuitarLab development plan
 
-Status (2026-10-26): Phases 0–2 done; Phase 3 in progress (3.1–3.5 done). **Next: step 3.6 Today.** On Expo SDK 58.
+Status (2026-10-26): Phases 0–2 done; Phase 3 in progress (3.1–3.6 done). **Next: step 3.7 You.** On Expo SDK 58.
 
 ### Where we are (read this first in a new chat)
 
@@ -487,11 +487,12 @@ Conventions for every step:
   - Test: iPhone: tempo segments change the Play button label; "Tune" opens the Tuner.
   - Commit: `feat(learn): lesson detail`
   - Result: done, tested on the iPhone. Learn rows open `lesson/[lessonId]`. Header with back, category tag and difficulty marks (`DifficultyMarks`, moved out of `LessonRow`); title and description; `ScaleShape` fretboard (views, mirrors for left-handed from Settings); stat tiles (best, runs, goal); `TempoOptions` (warm-up / suggested / goal from `tempoOptions`, unit-tested); Tune nudge opens the Tuner; Play fixed at the bottom via the new `Screen footer` prop. Lessons got `description`, `shape`, `hasExercises`; progress got `runs` (sample). Play shows "coming soon" for the 9 lessons without exercises (in development, a note for the other 3 until Practice in 7.4). Dev previews `?preview=loading|error`; unknown id shows "Lesson not found". New text style `monoStrong24`. After your test: the toast got an × close button (`Toast onClose`).
-- [ ] **3.6 Today**
+- [x] **3.6 Today** (done 2026-10-27)
   - Files: `src/app/(app)/(tabs)/index.tsx`, `src/hooks/useNetworkStatus.ts`.
   - Libraries: maybe `@react-native-community/netinfo` (Expo Go: yes) for the offline banner. Ask first.
   - Test: iPhone: regular, first-day (new account), offline (airplane mode), loading.
   - Commit: `feat(today): today screen`
+  - Result: done 2026-10-27. `@react-native-community/netinfo` 12.0.1 added (your OK). Today shows the date, "Hi, name" with a `LevelBadge` (opens You), the offline banner (`useIsOffline`), `StreakStrip` with the daily goal from Settings, `SessionCard` (fretboard preview via the new `ScaleShape variant="preview"`, chips, coach line, Play / Details, landscape hint) and two Up next rows (`ListRow` got category icon colours). Picks in `src/data/todayPicks.ts` (tested); level / streak / minutes SAMPLE in `useTodaySummary` until 6.4. Quarter notes got the "open low E" shape and lessons a `minutes` field. Play shows the dev note until Practice (7.4); Details opens Lesson detail; All lessons opens Learn. Dev previews `/?preview=first-day|offline|loading|error`, with buttons in the gallery. Quarter notes' description changed to match the first-day coach line ("Pluck the open low E on every click…").
 - [ ] **3.7 You (static progress)**
   - Files: `src/app/(app)/(tabs)/you.tsx`, `src/components/progress/{RankCard,AchievementGrid}.tsx`.
   - Test: iPhone: regular and empty states.
@@ -708,3 +709,5 @@ Nothing open. ("Coming soon" copy approved 2026-10-26 in step 3.5.)
 - 2026-10-26: step 3.4 done; unlock score confirmed at 80 % (done stays 90 %); "Where we are" handoff block added at the top.
 - 2026-10-26: step 3.5 built (Lesson detail, fretboard shapes, tempo rule); coming-soon copy approved; open questions cleared.
 - 2026-10-27: step 3.5 done (tested on iPhone); coming-soon toast closable.
+- 2026-10-27: step 3.6 built (Today, session picks, netinfo).
+- 2026-10-27: step 3.6 done; Today previews in the gallery; Quarter notes description matches the design.

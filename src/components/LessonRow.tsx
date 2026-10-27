@@ -11,7 +11,7 @@ import { Icon, type IconName } from './Icon';
 import { categoryColors } from './Tag';
 
 // Icon per category, from the Learn design.
-const categoryIcons: Record<LessonCategory, IconName> = {
+export const categoryIcons: Record<LessonCategory, IconName> = {
   rhythm: 'drum',
   scales: 'chart-no-axes-column-increasing',
   melody: 'music',

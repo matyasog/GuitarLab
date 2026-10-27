@@ -40,7 +40,7 @@ The design names the third tab "Tuner" (speaker icon). In the app it is **"Tools
 
 | Screen · state | Frame (id) | Planned route | Main components |
 |---|---|---|---|
-| Today · regular / scrolled | `Today / regular / regular` (g8cv3d), `… / scrolled` (oJ25M) | `src/app/(app)/(tabs)/index.tsx` | IconButton (level badge → You), StreakStrip (week + daily goal), Session card, SectionHeader, ListRow ×2, TabBar |
+| Today · regular / scrolled | `Today / regular / regular` (g8cv3d), `… / scrolled` (oJ25M) | `src/app/(app)/(tabs)/index.tsx` | `LevelBadge` (→ You), StreakStrip (week + daily goal), `SessionCard` (with `ScaleShape` preview), SectionHeader, ListRow ×2 (category icon colours), TabBar. Built in 3.6. Not in the design: "Today's session" before 17:00, session/Up next pick rules, ≈ 4 min for Chromatic warm-up, error state, dev Play note |
 | Today · first-day | `Today / regular / first-day` (NDL9C) | same, state | same |
 | Today · offline | `Today / regular / offline` (RZHGr) | same, state | Toast/info "You're offline…" |
 | Today · loading | `Today / regular / loading` (xSOS8) | same, state | Skeleton/card, Skeleton/list row ×3 |

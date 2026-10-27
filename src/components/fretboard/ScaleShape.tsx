@@ -9,6 +9,9 @@ type ScaleShapeProps = {
   shape: FretShape;
   // Left-handed players see the board mirrored: nut on the right (Settings → Strumming hand).
   mirrored?: boolean;
+  // full: Lesson detail (string names, note names, fret numbers, legend).
+  // preview: Today's session card (smaller board only, plain dots, unused strings dimmed).
+  variant?: 'full' | 'preview';
 };
 
 // Strings from top to bottom as the player looks down at the guitar, with their thickness.
@@ -21,21 +24,26 @@ const strings: { name: GuitarString; color: ColorName; thickness: number }[] = [
   { name: 'E', color: 'wound', thickness: 2.5 },
 ];
 
-// Sizes from "Scale diagram" in the Lesson detail design.
-const rowHeight = 24;
-const boardPadding = 6; // above the first and below the last string row
-const boardHeight = boardPadding * 2 + rowHeight * strings.length; // 156
-const openColumnWidth = 36;
+// Sizes from "Scale diagram" (Lesson detail) and "Fretboard preview" (Today's session card).
+const sizes = {
+  full: { rowHeight: 24, boardPadding: 6, openColumnWidth: 36, minFrets: 4, dot: 22, rootDot: 24 },
+  preview: { rowHeight: 16.8, boardPadding: 5.6, openColumnWidth: 28, minFrets: 3, dot: 12, rootDot: 16 },
+};
 const nutWidth = 4;
 const fretWireWidth = 2;
 const labelColumnWidth = 16;
 const inlayFrets = [3, 5, 7, 9];
 
-// Lesson detail fretboard, from "Scale diagram (mirrors for left-handed)" in the design:
-// string names, the wood board with the notes to play, fret numbers and a legend.
+// Lesson fretboard, from "Scale diagram (mirrors for left-handed)" in the Lesson detail design:
+// string names, the wood board with the notes to play, fret numbers and a legend. The preview
+// variant is the small board on Today's session card.
 // Built from plain views: a column per fret, the strings drawn across, a dot per note.
-export function ScaleShape({ shape, mirrored = false }: ScaleShapeProps) {
-  const fretCount = Math.max(4, ...shape.notes.map((note) => note.fret));
+export function ScaleShape({ shape, mirrored = false, variant = 'full' }: ScaleShapeProps) {
+  const size = sizes[variant];
+  const { rowHeight, boardPadding } = size;
+  const boardHeight = boardPadding * 2 + rowHeight * strings.length; // 156 full, 112 preview
+  const preview = variant === 'preview';
+  const fretCount = Math.max(size.minFrets, ...shape.notes.map((note) => note.fret));
   const frets = Array.from({ length: fretCount }, (_, index) => index + 1);
   const row = mirrored ? styles.rowReverse : styles.row;
   const hasOpen = shape.notes.some((note) => note.fret === 0);
@@ -45,18 +53,75 @@ export function ScaleShape({ shape, mirrored = false }: ScaleShapeProps) {
     strings.map((string) => {
       const note = shape.notes.find((item) => item.string === string.name && item.fret === fret);
       return (
-        <View key={string.name} style={styles.cell}>
-          {note ? <NoteDot name={note.name} root={note.name === shape.root} open={fret === 0} /> : null}
+        <View key={string.name} style={[styles.cell, { height: rowHeight }]}>
+          {note ? (
+            <NoteDot
+              name={note.name}
+              root={note.name === shape.root}
+              open={fret === 0}
+              size={note.name === shape.root ? size.rootDot : size.dot}
+              showName={!preview}
+            />
+          ) : null}
         </View>
       );
     });
 
+  const board = (
+    <View style={[row, styles.board, { height: boardHeight, paddingVertical: boardPadding }]}>
+      {/* Strings first, so the frets and note dots sit on top of them. */}
+      {strings.map((string, index) => {
+        // The preview dims strings the lesson doesn't use ("open low E only").
+        const unused = preview && !shape.notes.some((note) => note.string === string.name);
+        return (
+          <View
+            key={string.name}
+            style={[
+              styles.string,
+              {
+                top: boardPadding + rowHeight * index + (rowHeight - string.thickness) / 2,
+                height: string.thickness,
+                backgroundColor: colors[string.color],
+                opacity: unused ? 0.35 : 1,
+              },
+            ]}
+          />
+        );
+      })}
+
+      <View style={{ width: size.openColumnWidth }}>{renderCells(0)}</View>
+      <View style={[styles.nut, { marginVertical: -boardPadding }]} />
+      {frets.map((fret) => (
+        <View
+          key={fret}
+          style={[
+            styles.fret,
+            { marginVertical: -boardPadding, paddingVertical: boardPadding },
+            mirrored ? styles.wireLeft : styles.wireRight,
+          ]}
+        >
+          {inlayFrets.includes(fret) ? <View style={[styles.inlay, { top: boardHeight / 2 - 4 }]} /> : null}
+          {renderCells(fret)}
+        </View>
+      ))}
+    </View>
+  );
+
+  if (preview) {
+    return (
+      // A row, so the board's flex: 1 fills the width (in a column it would collapse its height).
+      <View style={styles.row} accessible accessibilityLabel={describe(shape)}>
+        {board}
+      </View>
+    );
+  }
+
   return (
     <View style={styles.diagram} accessible accessibilityLabel={describe(shape)}>
       <View style={[row, styles.boardRow]}>
-        <View style={styles.stringLabels}>
+        <View style={[styles.stringLabels, { paddingTop: boardPadding }]}>
           {strings.map((string) => (
-            <View key={string.name} style={styles.cell}>
+            <View key={string.name} style={[styles.cell, { height: rowHeight }]}>
               <AppText variant="mono12" color="muted" maxFontSizeMultiplier={1.2}>
                 {string.name}
               </AppText>
@@ -64,36 +129,12 @@ export function ScaleShape({ shape, mirrored = false }: ScaleShapeProps) {
           ))}
         </View>
 
-        <View style={[row, styles.board]}>
-          {/* Strings first, so the frets and note dots sit on top of them. */}
-          {strings.map((string, index) => (
-            <View
-              key={string.name}
-              style={[
-                styles.string,
-                {
-                  top: boardPadding + rowHeight * index + (rowHeight - string.thickness) / 2,
-                  height: string.thickness,
-                  backgroundColor: colors[string.color],
-                },
-              ]}
-            />
-          ))}
-
-          <View style={styles.openColumn}>{renderCells(0)}</View>
-          <View style={styles.nut} />
-          {frets.map((fret) => (
-            <View key={fret} style={[styles.fret, mirrored ? styles.wireLeft : styles.wireRight]}>
-              {inlayFrets.includes(fret) ? <View style={styles.inlay} /> : null}
-              {renderCells(fret)}
-            </View>
-          ))}
-        </View>
+        {board}
       </View>
 
       {/* Fret numbers line up under the columns: label column + gap, then open + nut. */}
       <View style={[row, mirrored ? styles.indentRight : styles.indentLeft]}>
-        <View style={styles.fretZeroNumber}>
+        <View style={{ width: size.openColumnWidth + nutWidth, alignItems: 'center' }}>
           <FretNumber value={0} />
         </View>
         {frets.map((fret) => (
@@ -113,19 +154,21 @@ export function ScaleShape({ shape, mirrored = false }: ScaleShapeProps) {
 }
 
 // Roots are brass, other notes cream enamel; open strings are rings instead of filled dots.
-function NoteDot({ name, root, open }: { name: string; root: boolean; open: boolean }) {
+type NoteDotProps = { name: string; root: boolean; open: boolean; size: number; showName: boolean };
+
+function NoteDot({ name, root, open, size, showName }: NoteDotProps) {
   const ringColor = root ? colors.brass : colors.enamelCream;
   const look = open
     ? { backgroundColor: colors.woodDark, borderWidth: 2, borderColor: ringColor }
     : { backgroundColor: root ? colors.brass : colors.enamelCream };
   const textColor: ColorName = open ? (root ? 'brass' : 'enamelCream') : 'enamelInk';
-  const size = root ? 24 : 22;
-
   return (
     <View style={[styles.dot, look, { width: size, height: size }]}>
-      <AppText variant="monoStrong12" color={textColor} maxFontSizeMultiplier={1}>
-        {name}
-      </AppText>
+      {showName ? (
+        <AppText variant="monoStrong12" color={textColor} maxFontSizeMultiplier={1}>
+          {name}
+        </AppText>
+      ) : null}
     </View>
   );
 }
@@ -183,17 +226,13 @@ const styles = StyleSheet.create({
   },
   stringLabels: {
     width: labelColumnWidth,
-    paddingTop: boardPadding,
   },
   cell: {
-    height: rowHeight,
     alignItems: 'center',
     justifyContent: 'center',
   },
   board: {
     flex: 1,
-    height: boardHeight,
-    paddingVertical: boardPadding,
     borderRadius: radii.chip,
     overflow: 'hidden',
     backgroundColor: colors.wood,
@@ -203,19 +242,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
-  openColumn: {
-    width: openColumnWidth,
-  },
   nut: {
     width: nutWidth,
-    // Stretches over the board's padding, so it runs from edge to edge.
-    marginVertical: -boardPadding,
+    // A negative margin (set inline) stretches it over the board's padding, edge to edge.
     backgroundColor: colors.nut,
   },
   fret: {
     flex: 1,
-    marginVertical: -boardPadding,
-    paddingVertical: boardPadding,
     borderColor: colors.fret,
   },
   wireRight: {
@@ -229,8 +262,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    // Centre of the board, between the G and D strings.
-    top: boardHeight / 2 - 4,
+    // Centred vertically (top set inline), between the G and D strings.
     alignSelf: 'center',
     backgroundColor: colors.woodLight,
   },
@@ -244,10 +276,6 @@ const styles = StyleSheet.create({
   },
   indentRight: {
     paddingRight: labelColumnWidth + space[8],
-  },
-  fretZeroNumber: {
-    width: openColumnWidth + nutWidth,
-    alignItems: 'center',
   },
   fretNumber: {
     flex: 1,

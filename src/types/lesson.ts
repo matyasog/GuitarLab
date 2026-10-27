@@ -20,6 +20,8 @@ export type Lesson = {
   shape?: FretShape;
   // True when the notes for the Practice run exist (decision D14: 3 lessons for now).
   hasExercises?: boolean;
+  // Rough length of one run in minutes ("≈ 6 min" on Today's session card).
+  minutes?: number;
 };
 
 // Strings named as on the fretboard, from the thinnest (high e) to the thickest (low E).

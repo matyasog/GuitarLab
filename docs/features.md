@@ -34,7 +34,7 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 | User profile document created on sign-up | 2 | done | `users/{uid}`, `src/firebase/users.ts` |
 | Friendly auth error messages | 2 | done | `src/firebase/authErrors.ts`; copy approved 2026-10-26 |
 | Sign in / up with Google | A.1 | planned (Android dev build) | not possible in Expo Go; buttons hidden until then |
-| Offline banner on Today | 3 | planned | Firestore offline cache |
+| Offline banner on Today | 3 | done | `@react-native-community/netinfo` (`useIsOffline`); done in 3.6 |
 
 ## Navigation
 
@@ -55,8 +55,8 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 
 | Feature | Phase | Status | Notes |
 |---|---|---|---|
-| Today: greeting, level badge, streak strip with daily goal, tonight's session card, up next | 3 → 6 | planned | static data in Phase 3, live in Phase 6 |
-| Today: first-day, offline, loading states | 3 | planned | |
+| Today: greeting, level badge, streak strip with daily goal, tonight's session card, up next | 3 → 6 | in progress | screen done in 3.6; level, streak and minutes are SAMPLE until 6.4; session and Up next picked by `todayPicks.ts` |
+| Today: first-day, offline, loading states | 3 | done | dev previews (gallery buttons) `/?preview=first-day|offline|loading|error` |
 | Learn: lesson list with category filter and sections (in progress / up next / locked / done) | 3 | done | 12 lessons from `src/data/lessons.ts`; sample progress until 6.4; tapping the selected chip returns to All |
 | Learn: loading and error states | 3 | done | dev preview `/learn?preview=loading|error` |
 | Lesson status from scores: unlock at 80 % on the required lesson, done at 90 % | 3 | in progress | `lessonStatus()` in `src/data/lessonSections.ts`; real scores in 6.4 |
