@@ -2,7 +2,7 @@
 // precise engine for the Android dev build (react-native-audio-api) can replace the Expo Go one.
 
 export type TimeSignature = '4/4' | '3/4' | '2/4' | '6/8';
-export type Subdivision = 'quarter' | 'eighth' | 'sixteenth';
+export type Subdivision = 'quarter' | 'eighth' | 'triplet' | 'sixteenth';
 export type ClickSound = 'click' | 'woodblock' | 'hihat';
 
 export type MetronomeConfig = {

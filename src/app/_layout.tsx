@@ -4,6 +4,7 @@ import { Archivo_600SemiBold } from '@expo-google-fonts/archivo/600SemiBold';
 import { BarlowSemiCondensed_600SemiBold } from '@expo-google-fonts/barlow-semi-condensed/600SemiBold';
 import { DMMono_400Regular } from '@expo-google-fonts/dm-mono/400Regular';
 import { DMMono_500Medium } from '@expo-google-fonts/dm-mono/500Medium';
+import { NotoMusic_400Regular } from '@expo-google-fonts/noto-music/400Regular';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -36,6 +37,7 @@ function RootNavigator() {
     DMMono_400Regular,
     DMMono_500Medium,
     BarlowSemiCondensed_600SemiBold,
+    NotoMusic_400Regular,
   });
   const { user, isLoading } = useAuth();
 

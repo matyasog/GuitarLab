@@ -1,6 +1,6 @@
 # GuitarLab development plan
 
-Status (2026-11-11): Phases 0–3 done; Phase 4 in progress (4.1 done). **Next: measure 4.1, then 4.2 Metronome state and controls.** On Expo SDK 58.
+Status (2026-11-11): Phases 0–3 done; Phase 4 in progress (4.1–4.2 done). **Next: 4.3 Pyramid instrument (needs the instrument image exports, manual task 6).** On Expo SDK 58.
 
 ### Where we are (read this first in a new chat)
 
@@ -512,10 +512,11 @@ Conventions for every step:
   - Result (built 2026-10-27, waiting for the iPhone measurement): `expo-audio` 58.0.10 and `expo-file-system` 58.0.11 added (your OK), plus `expo-asset` (a required peer of expo-audio, flagged by expo-doctor; in Expo Go). `npx expo install` added the `expo-audio` and `expo-asset` config plugins to `app.json`; background playback is turned off there (`enableBackgroundPlayback: false`). This only matters for the future Android dev build. `MetronomeEngine` interface as in D1 (+ `plannedTime` on each tick). `scheduler.ts` plans every click from an anchor (`time(n) = anchor + n × period`), applies tempo/meter changes on the next beat, and skips clicks more than half a period late (7 tests, incl. no drift over 5 minutes). `src/audio/synth/` makes the three sounds and their accents as 60 ms WAVs (3 tests). `ExpoAudioEngine` writes the WAVs to the cache, keeps 4 players per sound (rewound 120 ms after playing), wakes every ≤ 10 ms, and stops when the app leaves the foreground. Dev screen `/dev/metronome-timing` (gallery → Audio) shows clicks, average / recent / worst lateness and jitter (`timingStats.ts`, tested).
   - Rebuilt 2026-11-11: your iPhone test of the version above gave glitchy and sometimes silent clicks (R3 happened). Cause: `expo-audio` on iOS uses a media player (`AVQueuePlayer`) that can't start short sounds on time. Switched to D1 option B: `renderClickTrack` renders ~30 s of clicks (whole bars) into one WAV, the engine loops it and derives ticks from the player's position via the scheduler. Tempo / bar / sound changes swap in a new track and restart at beat 1. The dev screen now shows "Audio behind phone clock", track length / loops and how late clicks are noticed. The player pool and its rewind logic are gone.
   - Measured: iPhone SE, Expo Go, 200 BPM for 2:10 (431 clicks, 4 loop seams): clicks steady by ear; audio −8.4 ms against the phone clock (slightly ahead, about 2 ms per seam or 65 ppm, not audible); clicks noticed by the app 8.7 ms after they sound on average, 17.2 ms worst (this is the delay the pendulum and lamps will have). Changing tempo and sound while playing worked smoothly. The silent-switch check was not reported.
-- [ ] **4.2 Metronome state and controls**
+- [x] **4.2 Metronome state and controls** (done 2026-11-11)
   - Files: `src/hooks/useMetronome.ts`, `src/app/(app)/(tabs)/tools/metronome.tsx`, `src/audio/metronome/tempoNames.ts`, TAP tempo helper.
   - Test: iPhone: ±1/±5 clamp to 40–240, TAP (4 taps), time signatures, subdivisions, sounds, Start/Stop.
   - Commit: `feat(metronome): controls and tempo state`
+  - Result: done, tested on the iPhone. `@expo-google-fonts/noto-music` added (your OK). Screen: tool switch (compact: no title), tempo name + 64 pt BPM readout, −1 / +1, tempo row (compact: −5 · slider · +5; regular: ±5 under ±1 and the slider with 40 / 240 labels), Start / Stop + TAP, rows for time signature, subdivision (with triplets, new) and sound. `useMetronome` holds the state and the engine, stops on blur / background, remembers settings in memory. `tempoNames.ts`, `tapTempo.ts` tested. After your test: TAP opens a sheet with a big tap pad (`TapTempoSheet`, your request; not in the design). `Slider` got `min` / `max` / `valueText` and a knob thumb. Not yet: instrument (4.3), lamps (4.4), speed trainer + histogram (4.5), large-text stacking (4.4). expo-doctor now reports 16 Expo packages with newer SDK 58 patch versions (not caused by this step; update separately with `npx expo install --check`).
 - [ ] **4.3 Pyramid instrument**
   - Files: `src/components/metronome/MetronomeInstrument.tsx`, `assets/instruments/metronome/*`.
   - Libraries: none (Reanimated, expo-image installed).
@@ -720,3 +721,5 @@ Nothing open. ("Coming soon" copy approved 2026-10-26 in step 3.5.)
 - 2026-10-27: step 4.1 built (metronome engine, synthesised clicks, timing screen); expo-audio, expo-file-system, expo-asset added.
 - 2026-11-11: step 4.1 engine replaced: option A (player per click) glitched on the iPhone, now option B (looped pre-rendered click track); R3 updated.
 - 2026-11-11: step 4.1 done (measured on the iPhone).
+- 2026-11-11: step 4.2 built (metronome controls, triplets, Noto Music).
+- 2026-11-11: step 4.2 done (tested on iPhone), with the tap-tempo sheet.

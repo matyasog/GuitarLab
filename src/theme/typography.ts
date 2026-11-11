@@ -13,6 +13,8 @@ export const fontFamilies = {
   mono400: 'DMMono_400Regular',
   mono500: 'DMMono_500Medium',
   silkscreen600: 'BarlowSemiCondensed_600SemiBold',
+  // Note glyphs (♩ ♫ ♬) on the metronome's subdivision control; named in the kit, not a .pen variable.
+  music400: 'NotoMusic_400Regular',
 } as const;
 
 // Type scale (`type.*`). Nothing below 12.
@@ -82,6 +84,9 @@ export const textStyles = {
   monoStrong14: style(f.mono500, t[14]),
   mono12: style(f.mono400, t[12]),
   monoStrong12: style(f.mono500, t[12]),
+
+  // Note glyphs in the subdivision control
+  noteGlyph20: style(f.music400, t[20], { lineHeight: lineHeight(t[20], 1.2) }),
 
   // Silkscreen labels on instruments (FLAT, AUTO, IN TUNE, PERSONAL BEST)
   silkscreen12: style(f.silkscreen600, t[12], { letterSpacing: 1.5 }),

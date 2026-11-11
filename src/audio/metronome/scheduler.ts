@@ -16,7 +16,7 @@ export type PlannedClick = {
 };
 
 export const beatsPerBar: Record<TimeSignature, number> = { '4/4': 4, '3/4': 3, '2/4': 2, '6/8': 6 };
-export const clicksPerBeat: Record<Subdivision, number> = { quarter: 1, eighth: 2, sixteenth: 4 };
+export const clicksPerBeat: Record<Subdivision, number> = { quarter: 1, eighth: 2, triplet: 3, sixteenth: 4 };
 
 export function clampBpm(bpm: number): number {
   return Math.min(maxBpm, Math.max(minBpm, Math.round(bpm)));

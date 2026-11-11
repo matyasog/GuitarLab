@@ -4,33 +4,45 @@ import { StyleSheet, View, type GestureResponderEvent, type LayoutChangeEvent } 
 import { colors, minTouchTarget, radii } from '@/theme';
 
 type SliderProps = {
-  // 0 … 100
+  // min … max (0 … 100 unless given)
   value: number;
+  min?: number;
+  max?: number;
   // Called while dragging (to update the label next to it).
   onChange: (value: number) => void;
   // Called once when the finger lifts (to save).
   onChangeEnd: (value: number) => void;
   step?: number;
+  // What a screen reader says for the value; default "50%".
+  valueText?: (value: number) => string;
+  // knob: the machined chrome thumb with an amber dot, from the metronome's tempo slider.
+  thumb?: 'plain' | 'knob';
   accessibilityLabel: string;
 };
-
-const thumbSize = 24;
-
-function clamp(value: number) {
-  return Math.min(100, Math.max(0, value));
-}
 
 // Horizontal slider, from "Setting / Input sensitivity" in the design: a 4 pt rail, an amber
 // fill and a round 24 pt thumb, in a 44 pt tall touch area. It uses React Native's built-in
 // touch responder props on the View, so no extra library is needed: every touch and move
 // reports the finger's x position inside the slider, which becomes the value.
 // Screen readers adjust it with swipe up / down (accessibilityActions).
-export function Slider({ value, onChange, onChangeEnd, step = 5, accessibilityLabel }: SliderProps) {
+export function Slider({
+  value,
+  min = 0,
+  max = 100,
+  onChange,
+  onChangeEnd,
+  step = 5,
+  valueText = (current) => `${current}%`,
+  thumb = 'plain',
+  accessibilityLabel,
+}: SliderProps) {
   const [width, setWidth] = useState(0);
+  const thumbSize = thumb === 'knob' ? 28 : 24;
+  const clamp = (next: number) => Math.min(max, Math.max(min, next));
 
   const valueAt = (event: GestureResponderEvent) => {
     const fraction = event.nativeEvent.locationX / Math.max(1, width);
-    return clamp(Math.round((fraction * 100) / step) * step);
+    return clamp(min + Math.round((fraction * (max - min)) / step) * step);
   };
 
   const adjust = (delta: number) => {
@@ -39,7 +51,7 @@ export function Slider({ value, onChange, onChangeEnd, step = 5, accessibilityLa
     onChangeEnd(next);
   };
 
-  const thumbLeft = (value / 100) * Math.max(0, width - thumbSize);
+  const thumbLeft = ((value - min) / (max - min)) * Math.max(0, width - thumbSize);
 
   return (
     <View
@@ -56,7 +68,7 @@ export function Slider({ value, onChange, onChangeEnd, step = 5, accessibilityLa
       accessible
       accessibilityRole="adjustable"
       accessibilityLabel={accessibilityLabel}
-      accessibilityValue={{ min: 0, max: 100, now: value, text: `${value}%` }}
+      accessibilityValue={{ min, max, now: value, text: valueText(value) }}
       accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
       onAccessibilityAction={(event) => adjust(event.nativeEvent.actionName === 'increment' ? step : -step)}
     >
@@ -64,7 +76,15 @@ export function Slider({ value, onChange, onChangeEnd, step = 5, accessibilityLa
       <View style={styles.rail} pointerEvents="none">
         <View style={[styles.fill, { width: thumbLeft + thumbSize / 2 }]} />
       </View>
-      <View style={[styles.thumb, { left: thumbLeft }]} pointerEvents="none" />
+      {thumb === 'knob' ? (
+        <View style={[styles.knob, { left: thumbLeft, top: (minTouchTarget - thumbSize) / 2 }]} pointerEvents="none">
+          <View style={styles.knobCap}>
+            <View style={styles.knobIndex} />
+          </View>
+        </View>
+      ) : (
+        <View style={[styles.thumb, { left: thumbLeft }]} pointerEvents="none" />
+      )}
     </View>
   );
 }
@@ -87,12 +107,38 @@ const styles = StyleSheet.create({
   },
   thumb: {
     position: 'absolute',
-    top: (minTouchTarget - thumbSize) / 2,
-    width: thumbSize,
-    height: thumbSize,
+    top: (minTouchTarget - 24) / 2,
+    width: 24,
+    height: 24,
     borderRadius: radii.pill,
     borderWidth: 1,
     borderColor: colors.line2,
     backgroundColor: colors.text,
+  },
+  // The design's knob has a knurled gradient edge; here a chrome ring with a lighter cap.
+  knob: {
+    position: 'absolute',
+    width: 28,
+    height: 28,
+    borderRadius: radii.pill,
+    borderWidth: 1,
+    borderColor: colors.anodizedDark,
+    backgroundColor: colors.chrome,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  knobCap: {
+    width: 16,
+    height: 16,
+    borderRadius: radii.pill,
+    backgroundColor: colors.chromeLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  knobIndex: {
+    width: 6,
+    height: 6,
+    borderRadius: radii.pill,
+    backgroundColor: colors.amber,
   },
 });

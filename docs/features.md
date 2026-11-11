@@ -69,8 +69,8 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 |---|---|---|---|
 | Tuner / Metronome switch | 3 | done | switches between the tool routes; tools are placeholders |
 | **Metronome**: pyramid instrument, swinging pendulum, sliding weight | 4 | planned | baked images + Reanimated |
-| Metronome: BPM readout + tempo name, ±1 / ±5, TAP tempo | 4 | planned | 40–240 BPM |
-| Metronome: time signatures 4/4, 3/4, 2/4, 6/8; subdivision ♩ ♫ ♬; sound choice | 4 | planned | |
+| Metronome: BPM readout + tempo name, ±1 / ±5, tempo slider, TAP tempo | 4 | done | step 4.2; 40–240 BPM; `tempoNames.ts`, `tapTempo.ts` (tested) |
+| Metronome: time signatures 4/4, 3/4, 2/4, 6/8; subdivision ♩ ♫ ♫³ ♬; sound choice | 4 | done | step 4.2; triplets added; glyphs in Noto Music |
 | Metronome: play/stop, beat lamps with accented beat 1 | 4 | planned | |
 | Metronome: speed trainer (+2 BPM every 4 bars up to the lesson goal) | 4 | planned | |
 | Metronome: edge flash (off above 170 BPM, with reduced motion, or when Visual pulse is off) | 4 | planned | |

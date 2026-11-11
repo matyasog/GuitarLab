@@ -425,3 +425,19 @@ Text-size rule: text scales with the phone setting everywhere except labels insi
 **Reason:** On the iPhone, option A (JS timer + one `expo-audio` player per click) gave glitchy, sometimes silent clicks. `expo-audio` on iOS plays through `AVQueuePlayer`, a media player made for songs: each `play()` starts after an unpredictable delay, and rewinding a player (pause + seek) races with its next use. That can't be fixed from JavaScript. Inside one audio file the spacing of the clicks is exact to the sample, whatever the JS thread is doing. Using the audio position as the master clock keeps the pendulum and lamps in sync with the sound by construction.
 **Costs:** a tempo change is not instant and restarts the bar; the loop seam (every ~30 s) depends on the player being gapless, which the dev screen measures ("Audio behind phone clock"). Measured 2026-11-11: iPhone SE, Expo Go, 200 BPM for 2:10 (431 clicks, 4 loop seams): clicks steady by ear; audio −8.4 ms against the phone clock (slightly ahead, about 2 ms per seam or 65 ppm, not audible); clicks noticed by the app 8.7 ms after they sound on average, 17.2 ms worst (this is the delay the pendulum and lamps will have). Changing tempo and sound while playing worked smoothly.
 **Alternatives:** keep tuning option A (the start delay is inside the native player); `react-native-audio-api` (sample-accurate scheduling, but not in Expo Go; planned as step A.3 for the Android dev build).
+
+---
+
+## 2026-11-11 · Metronome controls: state in a hook, triplets, tempo names, TAP rule
+
+**Decision:** `useMetronome` (`src/hooks/useMetronome.ts`) owns the settings (BPM, time signature, subdivision, sound), the playing state and the engine; the screen only draws. The settings are kept in memory while the app runs (not in Firestore). The metronome stops when the screen loses focus (other tab or tool) or the app goes to the background. A fourth subdivision, **triplets** (3 clicks per beat), was added because the design shows it. Tempo names use the usual ranges (Largo < 60, Larghetto 60–65, Adagio 66–75, Andante 76–107, Moderato 108–119, Allegro 120–167, Presto 168–199, Prestissimo ≥ 200), matching the design's two examples. TAP = average gap of the last 4 taps; a pause over 2 s starts a new count. The tempo slider sets the tempo when the finger lifts, because the engine needs a new click track for every tempo. Note glyphs use `@expo-google-fonts/noto-music` (named in the design kit; in Expo Go). The slider knob is a simplified chrome knob (no knurled gradient).
+**Reason:** One hook keeps audio code out of the screen and makes the later engine swap a one-line change. Stopping on blur avoids a metronome clicking under another screen with no visible Stop button.
+**Alternatives:** saving the metronome settings to the profile (more writes for little value); keeping it playing across tabs (needs a global provider and a mini player).
+
+---
+
+## 2026-11-11 · TAP opens a sheet with a big tap pad (not in the design)
+
+**Decision:** The TAP button on the Metronome opens a bottom sheet (`TapTempoSheet`) with one large pad (220 pt tall) that shows the tapped BPM, and a "Use N BPM" button. The metronome stops when the sheet opens; the tempo is applied only when confirmed. Copy ("Tap tempo", "TAP HERE", the hint line, "Use N BPM", "Cancel") is new.
+**Reason:** My test on the iPhone: the 112 × 56 pt TAP button was awkward to hit in rhythm. A big target is the usual solution in metronome apps. Stopping the sound first avoids tapping against a click at the old tempo.
+**Alternatives:** keep the design's small button (tested, unfriendly); a full-screen route (more navigation for the same pad).
