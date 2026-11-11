@@ -77,6 +77,7 @@ Last updated: 2026-10-25 (nothing built yet; the app is still the Expo template)
 | Metronome: reduced motion (pendulum still, lamps only) | 4 | planned | |
 | Metronome: "Feel the beat" haptics | 4 | planned | `expo-haptics`, from Settings |
 | Metronome: "Your strums vs the click" histogram | 7 | mock only | |
+| Metronome engine: pre-rendered click track played in a loop, synthesised Click / Woodblock / Hi-hat | 4 | done | step 4.1 (`ExpoAudioEngine`, `clickTrack.ts`, `scheduler.ts`; tested). First version (one player per click) was glitchy on the iPhone and was replaced on 2026-11-11; the new one is steady on the iPhone (measured, see decisions; dev screen `/dev/metronome-timing`) |
 | **Tuner**: strobe instrument, note/octave, cents, Hz, instruction text | 7 | mock only | |
 | Tuner: AUTO / MANUAL string detection, headstock 3+3 and 6-in-line, compact string row | 7 | mock only | |
 | Tuner: A4 reference | 7 | mock only | from Settings |

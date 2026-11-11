@@ -226,6 +226,17 @@ function GalleryContent() {
       </View>
 
       <View style={styles.section}>
+        <SectionHeader title="Audio" />
+        <Button
+          label="Metronome timing test"
+          variant="secondary"
+          icon="play"
+          onPress={() => router.push('/dev/metronome-timing')}
+          fullWidth
+        />
+      </View>
+
+      <View style={styles.section}>
         <SectionHeader title="Screen state previews" />
         <View style={styles.row}>
           <Button

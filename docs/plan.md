@@ -1,6 +1,6 @@
 # GuitarLab development plan
 
-Status (2026-10-27): Phases 0–3 done. **Next: Phase 4, step 4.1 Metronome engine + timing measurement.** On Expo SDK 58.
+Status (2026-11-11): Phases 0–3 done; Phase 4 in progress (4.1 done). **Next: measure 4.1, then 4.2 Metronome state and controls.** On Expo SDK 58.
 
 ### Where we are (read this first in a new chat)
 
@@ -501,7 +501,7 @@ Conventions for every step:
 
 ### Phase 4: Metronome
 
-- [ ] **4.1 Engine + timing measurement**
+- [x] **4.1 Engine + timing measurement** (done 2026-11-11)
   - Goal: `MetronomeEngine` interface and the expo-audio implementation (D1), plus a dev screen that logs click timing.
   - Files: `src/audio/metronome/{MetronomeEngine,ExpoAudioEngine,scheduler}.ts`, `src/audio/synth/` (if sounds are synthesised, D3), `assets/sounds/` (if samples), `src/app/dev/metronome-timing.tsx`.
   - Libraries: `expo-audio` (Expo Go: yes; has a config plugin, but only needed for background audio or recording in dev builds), `expo-file-system` (Expo Go: yes) if WAVs are generated.
@@ -509,6 +509,9 @@ Conventions for every step:
   - Done when: no drift after 5 minutes; jitter measured and written into decisions.md; scheduler math unit-tested.
   - Docs: decisions (engine choice with measured numbers).
   - Commit: `feat(metronome): drift-free click engine`
+  - Result (built 2026-10-27, waiting for the iPhone measurement): `expo-audio` 58.0.10 and `expo-file-system` 58.0.11 added (your OK), plus `expo-asset` (a required peer of expo-audio, flagged by expo-doctor; in Expo Go). `npx expo install` added the `expo-audio` and `expo-asset` config plugins to `app.json`; background playback is turned off there (`enableBackgroundPlayback: false`). This only matters for the future Android dev build. `MetronomeEngine` interface as in D1 (+ `plannedTime` on each tick). `scheduler.ts` plans every click from an anchor (`time(n) = anchor + n × period`), applies tempo/meter changes on the next beat, and skips clicks more than half a period late (7 tests, incl. no drift over 5 minutes). `src/audio/synth/` makes the three sounds and their accents as 60 ms WAVs (3 tests). `ExpoAudioEngine` writes the WAVs to the cache, keeps 4 players per sound (rewound 120 ms after playing), wakes every ≤ 10 ms, and stops when the app leaves the foreground. Dev screen `/dev/metronome-timing` (gallery → Audio) shows clicks, average / recent / worst lateness and jitter (`timingStats.ts`, tested).
+  - Rebuilt 2026-11-11: your iPhone test of the version above gave glitchy and sometimes silent clicks (R3 happened). Cause: `expo-audio` on iOS uses a media player (`AVQueuePlayer`) that can't start short sounds on time. Switched to D1 option B: `renderClickTrack` renders ~30 s of clicks (whole bars) into one WAV, the engine loops it and derives ticks from the player's position via the scheduler. Tempo / bar / sound changes swap in a new track and restart at beat 1. The dev screen now shows "Audio behind phone clock", track length / loops and how late clicks are noticed. The player pool and its rewind logic are gone.
+  - Measured: iPhone SE, Expo Go, 200 BPM for 2:10 (431 clicks, 4 loop seams): clicks steady by ear; audio −8.4 ms against the phone clock (slightly ahead, about 2 ms per seam or 65 ppm, not audible); clicks noticed by the app 8.7 ms after they sound on average, 17.2 ms worst (this is the delay the pendulum and lamps will have). Changing tempo and sound while playing worked smoothly. The silent-switch check was not reported.
 - [ ] **4.2 Metronome state and controls**
   - Files: `src/hooks/useMetronome.ts`, `src/app/(app)/(tabs)/tools/metronome.tsx`, `src/audio/metronome/tempoNames.ts`, TAP tempo helper.
   - Test: iPhone: ±1/±5 clamp to 40–240, TAP (4 taps), time signatures, subdivisions, sounds, Start/Stop.
@@ -632,7 +635,7 @@ Listed so nothing is forgotten; details are planned when the phone arrives. Each
 |---|---|---|
 | R1 | ~~App Store Expo Go switches to SDK 58 mid-project~~ (happened 2026-10-26, upgraded in U.1) | The same will happen with SDK 59 (~early 2027, possibly before February): keep dependencies minimal and do the upgrade as its own step. Avoid APIs removed in 58 (`InteractionManager`, `Touchable`, deep `react-native/Libraries` imports, `StatusBar` `backgroundColor`/`translucent`, `ImageBackground`) |
 | R2 | ~~Firestore test-mode rules expire~~ (resolved 2026-10-25: the database is in production mode, locked) | Until step 2.2 every read/write fails with "permission denied"; this is expected |
-| R3 | Metronome jitter in Expo Go is audible | Switch the engine to option B (pre-rendered loop); the dev-build engine (C) later |
+| R3 | ~~Metronome jitter in Expo Go is audible~~ (happened 2026-11-11: option A glitched on the iPhone; switched to option B) | If the loop seam of option B is audible too: render a longer track, or wait for the dev-build engine (C) |
 | R4 | ~~`getReactNativePersistence` TypeScript error with firebase 13~~ (happened; fixed in 2.1 with `src/types/firebase-auth-react-native.d.ts`) | Remove the file if a future Firebase version ships the type itself (tsc will then report a duplicate) |
 | R5 | Firestore JS SDK on React Native has only a memory cache, so writes made offline are lost if the app is closed before reconnecting | Results "save-failed" flow keeps unsent sessions in AsyncStorage and retries (design already has "kept on your phone and we'll retry") |
 | R6 | ~~Moving tuner layers aren't in the design as separate frames~~ (resolved 2026-10-26: drawn in code with SVG, D5) | If the SVG strobe looks too flat next to the baked body, add a pre-rendered ring image later |
@@ -714,3 +717,6 @@ Nothing open. ("Coming soon" copy approved 2026-10-26 in step 3.5.)
 - 2026-10-27: step 3.6 done; Today previews in the gallery; Quarter notes description matches the design.
 - 2026-10-27: step 3.7 built (You, ranks, picks); level curve from 6.1 done early.
 - 2026-10-27: step 3.7 done (tested on iPhone); Phase 3 complete.
+- 2026-10-27: step 4.1 built (metronome engine, synthesised clicks, timing screen); expo-audio, expo-file-system, expo-asset added.
+- 2026-11-11: step 4.1 engine replaced: option A (player per click) glitched on the iPhone, now option B (looped pre-rendered click track); R3 updated.
+- 2026-11-11: step 4.1 done (measured on the iPhone).
